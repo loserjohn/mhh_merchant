@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>评价详情</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<style>
+			.customsMsg {
+				box-sizing: border-box;
+				margin-top: 15px;
+			}
+			
+			.commontBuy {
+				padding: 10px;
+				box-sizing: border-box;
+				box-shadow: 0 0 5px #ddd;
+				margin-top: 10px;
+			}
+			
+			.commontBuy .commontPic {
+				width: 50px;
+				height: 50px;
+				margin-right: 10px;
+			}
+			
+			.tabsItems_top {
+				margin-top: 15px;
+				margin-bottom: 15px;
+			}
+			
+			.tabsItems_top i {
+				line-height: 36px;
+			}
+			.commontContent{
+				margin-top: 15px;
+				border-top: 1px dotted #d3d3d3;
+			}
+			.commonPics{
+				justify-content: space-around;
+			}
+			.commonPics img{
+				width: 100px;
+				height: 100px;
+			}
+			
+			.commontTxt{
+				margin: 15px auto;
+			}
+			.recommont{
+				background: #eee;
+				margin-top: 15px;
+				box-sizing: border-box;
+				padding: 10px;
+			}
+			.recommont li>div{
+				margin: 10px auto;
+			}
+			.edietCommonBox{
+				margin-top: 15px;
+			}
+			.edietCommon{
+				min-height: 120px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav " id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">评价详情</h1>
+			</header>
+			<!--基本信息-->
+			<div class=" panel " id="content">
+				<!--客户信息-->
+				<div class="tabsItems_top flex">
+					<img  :src="detail.MEMBER_HEAD?detail.MEMBER_HEAD:'../../../images/default_avatar.jpg'"  alt="" class="avatar" />
+					<div class="f1">
+						<div class="">{{detail.MEMBER_NIKENAME}}</div>
+						<p class="cor_y">{{detail.REVIEW_TIME}}</p>
+					</div>
+					<!--<i class="iconfont icon-arrowright"></i>-->
+				</div>
+				<!--项目信息-->
+				<div class=" flex commontBuy">
+					<img :src="detail.PROJECT_IMG1" alt="" class="commontPic" />
+					<div class="f1">
+						<h3 class="cm_name lh26">{{detail.PROJECT_NAME }}</h3>
+						<div class="flex">
+							<h3 class="prize lh24">￥{{detail.PROJECT_DISCOUNT}}</h3>
+							<p class="delec_prize lh24">￥{{detail.PROJECT_PRICE}}</p>
+						</div>
+					</div>
+				</div>
+				<!--评价内容-->
+				<div class=" commontContent">
+					<div class="cm_name">评价内容：</div>
+					<div class="commontTxt">
+						{{detail.REVIEW_CONTENT}}
+					</div>
+					
+					<div class="flex commonPics" v-show ="detail.HAS_PICTURE=='1'?true:false">
+						<img :src="detail.REPLY_IMG1" v-if="detail.REPLY_IMG1" class="" alt="" />
+						<img :src="detail.REPLY_IMG2" v-if="detail.REPLY_IMG2" class="" alt="" />
+						<img :src="detail.REPLY_IMG3" v-if="detail.REPLY_IMG3" class="" alt="" />
+					</div>
+					
+				</div>
+				<!--回复-->
+				<ul class="recommont">
+					<li>
+						<div class="flex cm_name">
+							<p class="f1 ">我的回复:</p>
+							<p class="t_r">{{detail.REVIEW_TIME}}</p>
+						</div>
+						{{detail.REPLY_CONTENT}}
+					</li>
+
+					<li>
+						<div class="flex cm_name">
+							<p class="f1">{{detail.MEMBER_NIKENAME}}:</p>
+							<p class="t_r">{{detail.REVIEW_AGAIN_TIME}}</p>
+						</div>
+						{{detail.REVIEW_AGAIN_CONTENT}}
+					</li>
+				</ul>
+				
+				<!--编辑框-->
+				<div class="edietCommonBox">
+					<textarea name="" rows="" cols="" class="edietCommon" v-model="commontext" placeholder="回复："></textarea>
+				</div>
+				<!--提交回复-->
+				<div class="container">
+					<div class="cm_btn" @tap = "_submitCommon">
+						提交回复
+					</div>
+				</div>
+				
+			</div>
+
+		</div>
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/bscroll.min.js"></script>
+		
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+			swipeBack: true
+
+			})
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						detail: '',
+						commontext:''
+					},
+					created: function() {
+						//							alert(1)
+						app.initHeader();
+					},
+					mounted: function() {
+						var self = plus.webview.currentWebview();
+						this.detail = self.commonData
+//						console.log(JSON.stringify(self.commonData))
+					},
+					methods: {
+						/*提交评论回复*/
+						_submitCommon(){
+							if(!this.commontext){
+								plus.nativeUI.alert("请输入评论内容", function(){},'马嘿嘿提醒您');
+								return
+							}
+							var _this = this
+							plus.nativeUI.showWaiting('提交回复中..')
+							app.ajax(app.baseUrl + '/api/BusiOrderReview/AddReply', {
+									data: {
+										REVIEW_CODE:_this.detail.REVIEW_CODE,
+										REPLY_CONTENT:_this.commontext
+									},
+									// dataType:'json',//服务器返回json格式数据
+									type: 'post', //HTTP请求类型
+									success: function(result) {	
+										plus.nativeUI.closeWaiting()
+										if(result.Success) {
+											plus.nativeUI.toast('回复成功')
+											
+											if(plus.webview.getWebviewById('common_detail')){
+												plus.webview.getWebviewById('common_detail').evalJS('refresh()')
+											}
+											
+											mui.back()
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)										
+										}
+									}
+								});
+						}
+					}
+				})
+			})
+		</script>
+	</body>
+
+</html>

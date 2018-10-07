@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>商圈编辑</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../css/animate.css" />
+		<style>
+			.businessTop {
+				background: rgba(21, 21, 21, 1);
+				width: 100%;
+				box-sizing: border-box;
+				/*height: 124px;*/
+			}
+			
+			.businessTop .title {
+				line-height: 36px;
+				height: 36px;
+				box-sizing: border-box;
+				box-sizing: 0 15px;
+				border-bottom: 1px dotted #404040;
+				font-size: 12px;
+				text-align: center;
+			}
+			
+			.businessTop ul {
+				width: 100%;
+				height: 44px;
+				line-break: 44px;
+				box-sizing: border-box;
+			}
+			
+			.businessTop li div {
+				line-height: 44px;
+			}
+			
+			.eletBox {
+				position: absolute;
+				height: 42px;
+				width: 100%;
+				opacity: 0;
+				/*background: red;*/
+				z-index: 100;
+				left: 0;
+			}
+			
+			.businessItem {
+				line-height: 44px;
+				height: 44px;
+				box-sizing: border-box;
+				width: 100%;
+			}
+			
+			.businessList {
+				box-sizing: border-box;
+				background: #fff;
+				width: 100%;
+			}
+			
+			.cardList {
+				box-sizing: border-box;
+				padding: 0 15px;
+			}
+			
+			.businessBox {
+				bottom: 0;
+			}
+			/*底部的按钮*/
+			
+			.bottomMenus {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				height: 50px;
+				right: 0;
+				background: rgba(21, 21, 21, 1);
+				z-index: 10;
+			}
+			
+			.menusTxt {
+				font-weight: 400;
+				line-height: 50px;
+			}
+			
+			.note {
+				padding-bottom: 20px;
+			}
+			/*遮罩*/
+			
+			.mask {
+				position: fixed;
+				left: 0;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(0, 0, 0, .7);
+				z-index: 50;
+			}
+			
+			.modal {
+				width: 250px;
+				bottom: 0;
+				background: #303030;
+				position: absolute;
+				right: 0;
+			}
+			
+			.listBoxs {
+				position: absolute;
+				width: 100%;
+				bottom: 68px;
+				top: 132px;
+				overflow: hidden;
+			}
+			
+			.btnBox {
+				background:  #404040;
+				padding: 1px 15px;
+				box-sizing: border-box;
+				border-bottom: 1px solid #d3d3d3;
+				position: absolute;
+				bottom: 0;
+				height: 68px;
+				width: 100%;
+			}
+			
+			.btnBox .cm_btn {
+				height: 44px;
+			}
+			
+			.mask .choose {
+				position: absolute;
+				z-index: 50;
+				height: 132px;
+				background: #404040;
+				width: 100%;
+				margin: 0;
+			}
+			
+			.mask .choose li {
+				width: 100%;
+				/*border-right: 1px solid #404040;*/
+				justify-content: space-between;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+				position: relative;
+				height: 44px;
+				line-height: 44px;
+				box-sizing: border-box;
+				position: relative;
+				/*background: pink;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav " id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">商圈编辑</h1>
+			</header>
+
+			<!--商圈编辑框-->
+
+			<div class="businessTop" id="content">
+				<!--<div class="cm_name title cor_g">添加商圈</div>-->
+				<div class="f1 flex container" style="border-top: 1px dotted #404040;line-height: 44px;" @click="_modalToggle">
+					<div class="f1  cor_y ">查询商圈</div>
+					<!--<select v-model="business" class="f1 t_r reset eletBox" @change="_updatedTown(4)">
+						<option disabled value="">请选择</option>
+						<option v-for="item in businessList" :value="item.Text+'-'+item.Value">{{item.Text}}</option>
+					</select>-->
+					<i class="iconfont icon-xiayibu  cor_y"></i>
+				</div>
+			</div>
+			<!--商圈选择-->
+			<div class="businessBox  scrollBox" :style="{top:scrollTop}" ref="scroll">
+				<!--已选商圈-->
+				<div class="businessBody flex">
+					<ul class="reset businessList">
+						<li v-for="(item,index)  in selecteBusiness" class="mui-table-view-cell mui-transitioning reset businessItem" :id="'itemli_'+index">
+							<div class="mui-slider-right mui-disabled">
+								<p class="mui-btn mui-btn-red " style="transform: translate(-180px, 0px);" @click.stop.prevent="_delectItem(index)">删除</p>
+							</div>
+							<div class="mui-slider-handle" style="transform: translate(0px, 0px);">
+								<div class="cardList flex ">
+									<div class="cardPic f1">
+										{{item}}
+									</div>
+									<i class="iconfont icon-xitongfanhui1 "></i>
+								</div>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+				<p class="lh26 t_c" v-if="selecteBusiness.length==0" style="margin-top: 20px;">您暂时还没有添加任何商圈哟</p>
+			</div>
+			<!--遮罩下拉框-->
+			<div class="mask" v-show="modalToggle" @tap.self.stop.prevent="_modalToggle" :class="{fadeIn:modalToggle}">
+
+				<div class="modal animated slideInRight" :style="{top:modalTop}">
+					<ul class="  container choose">
+						<li class="flex  ">
+							<div class=" t_r cor_y">{{province?province.split('-')[0]:'省'}}</div>
+							<select v-model="province" class="f1 t_r reset eletBox" @change="_updatedTown(1)">
+								<option disabled value="">请选择</option>
+								<option v-for="item in provinceList" :value="item.Text+'-'+item.Value">{{item.Text}}</option>
+							</select>
+							<i class="iconfont icon-xiayibu cor_y  "></i>
+						</li>
+						<li class=" flex ">
+							<div class="t_r cor_y">{{town?town.split('-')[0]:'市'}}</div>
+							<select v-model="town" class="f1 t_r reset eletBox" @change="_updatedTown(2)">
+								<option disabled value="">请选择</option>
+								<option v-for="item in townList" :value="item.Text+'-'+item.Value">{{item.Text}}</option>
+							</select>
+							<i class="iconfont icon-xiayibu  cor_y "></i>
+						</li>
+						<li class=" flex  ">
+							<div class="t_r cor_y">{{area?area.split('-')[0]:'县/区'}}</div>
+							<select v-model="area" class="f1 t_r reset eletBox" @change="_updatedTown(3)">
+								<option disabled value="">请选择</option>
+								<option v-for="item in areaList" :value="item.Text+'-'+item.Value">{{item.Text}}</option>
+							</select>
+							<i class="iconfont icon-xiayibu  cor_y"></i>
+						</li>
+					</ul>
+					<div class="  listBoxs " ref="wrapper" >
+						<!--<div class="reset">-->
+
+						<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted">
+
+							<li class="mui-table-view-cell mui-checkbox " v-for="(item,index) in businessList">							
+								<label :for="'item'+index">{{item.Text}}</label>
+								<input :id="'item'+index" name="checkbox" :value="item.Text" type="checkbox"  v-model="newBusinessArea" >									
+							</li>
+						
+							<li v-show="businessList.length==0 " class="t_c lh26" style="line-height: 40px;">-暂无数据-</li>
+						</ul>
+						<!--</div>-->
+					</div>
+					<div class="container btnBox">
+						<div id='' class="cm_btn fs16" @tap="_addBusinessArea">添加商圈</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/util.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/vue.js"></script>
+		<script src="../../js/bscroll.min.js"></script>
+		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			});
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						wrapper: '',
+						/*隐藏的下拉框*/
+						scroll: '',
+						/*主页面的下拉框*/
+
+						scrollTop: '',
+						/*主界面下拉框高度*/
+						modalTop: '',
+						/*侧滑页面下拉高度*/
+
+						provinceList: [], //省
+						province: '',
+						townList: [], //市
+						town: '',
+						areaList: [], //区
+						area: '',
+						business: '',
+						businessList: [], //商圈
+
+						newBusinessArea: [], //新添加的商圈
+
+						selecteBusiness: [],/*已经选择的商圈*/
+						enabled: true,
+
+						modalToggle: false,/*模态框显示隐藏*/
+
+					},
+					created: function() {
+						app.initHeader();
+						var self = plus.webview.currentWebview();
+
+					},
+					mounted: function() {
+						var _this = this;
+						var scroll = this.$refs.scroll;
+						var wrapper = this.$refs.wrapper;
+						this.scrollTop = document.getElementById('header').offsetHeight +44 + 'px';
+						this.modalTop = document.getElementById('header').offsetHeight + 'px';
+						this.$nextTick(function() {
+							//							初始化scrool
+							if(!_this.scroll) {
+								//							初始化下拉框1
+								_this.scroll = new BScroll(scroll, {
+									click: true,
+									probeType: 3,
+									bounceTime: 200
+								})
+							} else {
+								_this.scroll.refresh();
+							};
+
+							if(!_this.wrapper) {
+								//							初始化下拉框2
+								_this.wrapper = new BScroll(wrapper, {
+									click: true,
+									probeType: 3,
+									bounceTime: 200
+								})
+							} else {
+								_this.wrapper.refresh();
+							};
+						})
+
+						var _this = this
+						/*首次进入加载省份信息*/
+						app.ajax(app.baseUrl + '/api/Area/GetListProvince', {
+							// dataType:'json',//服务器返回json格式数据
+							type: 'get', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							},
+							success: function(result) {
+								//								console.log(result)
+
+								/*登陆成功*/
+								// 储存本地 记录登陆时间	
+								//								alert(11)
+
+								_this.provinceList = result
+							},
+							error: function(xhr, type, errorThrown) {
+								//异常处理；
+								//								alert(22)
+								console.log(type);
+							}
+						});
+						/*首次进入加载商圈信息*/
+						app.ajax(app.baseUrl + '/api/BusiAccount/GetAccountInfo', {
+							// dataType:'json',//服务器返回json格式数据
+							type: 'get', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded',
+								'Authorization': app.mark + plus.storage.getItem('token')
+							},
+							success: function(result) {
+								/*登陆成功*/
+								// 储存本地 记录登陆时间	
+
+								_this.selecteBusiness = result.Data.SHOP.SHOP_AREA
+
+								plus.nativeUI.closeWaiting()
+								mui.currentWebview.show('pop-in', 300, function() {}, {});
+							},
+							error: function(xhr, type, errorThrown) {
+								//异常处理；
+								//								alert(22)
+								console.log(type);
+							}
+						});
+
+					},
+					methods: {
+						/*切换模态框*/
+						_modalToggle() {
+							this.modalToggle = !this.modalToggle
+						},
+
+						/*更新商圈*/
+						_updatedTown(t, value) {
+							var _this = this
+							switch(t) {
+								case 1:
+									/*更新市信息*/
+									app.ajax(app.baseUrl + '/api/Area/GetListCity', {
+										// dataType:'json',//服务器返回json格式数据
+										data: {
+											province: _this.province.split('-')[0]
+										},
+										type: 'get', //HTTP请求类型
+										timeout: 10000, //超时时间设置为10秒；
+										headers: {
+											'Content-Type': 'application/x-www-form-urlencoded'
+										},
+										success: function(result) {
+											/*登陆成功*/
+											_this.townList = result
+										},
+										error: function(xhr, type, errorThrown) {
+											//异常处理；
+											console.log(type);
+										}
+									});
+									break;
+								case 2:
+									/*更新区信息*/
+									app.ajax(app.baseUrl + '/api/Area/GetListArea', {
+										// dataType:'json',//服务器返回json格式数据
+										data: {
+											city: _this.town.split('-')[0]
+										},
+										type: 'get', //HTTP请求类型
+										timeout: 10000, //超时时间设置为10秒；
+										headers: {
+											'Content-Type': 'application/x-www-form-urlencoded'
+										},
+										success: function(result) {
+											/*登陆成功*/
+											_this.areaList = result
+										},
+										error: function(xhr, type, errorThrown) {
+											//异常处理；
+											console.log(type);
+										}
+									});
+									break;
+								case 3:
+									/*更新商圈信息*/
+									//									alert(_this.area.split(',')[1])
+									app.ajax(app.baseUrl + '/api/Circle/GetList', {
+										// dataType:'json',//服务器返回json格式数据
+										data: {
+											area: _this.area.split('-')[1]
+										},
+										type: 'get', //HTTP请求类型
+										timeout: 10000, //超时时间设置为10秒；
+										headers: {
+											'Content-Type': 'application/x-www-form-urlencoded'
+										},
+										success: function(result) {
+											/*登陆成功*/
+											//											alert(JSON.stringify(result.Data.ListInfo))
+											_this.businessList = result.Data.ListInfo
+										},
+										error: function(xhr, type, errorThrown) {
+											//异常处理；
+											console.log(type);
+										}
+									});
+									break;
+								case 4:
+									if(!value) return;
+									this.business = value.split('-')[0]
+
+									break;
+								default:
+									break;
+							}
+
+						},
+						//						删除操作
+						_delectItem(i) {
+							var _this = this;
+							plus.nativeUI.confirm('确定删除该商圈？', (event) => {
+								//								alert(1)
+
+								var li = document.getElementById('itemli_' + i)
+								//							console.log(li)
+								mui.swipeoutClose(li)
+
+								var arr = _this.selecteBusiness;
+								var arr2 = arr.splice(i, 1);
+								_this.selecteBusiness = arr;
+								//								console.log(JSON.stringify(_this.selecteBusiness))
+								if(event.index == 0) {
+									_this._save()
+								}
+
+							}, {
+								title: '马嘿嘿提醒您'
+							})
+
+						},
+						/*保存修改*/
+						_save(callback) {
+							//							alert(1)
+							var _this =this
+							
+							var data = this.selecteBusiness.join(',');
+							
+							if(this.selecteBusiness.length == 0) {
+								data = '_'
+							}
+							//							console.log(data)
+							app.ajax(app.baseUrl + '/api/BusiShop/UpdateShop', {
+								// dataType:'json',//服务器返回json格式数据
+								data: {
+									SHOP_AREA: data
+								},
+								type: 'post', //HTTP请求类型
+								timeout: 10000, //超时时间设置为10秒；
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded',
+									'Authorization': app.mark + plus.storage.getItem('token')
+								},
+								success: function(result) {
+									/*登陆成功*/
+									plus.nativeUI.toast('修改成功');
+									if(callback)callback()
+								},
+								error: function(xhr, type, errorThrown) {
+									//异常处理；
+									console.log(type);
+								}
+							});
+						},
+						/*添加商圈*/
+						_addBusinessArea() {
+														
+							var _this = this
+							if(!this.province || !this.town || !this.area ) {
+								plus.nativeUI.alert("请先选择地址", function() {}, "马嘿嘿提醒您", "OK");
+								return
+							}
+							plus.nativeUI.confirm('确定添加该商圈？', (event) => {
+
+								event.index == 0 && function() {								
+																							
+									_this.selecteBusiness = _this.selecteBusiness.concat(_this.newBusinessArea)	
+									
+									_this.selecteBusiness = _this._validArr()
+
+									_this._save(()=>{
+										_this._modalToggle()
+									})
+								}()
+
+							}, {
+								title: '马嘿嘿提醒您'
+							})
+						},
+						/*验证数组重复*/
+						_validArr() {
+							 var arr = this.selecteBusiness,
+							  result = [],
+							  len = arr.length;
+							 arr.forEach(function(v, i ,arr){  //这里利用map，filter方法也可以实现
+							  var bool = arr.indexOf(v,i+1);  //从传入参数的下一个索引值开始寻找是否存在重复
+							  if(bool === -1){
+							   result.push(v);
+							  }
+							 })
+							 return result;						 							 
+						}
+					}
+
+				})
+
+			});
+		</script>
+	</body>
+
+</html>

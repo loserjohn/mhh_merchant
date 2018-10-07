@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>作品管理</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/animate.css" />
+		<style>
+			/*列表项样式*/
+			
+			.tabsItems {
+				line-height: 2;
+				padding-bottom: 0;
+			}
+			
+			.itemBody {
+				margin-top: 15px;
+				border-bottom: 1px dashed #d3d3d3;
+				padding-bottom: 15px;
+			}
+			
+			.itemPic {
+				width: 70px;
+				height: 70px;
+				margin-right: 15px;
+				overflow: hidden;
+				background: #f9f9f9;
+				border: 1px solid #eee;
+				box-sizing: border-box;
+			}
+			
+			.labelBox {
+				margin: 4px auto;
+				/*background: red;*/
+			}
+			
+			.itemLabel {
+				height: 20px;
+				background: url(../../../images/label_bg.jpg) 0 0/cover no-repeat;
+				width: 66px;
+				margin-right: 8px;
+				text-align: center;
+				line-height: 20px;
+				color: #834924;
+				font-size: 12px;
+			}
+			
+			.btnsBox {
+				justify-content: flex-end;
+			}
+			
+			.btns {
+				height: 34px;
+				line-height: 34px;
+				padding: 0 10px;
+				margin: 10px 0;
+				margin-left: 5px;
+			}
+			
+			.itemFoot {
+				/*background: red;*/
+			}
+			
+			.itemFoot .cur_prize {
+				font-size: 22px;
+				line-height: 55px;
+			}
+			
+			.itemFoot p {
+				line-height: 55px;
+				margin-left: 20px;
+			}
+			/*底部菜单*/
+			
+			.bottomMenus {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				height: 50px;
+				right: 0;
+				background: rgba(21, 21, 21, 1);
+			}
+			
+			.menusTxt {
+				font-weight: 400;
+				line-height: 50px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav " id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">
+					<div class="cm_search flex" @tap="_toSearch">
+						<i class="iconfont icon-search "></i>
+						<div class="f1" >
+							<div class="f1 cm_search_input cor_g">马嘿嘿带你搜点啥？</div>
+						</div>						
+					</div>
+				</h1>
+				<a class=" mui-pull-right cor_y fs16 " style="line-height: 45px;padding-right: 10px;" @tap = "_backTop">
+					<span class="mui-icon mui-icon-arrowup"></span>
+				</a>
+			</header>
+			<!--分类作品-->
+			<div class="cm_tabBars " id="content" ref="content">
+				<ul class="cm_tabsT flex">
+					<li @tap="_changeTab(0)" class="cm_tabTitle f1" :class="{active:currtab==0?true:false}">未提交{{productsList[0].total}}</li>
+					<li @tap="_changeTab(1)" class="cm_tabTitle f1" :class="{active:currtab==1?true:false}">已发布{{productsList[1].total}}</li>
+					<li @tap="_changeTab(2)" class="cm_tabTitle f1" :class="{active:currtab==2?true:false}">待审核{{productsList[2].total}}</li>
+					<li @tap="_changeTab(3)" class="cm_tabTitle f1" :class="{active:currtab==3?true:false}">未通过{{productsList[3].total}}</li>
+					<li @tap="_changeTab(4)" class="cm_tabTitle f1" :class="{active:currtab==4?true:false}">已下架{{productsList[4].total}}</li>
+				</ul>
+			</div>
+			<!--选项卡内容-->
+			<div  class="cm_tabsContent scrollBox" :style="{top:tabContenTop}" id="scroll" ref="scroll">
+				<div class=" clearfix" style="min-height: 101%;">
+					<!--刷新提示框-->
+					<div class="refresh">
+						<p class="t_c cor_y  refresh_txt">有种你放开我</p>
+					</div>
+					<!--未提交-->
+					<div class="animated fadeInDownBig" v-show="currtab==0?true:false">
+						<ul class="reset cm_ul">
+							<li class="tabsItems panel" v-for="item in productsList[0].infoList" v-show="item.PROJECT_STATUS=='0'?true:false">
+								<div class="itemBody flex" @tap="_jumpToDetail(item.PROJECT_CODE)">
+									<div class="itemPic">
+										<img :src="item.PROJECT_IMG1" alt="" class="cover" />
+									</div>
+									<div class="f1">
+										<h3 class="cm_title">{{item.PROJECT_NAME}}</h3>
+										<p class=" ">发布时间    {{item.CREATE_TIME}}</p>
+										<!--<ul class="flex labelBox">
+											<li class="itemLabel">会员价</li>
+											<li class="itemLabel">新人价</li>
+											<li class="itemLabel">新人价</li>
+										</ul>-->
+										<div class="flex " > 
+											<!--<p class="f1 t_l cor_g lh36">成交量：{{item.SELL_COUNT}}</p>-->
+											<p class="f1 t_r cor_g lh36">{{item.PROJECT_LOVE}}人 收藏</p>
+										</div>
+									</div>
+								</div>
+								<div class="itemFoot flex">
+									<div class="flex">
+										<h3 class="prize cur_prize">￥{{item.PROJECT_DISCOUNT}} </h3>
+										<p class="delec_prize ">￥{{item.PROJECT_PRICE}}</p>
+									</div>
+									<!--<div class="f1 flex btnsBox">
+										<div class="cm_btn btns ">删除</div>
+									</div>-->
+								</div>
+							</li>
+							<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{productsList[0].norest?'没有数据了':'加载更多'}}</li>						
+						</ul>
+					</div>
+					<!--已发布-->
+					<div class="animated fadeInDownBig" v-show="currtab==1?true:false" >
+						<ul class="reset cm_ul">
+							<li class="tabsItems panel" v-for="item in productsList[1].infoList" v-show="item.PROJECT_STATUS=='1'?true:false">
+								<div class="itemBody flex" @tap="_jumpToDetail(item.PROJECT_CODE,item.PROJECT_STATUS)">
+									<div class="itemPic">
+										<img :src="item.PROJECT_IMG1" alt="" class="cover" />
+									</div>
+									<div class="f1">
+										<h3 class="cm_title">{{item.PROJECT_NAME}}</h3>
+										<p class=" ">发布时间    {{item.CREATE_TIME}}</p>
+										<!--<ul class="flex labelBox">
+											<li class="itemLabel">会员价</li>
+											<li class="itemLabel">新人价</li>
+											<li class="itemLabel">新人价</li>
+										</ul>-->
+										<div class="flex " >
+											<p class="f1 t_l cor_g lh36">成交量：{{item.SELL_COUNT}}</p>
+											<p class="f1 t_r cor_g lh36">{{item.PROJECT_LOVE}}人 收藏</p>
+										</div>
+									</div>
+								</div>
+								<div class="itemFoot flex">
+									<div class="flex">
+										<h3 class="prize cur_prize">￥{{item.PROJECT_DISCOUNT}} </h3>
+										<p class="delec_prize ">￥{{item.PROJECT_PRICE}}</p>
+									</div>
+									<!--<div class="f1 flex btnsBox">
+										<div class="cm_btn btns ">下架</div>
+									</div>-->
+								</div>
+							</li>
+							<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{productsList[1].norest?'没有数据了':'加载更多'}}</li>	
+						</ul>
+					</div>
+					<!--待审核-->
+					<div class="animated fadeInDownBig" v-show="currtab==2?true:false">
+						<ul class="reset cm_ul">
+							<li class="tabsItems panel" v-for="item in productsList[2].infoList" v-show="item.PROJECT_STATUS=='2'?true:false">
+								<div class="itemBody flex" @tap="_jumpToDetail(item.PROJECT_CODE)">
+									<div class="itemPic">
+										<img :src="item.PROJECT_IMG1" alt="" class="cover" />
+									</div>
+									<div class="f1">
+										<h3 class="cm_title">{{item.PROJECT_NAME}}</h3>
+										<p class=" ">发布时间    {{item.CREATE_TIME}}</p>
+										<!--<ul class="flex labelBox">
+											<li class="itemLabel">会员价</li>
+											<li class="itemLabel">新人价</li>
+											<li class="itemLabel">新人价</li>
+										</ul>-->
+										<div class="flex " >
+											<p class="f1 t_l cor_g lh36">成交量：{{item.SELL_COUNT}}</p>
+											<p class="f1 t_r cor_g lh36">{{item.PROJECT_LOVE}}人 收藏</p>
+										</div>
+									</div>
+								</div>
+								<div class="itemFoot flex">
+									<div class="flex">
+										<h3 class="prize cur_prize">￥{{item.PROJECT_DISCOUNT}} </h3>
+										<p class="delec_prize ">￥{{item.PROJECT_PRICE}}</p>
+									</div>
+									<div class="f1 flex btnsBox">
+										<p>审核中...</p>
+									</div>
+								</div>
+							</li>
+							<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{productsList[2].norest?'没有数据了':'加载更多'}}</li>	
+						</ul>
+					</div>
+					<!--未通过-->
+					<div class="animated fadeInDownBig" v-show="currtab==3?true:false">
+						<ul class="reset cm_ul">
+							<li class="tabsItems panel" v-for="item in productsList[3].infoList" v-show="item.PROJECT_STATUS=='3'?true:false">
+								<div class="itemBody flex" @tap="_jumpToDetail(item.PROJECT_CODE)">
+									<div class="itemPic">
+										<img :src="item.PROJECT_IMG1" alt="" class="contain" />
+									</div>
+									<div class="f1">
+										<h3 class="cm_title">{{item.PROJECT_NAME}}</h3>
+										<p class=" ">发布时间    {{item.CREATE_TIME}}</p>
+										<!--<ul class="flex labelBox">
+											<li class="itemLabel">会员价</li>
+											<li class="itemLabel">新人价</li>
+											<li class="itemLabel">新人价</li>
+										</ul>-->
+										<div class="flex " >
+											<p class="f1 t_l cor_g lh36">成交量：{{item.SELL_COUNT}}</p>
+											<p class="f1 t_r cor_g lh36">{{item.PROJECT_LOVE}}人 收藏</p>
+										</div>
+									</div>
+								</div>
+								<div class="itemFoot flex">
+									<div class="flex">
+										<h3 class="prize cur_prize">￥{{item.PROJECT_DISCOUNT}} </h3>
+										<p class="delec_prize ">￥{{item.PROJECT_PRICE}}</p>
+									</div>
+									<!--<div class="f1 flex btnsBox">
+										<div class="cm_btn btns ">删除</div>
+									</div>-->
+								</div>
+							</li>
+							<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{productsList[3].norest?'没有数据了':'加载更多'}}</li>	
+						</ul>
+					</div>
+					<!--已下架-->
+					<div class="animated fadeInDownBig" v-show="currtab==4?true:false">
+						<ul class="reset cm_ul">
+							<li class="tabsItems panel" v-for="item in productsList[4].infoList" v-show="item.PROJECT_STATUS=='4'?true:false">
+								<div class="itemBody flex" @tap="_jumpToDetail(item.PROJECT_CODE)">
+									<div class="itemPic">
+										<img :src="item.PROJECT_IMG1" alt="" class="cover" />
+									</div>
+									<div class="f1">
+										<h3 class="cm_title">{{item.PROJECT_NAME}}</h3>
+										<p class=" ">发布时间    {{item.CREATE_TIME}}</p>
+										<!--<ul class="flex labelBox">
+											<li class="itemLabel">会员价</li>
+											<li class="itemLabel">新人价</li>
+											<li class="itemLabel">新人价</li>
+										</ul>-->
+										<div class="flex " >
+											<p class="f1 t_l cor_g lh36">成交量：{{item.SELL_COUNT}}</p>
+											<p class="f1 t_r cor_g lh36">{{item.PROJECT_LOVE}}人 收藏</p>
+										</div>
+									</div>
+								</div>
+								<div class="itemFoot flex">
+									<div class="flex">
+										<h3 class="prize cur_prize">￥{{item.PROJECT_DISCOUNT}} </h3>
+										<p class="delec_prize ">￥{{item.PROJECT_PRICE}}</p>
+									</div>
+									<!--<div class="f1 flex btnsBox">
+										<div class="cm_btn btns ">删除</div>
+									</div>-->
+								</div>
+							</li>
+							<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{productsList[4].norest?'没有数据了':'加载更多'}}</li>	
+						</ul>
+					</div>
+
+				</div>
+			</div>
+
+			<!--发布新作品-->
+			<div class=" bottomMenus" @tap="_toEdit">
+				<h3 class="cor_y t_c menusTxt">发布新作品</h3>
+			</div>
+		</div>
+		<script src="../../../js/mui.min.js"></script>
+
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/bscroll.min.js"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+				var APP
+				mui.init({
+					swipeBack: true
+				});
+				mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+					APP = new Vue({
+						el: '#app',
+						data: {
+							tabContenTop: '',
+							scroll: '',
+							isLoading: false,
+							currtab: 1,
+							productsList:[
+								{ //未提交
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								},
+								{ //已发布
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								},
+								{ //待审核
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								},
+								{ //未通过
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								},
+								{ //已下架
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								}],
+							note:'加载更多'
+						},
+						created: function() {
+							app.initHeader();
+							
+						},
+						mounted: function() {
+							var _this = this;
+							var scroll = this.$refs.scroll
+							this.$nextTick(function() {
+								/*竖向下拉刷新*/
+								if(!_this.scroll) {
+									//							初始化标题栏
+									_this.scroll = new BScroll(scroll, {
+										click: true,
+										probeType: 3,
+										bounceTime: 200,
+										pullUpLoad: {
+											threshold: -20 // 当上拉距离超过30px时触发 pullingUp 事件
+										},
+										pullDownRefresh: {
+											  threshold: 50,
+											  stop: 0
+											}
+									})
+								} else {
+									_this.scroll.refresh();
+								};
+								/*上啦加载更多*/
+								_this.scroll.on('pullingUp', function(e) {
+									_this._getData((b) => {
+										if(b){
+
+										}else{
+											_this.scroll.finishPullUp()
+										}
+									})
+								})
+								
+								/*下拉刷新*/
+								_this.scroll.on('pullingDown', function(e) {									
+									_this._refreshData()									
+								})
+							})
+//							
+//							 plus.nativeUI.closeWaiting()
+//								 mui.currentWebview.show('pop-in', 300, function () {}, {});
+							/*初始化项目数据*/
+							this._getData((b)=>{
+								 plus.nativeUI.closeWaiting()
+								 mui.currentWebview.show('pop-in', 300, function () {}, {});
+								 if(b){
+									}else{
+									_this.scroll.finishPullUp()
+								}
+							});
+							
+							this._totals()
+							
+							var scroll = this.$refs.scroll
+							//							初始化scroll的屏幕位置
+							this.tabContenTop = document.getElementById('header').offsetHeight + 40+ 'px';
+
+						},
+						methods: {
+							//							tab切换
+							_changeTab: function(key) {
+								//								alert(key)
+								this.currtab = parseInt(key)
+//								this.scroll.scrollTo(0,0,300);
+								if(this.productsList[this.currtab].index == 1) {
+									this._getData((b) => {
+										if(b){
+										}else{
+											this.scroll.finishPullUp()
+										}
+									})
+								} else {
+									if(!this.productsList[this.currtab].norest){
+//										该分类还有数据
+										this.scroll.finishPullUp()
+										this.scroll.refresh();
+									}
+									this.scroll.refresh();
+									return
+								}
+							},
+							//							跳转详情页面
+							_jumpToDetail(e,t) {
+								mui.openWindow({
+									url: './product_detail.html',
+									id: 'product_detail',
+									styles: {
+										top: '0px', //新页面顶部位置
+										bottom: '0px', //新页面底部位置
+										scrollIndicator: "none",
+										plusrequire: 'ahead'
+									},
+									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+									show: {
+										autoShow: false, //页面loaded事件发生后自动显示，默认为true
+										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+									},
+									extras: {
+										productId:e										
+									},
+									waiting: {
+										autoShow: true, //自动显示等待框，默认为true
+										title: '正在加载...', //等待对话框上显示的提示内容
+									}
+								})
+							},
+							/*跳转搜索*/
+							_toSearch() {
+//								alert(1)
+								mui.openWindow({
+									url: '../search/search.html',
+									id: 'search',
+									styles: {
+										top: '0px', //新页面顶部位置
+										bottom: '0px', //新页面底部位置
+										scrollIndicator: "none",
+										plusrequire: 'ahead'
+									},
+									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+									show: {
+										autoShow: false, //页面loaded事件发生后自动显示，默认为true
+										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+									},
+									extras: {
+										//自定义扩展参数，可以用来处理页面间传值  
+									},
+									waiting: {
+										autoShow: true, //自动显示等待框，默认为true
+										title: '正在加载...', //等待对话框上显示的提示内容
+									}
+								})
+							},
+							/*添加新项目*/
+							_toEdit() {
+								mui.openWindow({
+									url: './product_edit.html',
+									id: 'product_edit',
+									styles: {
+										top: '0px', //新页面顶部位置
+										bottom: '0px', //新页面底部位置
+										scrollIndicator: "none",
+										plusrequire: 'ahead'
+									},
+									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+									show: {
+										autoShow: false, //页面loaded事件发生后自动显示，默认为true
+										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+									},
+									extras: {
+										//自定义扩展参数，可以用来处理页面间传值  
+									},
+									waiting: {
+										autoShow: true, //自动显示等待框，默认为true
+										title: '正在加载...', //等待对话框上显示的提示内容
+									}
+								})
+							},
+							/*获取项目列表*/
+							_getData(callback){
+								var _this=this
+								var tabType = this.currtab;
+								var index = this.productsList[tabType].index;
+								app.ajax(app.baseUrl + '/api/BusiProject/GetProjects', {
+									data: {
+										pageIndex:index,
+										pageSize:5,
+										PROJECT_STATUS:tabType
+									},
+									// dataType:'json',//服务器返回json格式数据
+									type: 'get', //HTTP请求类型
+									success: function(result) {	
+										if(result.Success) {
+											var l = _this.productsList[tabType].infoList.length;
+											var arr = _this.productsList[tabType].infoList
+											_this.productsList[tabType].infoList = arr.concat(result.Data.ListInfo);
+											
+//											console.log(_this.productsList[tabType].infoList.length,l)
+											if(_this.productsList[tabType].infoList.length == l) {
+												_this.productsList[tabType].norest = true;
+												if(callback)callback(true);
+												return;
+											} 
+
+											_this.productsList[tabType].index += 1
+											mui.later(()=>{
+												_this.scroll.refresh();												
+												if(callback)callback(false);
+											},300)
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+											
+										}
+									}
+								});
+															
+							},
+							_totals(){
+								var _this=this
+								/*获取总的条数*/
+								app.ajax(app.baseUrl + '//api/BusiProject/GetProjectsCount', {
+									// dataType:'json',//服务器返回json格式数据
+									type: 'get', //HTTP请求类型
+									success: function(result) {	
+//										plus.nativeUI.closeWaiting()
+										if(result.Success) {
+											_this.productsList[0].total = result.Data.status0	;
+												_this.productsList[1].total = result.Data.status1	;
+													_this.productsList[2].total = result.Data.status2	;
+														_this.productsList[3].total = result.Data.status3	;
+															_this.productsList[4].total = result.Data.status4	;
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+											
+										}
+									}
+								});
+							},
+							/*刷新数据*/
+							_refreshData(){
+								this.productsList =[
+								{ //未提交
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								},
+								{ //已发布
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								},
+								{ //待审核
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								},
+								{ //未通过
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								},
+								{ //已下架
+									index: 1,
+									total:0,
+									infoList: [],
+									norest: false
+								}];
+								plus.nativeUI.showWaiting()
+								this._getData((b)=>{
+									if(b){
+								
+										}else{
+											this.scroll.finishPullUp()
+										
+									}	
+									this.scroll.finishPullDown()
+									plus.nativeUI.closeWaiting()
+								})
+								this._totals()
+							},
+							/*回到顶部*/
+							_backTop(){
+								this.scroll.scrollTo(0,0,300)
+							}
+						}
+					})
+
+				});
+				function refresh(){
+	//				alert(1)
+					APP._refreshData()
+				}
+		</script>
+	</body>
+
+</html>

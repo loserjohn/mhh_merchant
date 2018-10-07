@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>时间设置</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<style>
+			.setBox {
+				background: rgba(21, 21, 21, 1);
+				padding-bottom: 15px;
+			}
+			
+			.allDatRest {
+				width: 100%;
+			}
+			
+			.text {
+				line-height: 30px;
+			}
+			
+			.timeRest {
+				background: #fff;
+				padding: 10px 0;
+			}
+			
+			.btn {
+				width: 80px;
+				height: 44px 
+			}
+			
+			.btn .cm_btn {
+				margin: 0;
+			}
+			
+			.lh4 {
+				line-height: 44px;
+			}
+			/*时间段控制*/
+			
+			.dateBox {
+				border-top: 1px solid #d3d3d3;
+				flex-wrap: wrap;
+				justify-content: space-between;
+			}
+			
+			.dateBox .timeItem {
+				width: calc(100% / 6);
+				height: 56px;
+				line-height: 46px;
+				text-align: center;
+				box-sizing: border-box;
+				/*border: 1px solid #eee;*/
+				box-sizing: border-box;
+				padding: 5px;
+				color: #d3d3d3;
+			}
+			
+			.dateBox .timeItem .itemBox {
+				background: #f2f2f2;
+				width: 100%;
+				height: 100%;
+				display: block;
+			}
+			
+			
+			
+			.dateBox .timeItem .itemBox.hasOrder {
+				color: #ccaa42;
+				position: relative;
+			}
+			
+			.dateBox .timeItem .itemBox.hasOrder::before {
+				position: absolute;
+				content: '(已预约)';
+				bottom: -14px;
+				font-size: 10px;
+			}
+			
+			.dateBox .timeItem .itemBox.canOrder {
+				background: #ccaa42;
+				color: #fff
+			}
+			
+			.dateBox .timeItem .itemBox.selectTime {
+				background: rgba(21, 21, 21, 1)!important;
+				color: #ccaa42
+			}
+			.checks{
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav " id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">{{today}}</h1>
+				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px">
+					常见问题
+				</a>
+			</header>
+			<!--操作菜单-->
+			<div class="setBox container flex" id="content" ref="starsBox">
+				<div class="flex allDatRest">
+					<div class="cor_w f1 text">全天休息</div>
+					<div class="">
+						<div class="mui-switch" :class="{'mui-active':allDayRest}" @tap="_allDayRest">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--时段休息-->
+			<div class="timeRest ">
+				<div class="flex container">
+					<div class="cm_name f1 lh4">时段休息</div>
+					<div class="btn">
+						<div class="cm_btn" @tap="_save">
+							设置
+						</div>
+					</div>
+				</div>
+
+				<ul class="dateBox flex">
+					<li class="timeItem " v-for="(item,index) in timeList">
+						<label :for="'item'+index" class="itemBox " :class="{canOrder:item.orderStatus == '2',hasOrder:item.orderStatus == '3',selectTime:_selectTime(item)}"  >{{item.time}}</label>
+						<input :id="'item'+index" name="checkbox"  :disabled="item.orderStatus==3" :value="item.value" type="checkbox" class="checks" v-model="selectList" >
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/util.js"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="../../../js/bscroll.min.js"></script>-->
+		<script type="text/javascript">
+			(function() {
+				mui.init({
+					swipeBack: true
+				});
+				mui.plusReady(function() {
+					app.WXinit(CryptoJS)
+					var APP = new Vue({
+						el: '#app',
+						data: {
+							today: '',
+
+							timeList:[],
+							selectList: [],
+							/*全天休息*/
+							allDayRest: false,
+							
+							enbled:true
+//							demo:{
+//								allRestEnbled:false  ,  // 全天休息  true   可以  false   状态
+//								timeList:[  //48个时段
+//									{
+//										time:'00:00',
+//										value:'00:00',
+//										orderStatus:1    //1 。休息时段  2.可预约时段   3.已被客户真实预约 不可修改时段
+//									},
+//									{
+//										time:'00:30',
+//										value:'00:00',
+//										orderStatus:1    //1 。休息时段  2.可预约时段   3.已被客户真实预约 不可修改时段
+//									}
+//									//.....
+//								],
+// 							}
+
+						},
+						created: function() {
+							app.initHeader();
+							var self = plus.webview.currentWebview();
+							var td = new Date(self.date);
+							this.today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate()
+
+							//							构建48个
+						},
+						mounted: function() {
+							/*初始化数据*/
+							//							alert(this.today)
+							var _this = this;
+							this._getData();
+						},
+						methods: {
+
+							/*选择效果*/
+							_selectTime(time) {
+								
+								if(time.orderStatus == 3)return; // 被预约的不可选中
+								
+
+								var r = this.selectList.indexOf(time.value);
+								if(r < 0) {
+									return false
+								} else {
+									return true
+								}
+							},
+							/*显示样式*/
+							_timeStyle(time) {
+								var r = this.orderList.indexOf(time)
+
+								if(r < 0) {
+									var re = this.workList.indexOf(time)
+									if(re < 0) {
+										/*休息状态*/
+										return {
+											selectTime: this._selectTime(time)
+										}
+									} else {
+										/*工作状态*/
+										return {
+											work: true,
+											selectTime: this._selectTime(time)
+										}
+									}
+								} else {
+									/*已经预约不可改变*/
+									return {
+										hasOrder: true,
+										selectTime: this._selectTime(time)
+									}
+								}
+							},
+							/*提交保存*/
+							_save() {
+								var _this = this;
+								if(mui.os.plus) {
+									var a = [{
+										title: '设为休息'
+									}, {
+										title: '设为可预约'
+									}];
+									plus.nativeUI.actionSheet({
+										title: '状态设置',
+										cancel: '取消',
+										buttons: a
+									}, function(b) {
+										switch(b.index) {
+											case 0:
+												return;
+												break;
+											case 1:
+												//设为休息 
+												_this.setDate(2)
+												break;
+											case 2:
+												//设为未预约 
+												_this.setDate(0)
+												break;
+											default:
+												break;
+										}
+									}, false);
+								}
+							},
+							/*状态设置*/
+							setDate(t) {
+								var msg = t == 2 ? '休息' : '可预约 ';
+								var _this = this;
+								
+								if(this.allDayRest){
+//									plus. nativeUI.toast()
+									plus.nativeUI.alert('请先关闭全天休息状态');
+									this.selectList = []
+									return
+								}
+								
+								plus.nativeUI.confirm('确定将选择时段置为' + msg + '？', () => {
+									plus.nativeUI.showWaiting()
+									app.ajax(app.baseUrl + '/api/BusiAccount/SetBookingTime', {
+										// dataType:'json',//服务器返回json格式数据
+										data: {
+											date: _this.today,
+											points: _this.selectList.join(','),
+											status: t
+										},
+										type: 'post', //HTTP请求类型
+										success: function(result) {
+											/*登陆成功*/
+											plus.nativeUI.closeWaiting()
+											if(result.Success) {
+												plus.nativeUI.toast('成功');
+												_this._getData()
+											} else {
+												alert(result.Msg)
+											}
+										}
+									});
+								}, {
+									title: '马嘿嘿提醒您'
+								})
+							},
+							/*获取当天数据*/
+							_getData() {
+								var _this = this
+								this.selectList = [];
+								app.ajax(app.baseUrl + '/api/BusiAccount/GetBookingTimeByDate', {
+									// dataType:'json',//服务器返回json格式数据
+									data: {
+										date: _this.today
+									},
+									type: 'get', //HTTP请求类型
+									success: function(result) {
+										/*登陆成功*/
+										_this.timeList = result.Data.timeList
+										
+										_this.allDayRest = result.Data.allRestEnbled //当前状态
+										
+										_this._allRestEnable()
+										
+									}
+								});
+							},
+//							是否可以全天休息
+							_allRestEnable(){
+								this.timeList.forEach((item,index)=>{
+								    if( parseInt(item.orderStatus) == 3){
+								    	this.enbled = false;
+								    	return false;
+								    }
+								})
+								
+								
+							},
+							/*设置全天休息*/
+							_allDayRest() {
+						
+								var msg = this.allDayRest?'取消':'开启'
+								var t = this.allDayRest?1:0   //1 可预约  2休息
+								var _this = this;
+//										alert(_this.allRestEnbled)
+//										alert(_this.allDayRest)
+								
+//								判断是否可以设置全天休息  只有在 当天不是全天休息状态 并且 当天没有真实预约 才可以 设为全天休息
+								if(!this.enbled && !this.allDayRest){
+									plus. nativeUI.toast('当天已有客户预约，不可置为全天休息！')
+									return
+								}
+								
+								
+								plus.nativeUI.confirm('确定'+msg+'全天休息？', (event) => {
+									if(event.index == 0) {
+										plus.nativeUI.showWaiting()
+										app.ajax(app.baseUrl + '/api/BusiAccount/SetBookingDate', {
+											data: {
+												dates: _this.today,
+												status: t
+											},
+											type: 'post', //HTTP请求类型
+											success: function(result) {
+												/*成功*/
+												plus.nativeUI.closeWaiting()
+												if(result.Success) {
+													plus.nativeUI.toast('成功');
+													_this.allDayRest = !_this.allDayRest;
+													_this._getData()
+												} else {
+													alert(result.Msg)
+												}
+											}
+										});
+									}
+
+								}, {
+									title: '马嘿嘿提醒您'
+								})
+							}
+
+						}
+					})
+
+				});
+			})();
+		</script>
+	</body>
+
+</html>

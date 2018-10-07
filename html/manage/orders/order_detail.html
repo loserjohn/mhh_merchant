@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>订单详情</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<style>
+			/*底部菜单*/
+			
+			.bottomMenus {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				height: 50px;
+				right: 0;
+				background: #212121
+			}
+			
+			
+			
+		
+			/*主要信息*/
+			
+			.msg {
+				padding-bottom: 20px;
+				padding-top: 20px;
+			}		
+					
+			/*服务信息*/
+			.mainMsg{
+				background: rgba(21, 21, 21, 1);
+				position: relative;
+				padding-bottom: 15px;
+			}
+			.mainMsg .address{
+				width: 100%;
+			}
+			.mainMsg .location{
+				position: absolute;
+				width: 64px;
+				height: 58px;
+				box-sizing: border-box;
+				border-radius: 32px 0 0 32px;
+				border: 1px solid #404040;
+				border-right:none;
+				background:#131313;
+				right: 0;
+				bottom:15px
+			}
+			.mainMsg .location .iconfont{
+				font-size: 30px;
+				display: block;
+				line-height: 58px;
+				margin-left: 15px;
+			}
+			.mainMsg .orderTime{
+				margin-top: 10px;
+			}
+			/*作品信息*/
+			.productMsg{
+				padding-bottom: 15px;
+				border-bottom: 1px dotted #d3d3d3;
+			}
+				
+			.cur_prize {
+				font-size: 22px;
+				line-height: 26px;
+			}			
+			/*客户信息*/
+			.customMsg .cm_title{
+				line-height: 50px;
+			}
+			.customMsg i{
+				line-height: 36px;
+			}
+			.customMsg .cm_name{
+				line-height: 36px;
+			}
+			/*小提示*/
+			.toolnode{
+				box-sizing: border-box;
+				padding: 15px 25px;
+			
+			}
+			.serverNum{
+				margin: 10px 0px 0px 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav "  id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">订单详情</h1>
+			</header>
+			<!--分类作品-->
+			<div class="" >
+				<!--服务地址-->
+				<div class="mainMsg container" id="content">
+					<div class="address cor_w fs16 flex">
+						<aside>
+							服务地点：
+						</aside>
+						<article class="f1">
+							{{detail.ORDER_ADDREASS}}		
+						</article>						
+					</div>
+					<!--<div class="location">
+							<i class="iconfont icon-wei-  cor_y locationIcon"></i>
+					</div>-->
+					<div class="orderTime cor_y fs16 flex" v-if="detail.BOOK_DATE">
+						<aside>
+							预约时间：
+						</aside>
+						<article class="f1">
+						 {{detail.BOOK_DATE.replace('00:00:00',detail.BOOK_PERIOD) }}
+						</article>	
+					</div>
+				</div>
+				<!--作品信息-->
+				<div class="msg panel">
+					<!--作品简要信息-->
+					<div class="productMsg  flex " @tap = "_jumpDetail(detail.PROJECT_CODE)">
+						<div class="cm_prePic">
+							<img :src="detail.PROJECT_IMG1" alt="" class="cover" />
+						</div>
+						<div class="f1">
+							<h3 class="cm_title">{{detail.PROJECT_NAME}}</h3>
+							<p class="cm_time">发布时间  {{detail.CREATE_TIME}}</p>
+							<div class="flex">
+								<h3 class="prize f1 ">￥{{detail.ORDER_PAY_AMOUNT}} </h3>
+								
+								<p class="cor_y f1 t_r lh24">{{detail.ORDER_STATUS | getStatus}}</p>
+							</div>
+						</div>
+					</div>
+					<!--客户信息-->
+					<div class="customMsg">
+						<h3 class="cm_title">客户信息</h3>
+						<div class="flex">
+							<img :src="detail.MEMBER_HEAD?detail.MEMBER_HEAD:'../../../images/default_avatar.jpg'" alt="" class="avatar" />
+							<div class="cm_name f1">{{detail.MEMBER_NIKENAME}}</div>
+							<!--<i class="iconfont  icon-arrowright"></i>-->
+						</div>
+						<p class="cm_name fs12">联系方式：{{detail.MEMBER_MOBILE}}   </p>
+						<div class="flex">
+							<p class="cm_name fs12">备注：</p>
+							<p class=" f1 ">
+								{{detail.REMARK}}
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!--小贴士-->
+				<div class="toolnode no-bg cor_g">
+					马嘿嘿提醒你
+				</div>
+			</div>
+			<!--发布新作品-->
+			<div class=" bottomMenus flex">
+				<h3 class="cor_y t_c cm_btnTxt f1" @tap ="_callPhone">致电客户</h3>
+				<h3 class="cor_w t_c cm_btnTxt f1 bg_y" v-if="detail.ORDER_STATUS==2" @tap ="_beginServer(true)">开始服务</h3>
+				<h3 class="cor_w t_c cm_btnTxt f1 bg_y" v-if="detail.ORDER_STATUS==3" @tap ="_completeServer(true)">服务完成</h3>
+			</div>
+			
+			<!--验证码校验框-->
+			<div class="cm_mask" v-if="show"  >
+				<div class="cm_modal">
+					<h3 class="cm_title t_c">开始服务</h3>
+					<div class="flex " style="box-sizing: border-box;padding: 0 20px;margin-top: 8px;">
+						<h3 class="cm_name f1 t_c" style="margin-top: 15px;">服务码:</h3>
+						<input class="serverNum f2" type="text" v-model = "serverNum"/>
+					</div>	
+					<div class="flex">
+						
+						<div class="cm_btn f1" @tap = "_beginServer(false)">
+							返回
+						</div>
+						<div class="cm_btn f2" @tap = "_validServerNum">
+							验证服务码
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+		</div>
+		
+		<script src="../../../js/mui.min.js"></script>
+				<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/bscroll.min.js"></script>
+		<script type="text/javascript">
+			(function() {
+				mui.init({
+					swipeBack: true
+				});
+				mui.plusReady(function() {
+						app.WXinit(CryptoJS)
+					var APP = new Vue({
+						el: '#app',
+						data: {
+							detail:'',/*订单信息*/
+							show:false,//模态框显示
+							serverNum:''//服务码
+						},
+						created: function() {
+							app.initHeader();
+						},
+						mounted: function() {
+											
+							this._initData(()=>{
+								plus.nativeUI.closeWaiting()
+								mui.currentWebview.show('pop-in', 300, function () {}, {});
+							})
+							
+						},
+						 filters: {
+					        getStatus(value) {
+					        	switch (value){
+					        		case '0':
+					        		return '待付款'
+					        			break;
+					        		case '1':
+					        		return '已付款'
+					        			break;
+					        		case '2':
+					        		return '待服务'
+					        			break;
+					        		case '3':
+					        		return '服务中'
+					        			break;
+					        		case '4':
+					        		return '待评价'
+					        			break;
+					        		case '5':
+					        		return '已完成'
+					        			break;
+					        		case '6':
+					        		return '申请退款'
+					        			break;
+					        		case '7':
+					        		return '退款成功'
+					        			break;
+					        		case '8':
+					        		return '退款失败'
+					        			break;
+					        		case '9':
+					        		return '已取消'
+					        			break;	
+					        		
+					        		default:
+					        			break;
+					        	}
+					                
+					       	}
+					    },
+						methods: {
+							_initData(callback){
+								var _this =this
+								var self =plus.webview.currentWebview();	
+								/*加载获取订单详情*/
+								app.ajax(app.baseUrl + '/api/BusiOrder/GetOrder', {
+									data: {
+										ORDER_CODE:self.orderId
+									},
+									// dataType:'json',//服务器返回json格式数据
+									type: 'get', //HTTP请求类型
+
+									success: function(result) {
+										/*登陆成功*/
+										if(result.Success) {
+											_this.detail  = result.Data.data
+											
+											if(callback) callback()
+										} else {
+											/*验证失败*/
+											if(callback) callback(false, result.Msg)
+										}
+									}
+								});
+							},
+							/*初始化详情数据*/
+							
+							/*完成服务*/
+							_completeServer(){
+								var _this = this						
+								plus.nativeUI.confirm('确认已经完成服务？', (event) => {
+									var index = event.index;
+									if(index == 0){
+										plus.nativeUI.showWaiting('提交中')
+										app.ajax(app.baseUrl + '/api/BusiOrderService/SuccessOrderService', {
+											data: {
+												ORDER_CODE:this.detail.ORDER_CODE
+											},
+											// dataType:'json',//服务器返回json格式数据
+											type: 'post', //HTTP请求类型
+											success: function(result) {
+												plus.nativeUI.closeWaiting()
+													if(result.Success) {
+														plus.nativeUI.toast('服务已完成');
+														_this._initData();
+														
+													} else {
+														/*验证失败*/
+														plus.nativeUI.toast(result.Msg)
+			
+													}											
+											}
+										});
+									}
+								
+								}, {
+									title: '马嘿嘿提醒您'
+								})
+							},
+							//	左右滑动切换
+							_swipipeTab(w) {
+								if(w > 0) {
+									//									向右
+									this.currtab++
+								} else {
+									//									向左
+									this.currtab--
+								}
+								if(this.currtab <= 0) {
+									this.currtab = 4
+								} else if(this.currtab > 4) {
+									this.currtab = 1
+								}
+							},
+							/*跳转项目详情*/
+							_jumpDetail(key){
+								mui.openWindow({
+									url: '../production/product_detail.html',
+									id: 'product_detail',
+									styles: {
+										top: '0px', //新页面顶部位置
+										bottom: '0px', //新页面底部位置
+										scrollIndicator: "none",
+										plusrequire: 'ahead'
+									},
+									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+									show: {
+										autoShow: false, //页面loaded事件发生后自动显示，默认为true
+										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+									},
+									extras: {
+										//自定义扩展参数，可以用来处理页面间传值  
+										productId:key
+									},
+									waiting: {
+										autoShow: true, //自动显示等待框，默认为true
+										title: '正在加载...', //等待对话框上显示的提示内容
+									}
+								})
+							},
+							/*开始服务*/
+							_beginServer(b){
+								this.show = b
+							},
+							/*致电*/
+							_callPhone(){
+//								alert(0)
+								plus.device.dial( this.detail.MEMBER_MOBILE, false );
+							},
+							/*验证服务码*/
+							_validServerNum(){
+								if(!this.serverNum){
+									plus.nativeUI.alert("服务码不能为空!", function(){return false;},'马嘿嘿提醒您');
+									return;
+								}
+								var _this =this;
+								var data = {
+									ORDER_CODE:this.detail.ORDER_CODE,
+									SERVICE_NUM:this.serverNum
+								};
+//								console.log(JSON.stringify(data))
+								plus.nativeUI.showWaiting('校验中...')
+								app.ajax(app.baseUrl + '/api/BusiOrderService/SeedOrderService', {
+									data: data,
+									// dataType:'json',//服务器返回json格式数据
+									type: 'post', //HTTP请求类型
+									success: function(result) {
+										mui.later(()=>{
+											plus.nativeUI.closeWaiting()
+											if(result.Success) {
+												plus.nativeUI.toast('校验成功,开始服务');
+												_this._beginServer(false) 
+												_this._initData()
+											} else {
+												/*验证失败*/
+												plus.nativeUI.toast(result.Msg)
+	
+											}
+										},1500)
+										
+									}
+								});
+							}
+						}
+					})
+
+				});
+			})();
+		</script>
+	</body>
+
+</html>

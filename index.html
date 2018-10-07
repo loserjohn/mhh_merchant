@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>马嘿嘿</title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/common.css" />
+		<style>
+			.logoBg {
+				position: absolute;
+				width: 190px;
+				height: 190px;
+				left: 50%;
+				top: 40%;
+				margin-left: -95px;
+				margin-top: -95px;
+			}
+			
+			.loginbtns {
+				width: 100%;
+				height: 44px;
+				bottom: 40px;
+				box-sizing: border-box;
+				padding: 0 20px;
+			}
+			
+			.blank {
+				width: 20px;
+			}
+			
+			#app {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				background: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<img src="images/logo1.png" class="logoBg" alt="" />
+			<div class="loginbtns flex fixed">
+				<div class="f1 ">
+					<div class="cm_btn" @touchstart="toLogin">
+						手机登陆
+					</div>
+				</div>
+				<div class="blank"></div>
+				<div class="f1">
+					<div class="cm_btn" @touchstart="toWxLogin">
+						微信登陆
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="js/vue.js"></script>
+		<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/system.js"></script>
+		<script src="js/system.js"></script>	
+		
+		<script type="text/javascript" charset="utf-8">
+			mui.init({
+				swipeBack: false
+			});
+			
+			mui.plusReady(function() {				
+//				systemOS.checkUpdate(); //版本
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						/* 预加载的首页 */
+						home: '',
+						lastLoginTime: '',
+						lastLoginWay: '',
+						userAccount: '',
+						userPass: '',
+						opId: '',
+						/* 授权登陆通道对象 */
+						auths: {
+							s_name: '',
+							s_server: '',
+						}
+					},
+					created: function() {
+						//					this.baseUrl = plus.storage.getItem('baseUrl');
+						var _this = this;
+						var authBtns = ['weixin'];
+					},
+					mounted: function() {
+						var _this = this
+
+						app.WXinit(CryptoJS)
+						
+						systemOS.versionInit((t)=>{
+//							alert(666)
+							if(t){
+								app.autoLogin()
+							}
+						})												
+						
+						//判断忆否已经存在openid，没有则不自动登陆
+						this.opId = plus.storage.getItem('opId');
+						//最后的登陆时间
+						this.lastLoginTime = plus.storage.getItem('lastLoginTime');
+						//	最后的登陆方式 1 为账号登陆,2为微信登陆
+						this.lastLoginWay = plus.storage.getItem('lastLoginWay');
+						// 用户名
+						this.userName = plus.storage.getItem('userName');
+						// 用户密码	
+						this.userPass = plus.storage.getItem('userPass');
+
+						var backButtonPress = 0;
+						mui.back = function(event) {
+							backButtonPress++;
+							if(backButtonPress > 1) {
+								plus.runtime.quit();
+							} else {
+								plus.nativeUI.toast('再按一次退出应用');
+							}
+							setTimeout(function() {
+								backButtonPress = 0;
+							}, 1000);
+							return false;
+						};
+					},
+					methods: {
+						/* 手机号码登陆 按钮 */
+						toLogin() {
+							mui.openWindow({
+								url: './login.html',
+								id: 'login',
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead'
+								},
+								show: {
+									aniShow: 'none',
+									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {},
+								waiting: {
+									autoShow: true, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						},
+						// 微信手动号登陆
+						toWxLogin() {
+//							plus.nativeUI.showWaiting()
+							var _this = this;
+							app.wxOAuth();
+						},
+						/* 加密 */
+						_Encrypt(str) {
+							str = str + '|.|' + new Date().getTime()
+							var key = CryptoJS.enc.Utf8.parse(app._KEY);
+							var iv = CryptoJS.enc.Utf8.parse(app._IV);
+							var encrypted = '';
+							var srcs = CryptoJS.enc.Utf8.parse(str);
+							encrypted = CryptoJS.AES.encrypt(srcs, key, {
+								iv: iv,
+								mode: CryptoJS.mode.CBC,
+								padding: CryptoJS.pad.Pkcs7
+							});
+							return encrypted.ciphertext.toString();
+						}
+					}
+				})
+
+			})
+		</script>
+	</body>
+
+</html>

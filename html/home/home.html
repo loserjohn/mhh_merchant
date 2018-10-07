@@ -1,0 +1,750 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/iconfont.css" />
+		<style>
+			/*头部信息*/
+			
+			.account {
+				width: 100%;
+				/*height:250px;*/
+				border-radius: 0 0 20px 20px;
+				background: linear-gradient(#303030, #000000);
+				box-sizing: border-box;
+				padding-top: 70px;
+				position: relative;
+			}
+			
+			.shopPic {
+				width: 90px;
+				height: 90px;
+				margin-right: 40px;
+			}
+			
+			.shopPic img {
+				width: 100%;
+				height: 100%;
+			}
+			
+			.avatar {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				overflow: hidden;
+				margin-right: 10px;
+			}
+			
+			/*.msg_p {
+				margin-left: 15px;
+			}*/
+			/*公告*/
+			
+			.notice {
+				box-sizing: border-box;
+				padding-top: 20px;
+				/*margin-bottom:20px;*/
+				padding-bottom: 20px;
+			}
+			
+			.txtBox {
+				position: relative;
+				border: 1px solid #404040;
+				border-radius: 10px;
+				background: #212121;
+				overflow: hidden;
+			}
+			
+			.noticeText {
+				border: none;
+				outline: none;
+				background: #212121;
+				color: #c8c7c7;
+				font-size: 12px;
+				margin-bottom: 30px;
+			}
+			
+			.txtBox .reset {
+				position: absolute;
+				left: 10px;
+				bottom: 0;
+				/*color: #69a9ef;*/
+				line-height: 30px;
+			}
+			
+			.txtBox .issue {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				color: #ccaa42;
+				width: 82px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				background: url(../../images/btn_bg.png) 0 0/cover no-repeat;
+			}
+			/*快捷按钮*/
+			
+			.quickBtns {
+				/*position: absolute;*/
+				width: 100%;
+				height: 100px;
+				background: #fff;
+				left: 0;
+				bottom: -80px;
+				z-index: -1;
+				margin-top: -20px;
+			}
+			
+			.menusIcon {
+				width: 36px;
+				height: 36px;
+				margin: 0 auto;
+				margin-top: 30px;
+				display: block;
+			}
+			
+			.menuTxt {
+				text-align: center;
+				color: #212121;
+				margin-top: 5px;
+			}
+			/*商圈编辑*/
+			
+			.business {
+				margin-top: 10;
+			}
+			
+			.businessTxt {
+				/*border:1px solid #d3d3d3;*/
+				color: #737272;
+				word-break: break-all;
+				white-space: normal;
+			}
+			/*上架作品*/
+			
+			.producsSlider {
+				flex-wrap: wrap;
+				justify-content: space-between;
+			}
+			
+			.producs {
+				width: 48%;
+				height: auto;
+				/*border-radius: 10px;*/
+				overflow: hidden;
+				margin-bottom: 15px;
+			}
+			
+			.producs .producsPic {
+				width: 100%;
+				height: 158px;
+			}
+			
+			.producs h3 {
+				font-size: 16px;
+			}
+			
+			.producsTxt {
+				box-sizing: border-box;
+				padding: 0 5px;
+			}
+			/*今日流量*/
+			
+			.floxBox {
+				box-sizing: border-box;
+				padding: 10px 0;
+			}
+			
+			.black {
+				background: #000;
+			}
+			/*.black>p{
+				color: #ccaa42;
+			}*/
+			
+			.black>h3 {
+				color: #fff;
+			}
+			
+			.fixed {
+				position: fixed;
+			}
+			/*商圈编辑*/
+			
+			.businessBox {
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				background: pink;
+				z-index: 100;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav mui-bar-transparent" style="background-color: rgba(21, 21, 21, 0)" data-top='0' data-offset='200' data-duration='16' id="header">
+			<h1 class="mui-title">马嘿嘿欢迎您</h1>
+		</header>
+		<div id="app" ref='scroll'>
+			<div class="clearfix" style="padding-bottom: 50px;position: relative;">
+				<!--商户信息-->
+				<div style="position: relative ">
+					<div class="account container">
+						<!--基本信息-->
+						<div class="flex">
+							<div class="shopPic">
+								<img src="../../images/sh.png" class="cover" />
+							</div>
+							<div class="f2" @tap="_person">
+								<div class="flex">
+									<div class=" avatar">
+										<img :src="avatar?avatar:'../../images/default_avatar.jpg'" alt="" class="cover" />
+									</div>
+									<div class="f1">
+										<h3 class="fs16 cor_w">{{nickName?nickName:'--'}}</h3>
+										<p class="fs12 cor_g">{{profession?profession:'--'}}</p>
+									</div>
+								</div>
+								<div class="" style="margin-top: 5px;">
+									<div class="flex">
+										<p class="t_l fs12 " style="line-height: 2">
+											嘿皮值 <i class="iconfont icon-xiaolianwawa cor_y fontIcon"></i>：
+										</p>
+										<p class="f1 cor_g  fs12 msg_p flex" style="line-height: 2;">
+											<span v-for="item in levelNum" class="levelIcon"></span>
+										</p>
+									</div>
+									<div class="flex lh26">
+										<p class="t_l fs12" style="line-height: 2;">
+											小草值 <i class="iconfont icon-rfq cor_y fontIcon"></i>：
+										</p>
+										<p class="f1 cor_g fs12  msg_p" style="line-height: 2;">{{scoreNum?scoreNum:'--'}}</p>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+						<!--店铺公告-->
+						<div class="notice ">
+							<div class="txtBox">
+								<textarea name="noticeText" placeholder="店铺公告！" rows="" cols="" class="noticeText cover" v-model="shopNotice"></textarea>
+								<div class="reset cor_g" id="reset" @touchstart="_reset">清空</div>
+								<div class="issue" id="issue" @touchstart="_issue">确认发布</div>
+							</div>
+						</div>
+
+					</div>
+					<!--快捷按钮-->
+					<div class="quickBtns flex panel">
+						<div class="f1" @click="_jumpMenus('time')">
+							<img src="../../images/demo3.png" alt="" class="menusIcon" />
+							<p class="menuTxt">时间管理</p>
+						</div>
+						<div class="f1" @click="_jumpMenus('production')">
+							<img src="../../images/demo3.png" alt="" class="menusIcon" />
+							<p class="menuTxt">作品管理</p>
+						</div>
+						<div class="f1" @click="_jumpMenus('orders')">
+							<img src="../../images/demo3.png" alt="" class="menusIcon" />
+							<p class="menuTxt">订单管理</p>
+						</div>
+						<div class="f1" @click="_jumpMenus('deposit')">
+							<img src="../../images/demo3.png" alt="" class="menusIcon" />
+							<p class="menuTxt">提现</p>
+						</div>
+					</div>
+				</div>
+
+				<!--商圈编辑-->
+				<div class="business panel ">
+					<div id='' class="cm_btn fs16" @click="_toEditBusinessArea">编辑商圈</div>
+					<div class="businessTxt">
+						<!--{{businessArea}}-->
+						<span v-for="item in businessArea" style="margin-right: 5px;">{{item}}</span>
+						<p class="lh26 t_c " v-show="businessArea.length==0">--无--</p>
+					</div>
+				</div>
+
+				<!--今日流量-->
+				<div class="flow panel">
+					<div class="panelTitle">
+						今日流量
+					</div>
+					<div class="flex t_c">
+						<div class="f1 black floxBox">
+							<p class="cor_y">今日访客</p>
+							<h3>{{todayData.VisitCount}}</h3>
+						</div>
+						<div class="f1 floxBox">
+							<p class="cor_y">今日订单</p>
+							<h3>{{todayData.OrderCount}}</h3>
+						</div>
+						<div class="f1 black floxBox">
+							<p class="cor_y"> 成交量 </p>
+							<h3>{{todayData.PayOrderCount}}</h3>
+						</div>
+					</div>
+					<div class="flex t_c ">
+						<div class="f1 floxBox">
+							<p class="cor_y">浏览量</p>
+							<h3>{{todayData.BrowseCount}}</h3>
+						</div>
+						<div class="f1 black floxBox">
+							<p class="cor_y">收藏量</p>
+							<h3>{{todayData.AttenionCount}}</h3>
+						</div>
+						<div class="f1 floxBox">
+							<p class="cor_y">交易额</p>
+							<h3>{{todayData.PayOrderAmount}}</h3>
+						</div>
+					</div>
+				</div>
+
+				<!--上架作品-->
+				<div class="productions panel">
+					<div class="panelTitle">
+						最新上架
+						<a class="fr cor_y " @click="_jumpMenus('production')">查看<i class="iconfont icon-arrowright"></i></a>
+					</div>
+					<p class="t_c" v-if="productList.length==0?true:false" style="line-height: 40px;">--展示还没有作品，赶紧去发布吧--</p>
+					<ul class="flex   producsSlider" v-else>
+						<li class="producs" v-for="item in productList" @tap="_jumpToDetail(item.PROJECT_CODE)">
+							<img :src="item.PROJECT_IMG1" alt="" class="producsPic" />
+							<div class="producsTxt">
+								<h3 class="ellipsis">{{item.PROJECT_NAME}}</h3>
+								<p class="prize">￥{{item.PROJECT_PRICE}}</p>
+								<div class="flex">
+									<!--<p class="f1 time">会员价</p>-->
+									<p class="f1  time">{{item.BOOKING_COUNT}}已预定</p>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<!--提示语-->
+				<div class="cm_hint flex">
+					<div class="f1"><img src="../../images/hint.png" alt="" /></div>
+				</div>
+
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/util.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/vue.js"></script>
+		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="../../js/bscroll.min.js"></script>-->
+		<script type="text/javascript">
+			var APP;
+			mui.plusReady(function() {
+				initPage();
+				var self = plus.webview.currentWebview()
+				app.WXinit(CryptoJS)
+				
+				APP = new Vue({
+					el: '#app',
+					data: {
+						isLoading: false,
+						nickName: '',
+						/*昵称*/
+						profession: '',
+						/*职业*/
+						//						level:'',
+						levelNum: '',
+						/*黑皮值*/
+						scoreNum: '',
+						/*积分分数*/
+						businessArea: '',
+						/*商圈*/
+						avatar: '',
+						/*头像*/
+						shopNotice: '',
+						/*公告*/
+						oldTxt: '',
+						productList: [],
+						/*最新项目*/
+
+						todayData: {
+							VisitCount: 0,
+							OrderCount: 0,
+							PayOrderCount: 0,
+							BrowseCount: 0,
+							AttenionCount: 0,
+							PayOrderAmount: 0
+						},
+
+						account: ''
+
+					},
+					created: function() {
+						app.initHeader();
+						//						console.log(1)
+
+					},
+					mounted: function() {
+						var _this = this
+						mui.init({
+							swipeBack: false,
+							pullRefresh: {
+								container: "#app", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+								down: {
+									style: 'circle', //必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+									color: '#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+									height: '50px', //可选,默认50px.下拉刷新控件的高度,
+									range: '100px', //可选 默认100px,控件可下拉拖拽的范围
+									offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
+									auto: false, //可选,默认false.首次加载自动上拉刷新一次
+									callback: () => {
+										_this._initShop(() => {
+											mui.later(() => {
+												mui('#app').pullRefresh().endPulldown();
+											}, 1000)
+										})
+									} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+								}
+							}
+						});
+						
+						/*首次加载获取商户信息*/
+						//						this._initShop()
+						var backButtonPress = 0;
+						mui.back = function(event) {
+							backButtonPress++;
+							if(backButtonPress > 1) {
+								plus.runtime.quit();
+							} else {
+								plus.nativeUI.toast('再按一次退出应用');
+							}
+							setTimeout(function() {
+								backButtonPress = 0;
+							}, 1000);
+							return false;
+						};
+						
+						
+					},
+					methods: { /*更改公告*/
+						_issue: function(e) {
+							var _this = this
+							if(!_this.shopNotice) {
+								plus.nativeUI.toast('至少说点啥吧？');
+								return
+							}
+							if(_this.shopNotice == _this.oldTxt) {
+								plus.nativeUI.alert("能不能来点不一样的", function() {}, "马嘿嘿提醒您", "ok");
+								return;
+							}
+							plus.nativeUI.confirm('确定修改公告？', (event) => {
+
+								var k = event.index
+								//								alert(k)
+								if(k == 0) {
+									app.ajax(app.baseUrl + '/api/BusiShop/UpdateShop', {
+										// dataType:'json',//服务器返回json格式数据
+										data: {
+											SHOP_NOTICE: _this.shopNotice
+										},
+										headers: {
+											'Content-Type': 'application/x-www-form-urlencoded',
+											'Authorization': app.mark + plus.storage.getItem('token')
+										},
+										success: function(result) {
+											/*登陆成功*/
+											plus.nativeUI.toast('修改成功')
+										}
+									});
+								} else {
+									return false
+								}
+							}, {
+								title: '马嘿嘿提醒您'
+							})
+						},
+						/*清空公告*/
+						_reset() {
+							plus.nativeUI.confirm('确定清空公告？', (event) => {
+								var k = event.index
+								//								alert(k)
+								if(k == 0) {
+									this.shopNotice = ''
+								} else {
+									return false
+								}
+
+							})
+						},
+						/*获取 ,更新商户信息*/
+						_initShop(callback) {
+//														alert(app.mark + plus.storage.getItem('token'))
+							var _this = this;
+							/*商户信息*/
+							app.ajax(app.baseUrl + '/api/BusiAccount/GetAccountInfo', {
+								//							data: Info,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								success: function(result) {
+									/*登陆成功*/
+									if(result.Success) {
+										
+//										alert(JSON.stringify(result.Data.SHOP.SHOP_AREA))
+										_this.nickName = result.Data.SHOP.SHOP_NAME;
+//										plus.storage.setItem('userNickName',result.Data.ACCOUNT_PETNAME)
+//										alert(result.Data.ACCOUNT_PETNAME)
+										_this.profession = result.Data.SHOP.SHOP_BUSINESS_TYPE;
+										//									_this.level=result.Data.ACCOUNT_PETNAME;
+										_this.levelNum = result.Data.SHOP.SHOP_STAR;
+										_this.scoreNum = result.Data.SHOP.INTEGRAL;
+						
+										_this.businessArea = result.Data.SHOP.SHOP_AREA;					
+										_this.avatar = result.Data.SHOP.SHOP_LOGO;
+										_this.shopNotice = result.Data.SHOP.SHOP_NOTICE;
+										_this.oldTxt = result.Data.SHOP.SHOP_NOTICE;
+										_this.account = result.Data.SHOP.SHOP_AMOUNT;
+										
+										plus.storage.setItem('pic_head', result.Data.SHOP.SHOP_LOGO);
+										plus.storage.setItem('userNickName', result.Data.SHOP.SHOP_NAME);
+
+										
+										if(plus.webview.getWebviewById('chat')){
+											plus.webview.getWebviewById('chat').evalJS('refresh()')
+										}
+										
+										if(callback) callback();
+									} else {
+										/*验证失败*/
+										if(callback) callback(false, result.Msg)
+
+									}
+								}
+							});
+							/*更新最新项目*/
+							app.ajax(app.baseUrl + '/api/BusiProject/GetProjects?pageIndex=1&pageSize=6&PROJECT_STATUS=1', {
+								//								data: Info,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								success: function(result) {
+									if(result.Success) {
+										//										alert(1)
+										_this.productList = result.Data.ListInfo;
+										//										if(callback)callback();
+									} else {
+										/*验证失败*/
+										//										if(callback) callback(false, result.Msg)					
+									}
+								}
+							});
+							/*今日统计*/
+							app.ajax(app.baseUrl + '/api/DataStatistics/GetCounts', {
+								//								data: Info,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								success: function(result) {
+									/*登陆成功*/
+									if(result.Success) {
+										//										alert(1)
+										_this.todayData = result.Data
+									} else {
+										/*验证失败*/
+									}
+								}
+							});
+						},
+						/*编辑商圈*/
+						_toEditBusinessArea() {
+							var _this = this;
+							mui.openWindow({
+								url: './businessEdiet.html',
+								id: 'businessEdiet',
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead'
+								},
+								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {
+									//									businessArea:'aaaaa,bbbbb,ccccc,aaaaa,bbbbb,ccccc,aaaaa,bbbbb,ccccc,aaaaa,bbbbb,ccccc'
+									//									businessArea:_this.businessArea
+								},
+								waiting: {
+									autoShow: true, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						},
+						/*菜单跳转*/
+						_jumpMenus: function(key) {
+							//							alert(1)
+							var url = '../manage/' + key + '/' + key + '.html';
+							if(key == 'deposit') {
+								url = '../manage/' + key + '.html'
+							};
+							mui.openWindow({
+								url: url,
+								id: key,
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead'
+								},
+								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {
+									account: this.account
+								},
+								waiting: {
+									autoShow: true, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						},
+						//							跳转详情页面
+						_jumpToDetail(e) {
+							//							alert(e)
+							mui.openWindow({
+								url: '../../html/manage/production/product_detail.html',
+								id: 'product_detail',
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead'
+								},
+								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {
+									productId: e
+								},
+								waiting: {
+									autoShow: true, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						},
+						/*跳转个人信息页面*/
+						_person(){
+							mui.openWindow({
+								url: '../../html/manage/personSet/personSet.html',
+								id: 'personSet',
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead'
+								},
+								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {},
+								waiting: {
+									autoShow: true, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						}
+					}
+				})
+
+			});
+			/*获取用户身份之后刷新页面*/
+			function initPage() {
+				var time = setInterval(function() {
+					if(!APP._initShop) return;
+
+					APP._initShop(() => {
+						//自定义监听图标点击事件
+						var active_color = '#fff';
+
+						// 创建子webview窗口 并初始化
+						var aniShow = {};
+
+						//创建原生菜单栏		
+						util.initSubpage(aniShow); 
+
+						var nview = plus.nativeObj.View.getViewById('tabBar'),
+							activePage = plus.webview.currentWebview(),
+							targetPage,
+							subpages = util.options.subpages,
+							pageW = window.innerWidth,
+							currIndex = 0;
+
+						/**
+						 * 根据判断view控件点击位置判断切换的tab
+						 */
+						nview.addEventListener('click', function(e) {
+
+							var clientX = e.clientX;
+							if(clientX > 0 && clientX <= parseInt(pageW * 0.25)) {
+								currIndex = 0;
+							} else if(clientX > parseInt(pageW * 0.25) && clientX <= parseInt(pageW * 0.5)) {
+								currIndex = 1;
+							} else if(clientX > parseInt(pageW * 0.5) && clientX <= parseInt(pageW * 0.75)) {
+								currIndex = 2;
+							} else {
+								currIndex = 3;
+							}
+							// 匹配对应tab窗口	
+							if(currIndex > 0) {
+								targetPage = plus.webview.getWebviewById(subpages[currIndex - 1]);
+							} else {
+								targetPage = plus.webview.currentWebview();
+							}
+
+							if(targetPage == activePage) {
+								return;
+							}
+							//底部选项卡切换
+							util.toggleNview(currIndex);
+							// 子页面切换
+							util.changeSubpage(targetPage, activePage, aniShow);
+							//更新当前活跃的页面
+							activePage = targetPage;
+						});
+						
+						util.toggleNview(0);
+						plus.nativeUI.closeWaiting();
+							plus.webview.getWebviewById('manage').hide()
+							plus.webview.currentWebview().show('pop-in', 300, function() {
+								mui('#app').pullRefresh().endPulldown();
+							}, {});
+						
+					})
+
+					clearInterval(time);
+				}, 200)
+			}
+			
+			function refresh(src){
+				plus.nativeUI.showWaiting()
+				APP._initShop(() => {
+											mui.later(() => {
+												plus.nativeUI.closeWaiting()
+											}, 1000)
+										})
+			}
+		</script>
+	</body>
+
+</html>

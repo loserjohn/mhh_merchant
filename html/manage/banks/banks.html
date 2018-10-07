@@ -1,0 +1,346 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>银行卡管理</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/animate.css" />
+		<style>
+			.bankList{
+				width: 100%;
+				box-sizing: border-box;
+			}
+			.bankList .bankNUm{
+				box-sizing: border-box;
+				padding: 15px;
+			}
+			.bankList .bankName{
+				box-sizing: border-box;
+				padding: 15px;
+				background: #212121;
+				width: 140px;
+				text-align: center;
+			}
+			.bankList  i{
+				margin-top: 18px;
+				margin-right: 10px;
+			}
+			.bankList .bankName.default{
+				background: #ccaa42;
+				color: #fff;
+			}
+			
+			/*底部的按钮*/
+			
+			.bottomMenus {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				height: 50px;
+				right: 0;
+				background: rgba(21, 21, 21, 1);
+			}
+			
+			.menusTxt {
+				font-weight: 400;
+				line-height: 50px;
+			}
+			
+			.note {
+				padding-bottom: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav " id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">银行卡管理</h1>
+				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px">
+					须知
+				</a>
+			</header>
+
+			<!--卡片-->
+			<div class="cards scrollBox " :style="{top:scrollTop}" id="scroll" ref="scroll">
+				<div class="reset" style="min-height: 101%;">
+					<!--刷新提示框-->
+					<div class="refresh">
+						<p class="t_c cor_y  refresh_txt">有种你放开我</p>
+					</div>
+					<ul class="reset cm_ul ">
+						<li class="mui-table-view-cell mui-transitioning reset" :id="item.BANK_CODE" v-for="item in banksList">
+							<div class="mui-slider-right mui-disabled">
+								<a class="mui-btn " v-show="item.ISDEFAULT==0" style="transform: translate(-180px, 0px);background: #ccaa42;" @tap="_handle(item.BANK_CODE)">设为默认</a>
+								<a class="mui-btn mui-btn-red" v-show="item.ISDEFAULT==0" style="transform: translate(-180px, 0px);" @tap="_delect(item.BANK_CODE)">删除</a>
+							</div>
+							<div class="mui-slider-handle" style="transform: translate(0px, 0px);" >
+								<div class="bankList flex "  @tap="_preDetail(item)" >
+									<div class=" flex f1 "  >
+										<div class="bankName cm_name cor_y" :class="{default:item.ISDEFAULT==1}">
+											{{item.BANK_NAME}}
+										</div>
+										<p class=" t_c f1 cm_name bankNUm">{{item.BANK_CARDNUM}}</p>
+									</div>
+									<i class="iconfont icon-xitongfanhui1 "></i>
+								</div>
+							</div>
+						</li>
+						<li v-if="banksList.length==0" class="t_c cm_noItem" >
+							<img src="../../../images/no2.png" alt="" />
+							<div class="t_c">--您还没有银行卡--</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!--模态框显示优惠券信息信息-->
+			<div class="cm_mask" v-show="show" >
+				<div class="cm_modal animated slideInUp">
+					<h3 class="cm_title t_c">银行卡详情</h3>
+					<h3 class="cm_name">{{detailPre.BANK_NAME}}</h3>
+					<div>开号 : {{detailPre.BANK_CARDNUM}}</div>
+					<div>开户行 : {{detailPre.BANK_OPEN_NAME}}</div>
+					<div>持卡人姓名  : {{detailPre.BANK_CARDHOLDER}}</div>					
+					<div>预留手机号 : {{detailPre.BANK_MOBILE}}</div>
+					
+					<div class="cm_btn" @tap="_preDetail">
+						关闭
+					</div>
+				</div>
+			</div>
+			<!--底部菜单-->
+			<div class=" bottomMenus flex">
+				<h3 class="cor_y t_c menusTxt f1 " @tap="_toAddNewCard">
+						<i  class="iconfont icon-add  " style="font-size: 20px;" ></i> 
+						添加银行卡
+					</h3>
+			</div>
+
+		</div>
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/bscroll.min.js"></script>
+				<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			})
+			var APP 
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				APP = new Vue({
+					el: '#app',
+					data: {
+						scrollTop: '',
+						scroll: '',
+						show: false,
+						banksList: '',
+						detailPre: {}
+					},
+					created: function() {
+						//							alert(1)
+						app.initHeader();
+					},
+					mounted: function() {
+
+						var _this = this
+						var scroll = this.$refs.scroll
+						this.scrollTop = document.getElementById('header').offsetHeight + 'px'
+						/*首次加载数据*/
+						this._getData(() => {
+							mui.later(()=>{
+								plus.nativeUI.closeWaiting()
+							mui.currentWebview.show('pop-in', 300, function () {}, {});
+							},1000)
+							
+						})
+
+						this.$nextTick(function() {
+							//							初始化scrool
+							if(!_this.scroll) {
+								//							初始化标题栏
+								_this.scroll = new BScroll(scroll, {
+									click: true,
+									probeType: 3,
+									bounceTime: 200,
+									pullDownRefresh: {
+										threshold: 50,
+										stop: 20
+									}
+								})
+							} else {
+								_this.scroll.refresh();
+							};
+							/*下拉刷新*/
+							_this.scroll.on('pullingDown', function(e) {
+
+								plus.nativeUI.showWaiting()
+								_this._getData(() => {
+									plus.nativeUI.closeWaiting();
+									_this.scroll.finishPullDown()
+								})
+
+							})
+						})
+					},
+					filters: {
+						getStatus(k) {
+							//							优惠券状态0-未启用，1-启用中,2-审核中
+							switch(k) {
+								case '0':
+									return '未启用'
+									break;
+								case '1':
+									return '启用中'
+									break;
+								case '2':
+									return '审核中...'
+									break;
+								default:
+									break;
+							}
+						}
+					},
+					methods: {
+						/*添加新卡*/
+						_toAddNewCard() {
+							mui.openWindow({
+								url: './addBank.html',
+								id: 'addBank',
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead'
+								},
+								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {
+									//自定义扩展参数，可以用来处理页面间传值  
+								},
+								waiting: {
+									autoShow: true, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						},
+						/*删除操作*/
+						_delect(code) {
+							//							console.log(11)
+							var li = document.getElementById(code)
+							//							console.log(li)
+							mui.swipeoutClose(li)
+							var _this = this
+							var data = {
+								BANK_CODE: code,
+							}
+							//
+							plus.nativeUI.showWaiting('删除中...')
+							app.ajax(app.baseUrl + '/api/BusiBank/Delete', {
+								// dataType:'json',//服务器返回json格式数据
+								data: data,
+								type: 'post', //HTTP请求类型
+								success: function(result) {
+									if(result.Success) {
+
+										var msg = "删除成功";
+										mui.later(() => {
+											plus.nativeUI.closeWaiting()
+											plus.nativeUI.toast(msg)
+											_this._getData()
+										}, 1500)
+
+										/*还原数据*/
+									} else {
+										plus.nativeUI.closeWaiting()
+										plus.nativeUI.toast(result.Msg)
+										console.log(result.Msg)
+									}
+
+								}
+							});
+						},
+						/*设为默认*/
+						_handle(code) {
+							var li = document.getElementById(code)
+										//							console.log(li)
+							mui.swipeoutClose(li)
+							var _this = this 
+							plus.nativeUI.showWaiting('设置中...')
+								app.ajax(app.baseUrl + '/api/BusiBank/Default', {
+									// dataType:'json',//服务器返回json格式数据
+									data: {
+										BANK_CODE:code
+									},
+									type: 'post', //HTTP请求类型
+									success: function(result) {											
+										if(result.Success) {
+											
+											var msg = "设置成功";
+											mui.later(()=>{
+												plus.nativeUI.closeWaiting()
+												plus.nativeUI.toast(msg)
+												_this._getData()
+											},1500)
+											
+											/*还原数据*/										
+										} else {
+											plus.nativeUI.closeWaiting()
+											plus.nativeUI.toast(result.Msg)
+											console.log(result.Msg)
+										}
+	
+									}
+								});	
+							
+						},
+						/*查看详情*/
+						_preDetail(item){
+							if(item){
+								this.detailPre = item	
+							}
+							this.show = !this.show;
+						},
+						/*获取银行卡数据*/
+						_getData(callback) {
+							var _this = this
+							app.ajax(app.baseUrl + '/api/BusiBank/GetList', {
+								//									data: data,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+
+								success: function(result) {
+									if(result.Success) {
+										_this.banksList = result.Data.ListInfo
+										mui.later(() => {
+											_this.scroll.refresh();
+											if(callback) callback();
+										}, 300)
+									} else {
+										/*验证失败*/
+										plus.nativeUI.toast(result.Msg)
+
+									}
+								}
+							});
+						}
+					}
+				})
+			})
+			function refresh(){
+//				alert(1)
+				APP._getData()
+			}
+		</script>
+	</body>
+
+</html>

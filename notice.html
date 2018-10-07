@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>须知</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<style>
+
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav " id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">须知</h1>
+				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px"></a>
+			</header>
+			<!--简要信息-->
+			<div class="" id="content">
+
+			</div>
+		</div>
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/util.js"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			});
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						content: ''
+					},
+					created: function() {
+						app.initHeader();
+					},
+					mounted: function() {
+
+						this._getData(() => {
+							plus.nativeUI.closeWaiting()
+							mui.currentWebview.show('pop-in', 300, function() {}, {});
+						})
+					},
+					methods: {
+						/*获取信息*/
+						_getData(callback) {
+							var _this = this
+							app.ajax(app.baseUrl + '/api/BusiAccount/GetAccountInfo', {
+								//							data: Info,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								timeout: 10000, //超时时间设置为10秒；
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded',
+									'Authorization': app.mark + plus.storage.getItem('token')
+								},
+								success
+									}
+							: function(result) {
+									/*登陆成功*/
+									if(result.Success) {
+										_this.personMsg = result.Data
+										_this.avatar = result.Data.SHOP.SHOP_LOGO
+										if(callback) callback();
+									} else {
+										/*验证失败*/
+										if(callback) callback(false, result.Msg)
+	},
+								error: function(xhr, type, errorThrown) {
+									//异常处理；
+									console.log(type);
+								}
+							});
+						}
+					}
+				})
+
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>时间管理</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<style>
+			.dateBox{
+				margin-top: 20px;
+			}
+			.dataList{
+				flex-wrap: wrap;
+				justify-content: space-between;
+			}
+			.dateItem{
+				width: 14%;
+				line-height: 2.5;
+				box-sizing: border-box;
+				padding: 3px;
+			}
+			.dataTxt{
+				display: block;
+				width: 100%;
+				height: 100%;
+				line-height: 2.5;
+				background: #eee;
+			}
+			.dataTxt.active{
+				background: #212121;
+				color: #ccaa42;
+			}
+		
+			.weekBox {
+				background: rgba(21, 21, 21, 1);
+				padding-bottom: 15px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav"   id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">时间管理</h1>
+				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px">
+					常见问题
+				</a>
+			</header>
+			<!--分类作品-->
+			<!--星级-->
+				<div class="weekBox container flex" id="content" ref="starsBox">
+					<div class="t_c cor_w  f1">
+							日
+					</div>
+					<div class="t_c cor_w  f1">
+							一
+					</div>
+					<div class="t_c cor_w  f1">
+							二
+					</div>
+					<div class="t_c cor_w  f1">
+							三
+					</div>
+					<div class="t_c cor_w  f1">
+							 四
+					</div>
+					<div class="t_c cor_w  f1">
+							五
+					</div>
+					<div class="t_c cor_w  f1">
+							六
+					</div>
+				</div>
+				<!--作品评价-->
+				<div class="mounted panel">
+					
+					<div class="dateBox">
+						<div class="mountedTitle flex">
+							<h3 class="lh24" style="margin-right: 15px;">{{nowTime.m}}月</h3>
+							<p class="lh24">{{nowTime.y}}</p>
+						</div>
+						<ul class=" flex dataList">
+							<li v-for="item in curMount" class="dateItem t_c " >
+							    <p class="dataTxt" :class="{active:_enbleData(item.date)}" @click = "_jumpDateDetail(_enbleData(item.date),item.date)">
+							    	{{ item.text? item.text:''}}
+							    </p>
+							</li>					
+						</ul>
+					</div>
+					
+					<div class="dateBox">
+						<div class="mountedTitle flex">
+							<h3 class="lh24"  style="margin-right: 15px;">{{new Date(nowTime.y,nowTime.m,1).getMonth()+1 }}月</h3>
+							<p class="lh24">{{nowTime.m+1>12?nowTime.y+1:nowTime.y}}</p>
+						</div>
+						<ul class=" flex dataList">
+							<li v-for="item in nextMount" class="dateItem t_c ">
+								<p class="dataTxt " :class="{active:_enbleData(item.date)} "  @click = "_jumpDateDetail(_enbleData(item.date),item.date)">
+							    	{{ item.text? item.text:'' }}
+							   </p>
+							</li>
+							
+						</ul>
+					</div>
+				</div>
+		</div>
+
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/util.js"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<!--<script src="../../../js/bscroll.min.js"></script>-->
+		<script type="text/javascript">
+			(function() {
+				mui.init({
+					swipeBack: true
+				});
+				mui.plusReady(function() {
+//					alert(1)
+					var APP = new Vue({
+						el: '#app',
+						data: {
+							curMount:[],
+							nextMount:[],
+							nowTime:''
+						},
+						created: function() {
+							
+							app.initHeader();
+//							赋值当前日期信息							
+							var n = new Date();	
+							var year =n.getFullYear();
+							var mount =n.getMonth()+1;
+							var date =n.getDate();
+//							var year =2018;
+//							var mount =3;
+//							var date =23;
+							
+							var nt = {
+								t:n,
+//								年							
+								y:year,
+//								月
+								m:mount,
+//								日
+								d:date,
+//								本月第一天是周几
+								s_week:new Date(year,mount-1,1).getDay(),
+//								下月第一天是周几
+								n_s_week:new Date(year,mount,1).getDay(),
+//								当月的天数
+								c_fullday:new Date(year,mount,0).getDate(),
+//								下个月的总天数
+								n_fullday:new Date(year,mount+1,0).getDate(),
+							}
+							this.nowTime = nt
+						},
+						mounted: function() {
+							var c_arr = [];
+							var n_arr = [];
+							var s_week = this.nowTime.s_week;
+							var c_fullday = this.nowTime.c_fullday;
+							var n_fullday = this.nowTime.n_fullday;
+							var n_s_week = this.nowTime.n_s_week;
+							
+							var d = 1;
+							var n_d = 1;
+							
+//							当月
+							for(i=0;i<35;i++){
+								if(i<s_week){
+									c_arr.push('')
+								}else if(i<(c_fullday+s_week)){
+									c_arr.push({
+										text:d,
+										date:new Date(this.nowTime.y,this.nowTime.m-1,d).getTime()
+									});
+									d++
+								}else{
+									c_arr.push({
+										text:d-c_fullday,
+										date:new Date(this.nowTime.y,this.nowTime.m,d-c_fullday).getTime()
+									});
+									d++
+								}
+							}
+							this.curMount = c_arr;
+//							下个月
+								
+							for(k=0;k<35;k++){
+								if(k<n_s_week){
+									if(d>c_fullday){
+//										n_arr.push(d-c_fullday)
+										n_arr.push({
+											text:d-c_fullday,
+											date:new Date(this.nowTime.y,this.nowTime.m,d-c_fullday).getTime()
+										})
+										d++
+									}else{
+//										n_arr.push(d)
+										n_arr.push({
+											text:d,
+											date:new Date(this.nowTime.y,this.nowTime.m-1,d).getTime()
+										})
+										d++
+									}						
+								}else if((d-c_fullday)<n_fullday){
+//									n_arr.push(d-c_fullday);
+									n_arr.push({
+											text:d-c_fullday,
+											date:(new Date(this.nowTime.y,this.nowTime.m,d-c_fullday)).getTime()
+										})
+									d++
+								}else{
+									n_arr.push('');
+								}
+							}
+							this.nextMount = n_arr;
+							plus.nativeUI.closeWaiting()
+								mui.currentWebview.show('pop-in', 300, function () {}, {});
+						},
+						methods: {
+//							判断样式
+							_enbleData(d){
+								
+								if(!d)return false;
+								var min_t = new Date(this.nowTime.y,this.nowTime.m-1,this.nowTime.d).getTime();	
+//								s_t = '2018/7/27'
+								var max_t = new Date(min_t); 								
+								max_t.setDate(max_t.getDate()+29);
+
+								if(min_t<=d&&d<=max_t){
+									return true
+								}else{
+									return false
+								}
+
+							},
+//							跳转日期详情
+							_jumpDateDetail(t,date){
+								if(!date)return false;
+								if(!t)return false;
+								mui.openWindow({
+											url: './time_set.html',
+											id: 'time_set',
+											styles: {
+												top: '0px', //新页面顶部位置
+												bottom: '0px', //新页面底部位置
+												scrollIndicator: "none",
+												plusrequire: 'ahead'
+											},
+											createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+											show: {
+												autoShow: true, //页面loaded事件发生后自动显示，默认为true
+												duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+											},
+											extras: {
+												date:date
+											},
+											waiting: {
+												autoShow: true, //自动显示等待框，默认为true
+												title: '正在加载...', //等待对话框上显示的提示内容
+											}
+										})
+							}
+						}
+					})
+
+				});
+			})();
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>账户提现</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/iconfont.css" />
+		<style>
+			/*提现至*/
+			
+			.card {
+				width: 100%;
+				background: #fff;
+			}
+			
+			.card .address {
+				height: 52px;
+				border-bottom: 1px solid #d3d3d3;
+				position: relative;
+			}
+			
+			.card .address i {
+				margin-top: 15px;
+			}
+			
+			.card .address .eletBox {
+				position: absolute;
+				right: 0;
+				top: 0;
+				/*background: red;*/
+				height: 100%;
+			}
+			
+			.card .address .payIcon {
+				font-size: 30px;
+			}
+			/*金额*/
+			
+			.momney {
+				line-height: 60px;
+				margin: 15px 0;
+				border-bottom: 1px solid #d3d3d3;
+			}
+			
+			.momney .valueBox {
+				height: 60px;
+				line-height: 60px;
+				outline: none;
+				font-size: 24px;
+				border: none;
+				margin: 0 15px 0 5px;
+			}
+			
+			.momney .resetBtn {
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				background: #d3d3d3;
+				text-align: center;
+				line-height: 20px;
+				display: inline-block;
+			}
+			
+			.lh6 {
+				line-height: 60px;
+			}
+			
+			.moneyIcon {
+				font-size: 30px;
+			}
+			
+			.btns {
+				margin-top: 40px;
+			}
+			#submit{
+				width: 100%;
+				height: 44px;
+				line-height: 44px;
+				padding: 0;
+				border: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav " id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">账户提现</h1>
+			</header>
+
+			<!--提现操作-->
+			<div id="content" class="card ">
+				<div class="flex address container">
+					<i class="iconfont icon-bangdingyinhangqia cor_y payIcon"></i>
+					<div class="f1" style="margin-right: 10px;">
+						<div class="t_r cm_name">{{card.BANK_NAME}}</div>
+						<p class="t_r time f1 cor_g">{{card.BANK_CARDNUM}}</p>
+					</div>
+					<i class="iconfont icon-arrowright cor_y"></i>
+					<div class="eletBox" style="z-index: 110;width: 100%;" v-if="card.length==0" @tap="_addBank"></div>
+					<select v-model="card"  class="f1 t_r  reset eletBox" style="opacity: 0;">
+						<option disabled value="">请选择</option>
+						<option v-for="item in allBankCard" :value="item" :key="item.Value">{{item.BANK_NAME+'-'+item.BANK_CARDNUM}}</option>
+					</select>
+				</div>
+
+				<!--金额-->
+				<div class="amount container">
+					<p class="cm_name">提现金额</p>
+					<div class="momney flex">
+						<h3 class="lh6 moneyIcon">￥</h3>
+						<input type="number" class="valueBox f1" placeholder="" v-model="money" @input="_validNum">
+						<div class="lh6">
+							<div class="resetBtn" @tap="_reset">
+								<i class="iconfont icon-close cor_w"></i>
+							</div>
+						</div>
+
+					</div>
+					<div class="flex">
+						<div class="f1 cor_y" @tap="_allIn">全部提现</div>
+						<div class="f1 t_r cor_b">提现说明?</div>
+					</div>
+				</div>
+
+				<div class="btns container">
+					<button type="button" id="submit" data-loading-icon="mui-spinner mui-spinner-custom" class="mui-btn cm_btn" @tap="_submit">立即提现</button>
+				</div>
+			</div>
+
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/vue.js"></script>
+		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			})
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						allBankCard: [],
+						card: '',
+						select: '',
+						money:'',
+						allMoney:''
+					},
+					created: function() {
+						//							alert(1)
+						app.initHeader();
+					},
+					mounted: function() {
+						var _this = this
+						plus.nativeUI.closeWaiting()
+						mui.currentWebview.show('pop-in', 300, function () {}, {});
+						this._getBanks()
+						var self=plus.webview.currentWebview()
+						this.allMoney = self.account;
+//						alert(this.allMoney)
+					},
+					methods: {
+						/*获取名下银行卡*/
+						_getBanks() {
+							var _this = this
+							app.ajax(app.baseUrl + '/api/BusiBank/GetList', {
+								//									data: data,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								timeout: 10000, //超时时间设置为10秒；
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded',
+									'Authorization': app.mark + plus.storage.getItem('token')
+								},
+								success: function(result) {
+									if(result.Success) {
+//										console.log(JSON.stringify(result.Data.ListInfo))
+										_this.allBankCard = result.Data.ListInfo
+										if(result.Data.ListInfo.length == 0){
+											_this.card = ''
+										}else{
+											_this.card = result.Data.ListInfo[0]
+										}
+										
+									} else {
+										/*验证失败*/
+										plus.nativeUI.toast(result.Msg)
+
+									}
+								},
+								error: function(xhr, type, errorThrown) {
+									//异常处理；
+									console.log(type);
+								}
+							});
+						},
+						/*提交取现*/
+						_submit(){
+							var _this =this  
+							if(!this.money ){
+									plus.nativeUI.alert( "请输入金额", function(){}, "马嘿嘿提醒您", "ok" );
+									return;
+							}	
+							plus.nativeUI.confirm('您将提现金额 ￥'+this.money+'元至选定银行卡', (event) => {
+								if(event.index==0){
+									mui('#submit').button('loading');
+//									
+//									console.log(JSON.stringify({
+//											BANK_CODE:_this.card.BANK_CODE,
+//											AMOUNT:parseInt(_this.money)
+//										}))
+									app.ajax(app.baseUrl + '/api/BusiWithdraw/Withdraw', {
+										// dataType:'json',//服务器返回json格式数据
+										data: {
+											BANK_CODE:_this.card.BANK_CODE,
+											AMOUNT:parseInt(_this.money)
+										},
+										type: 'post', //HTTP请求类型
+										success: function(result) {
+											/*登陆成功*/											
+											mui.later(()=>{
+												if(result.Success){
+													mui('#submit').button('reset');
+													plus.nativeUI.toast('提现成功');
+													plus.webview.getWebviewById('manage').evalJS('initPage()')
+													mui.later(()=>{
+														mui.back()
+													},500)
+													
+												}else{
+													mui('#submit').button('reset');
+													plus.nativeUI.toast(result.Msg)
+												}
+												
+											},1500)
+										},
+										error: function(xhr, type, errorThrown) {
+											mui('#submit').button('reset');	
+										}
+									});			
+									
+								}														
+							}, {
+								title: '马嘿嘿提醒您'
+							})
+							
+							
+																	
+						},
+						/*重置*/
+						_reset(){
+							this.money = ''
+						},
+						/*矫正数字*/
+						_validNum(){
+							this.money = parseInt(this.money)
+						},
+						/*全部去除*/
+						_allIn(){
+							this.money = this.allMoney
+						},
+						/*添加新卡*/
+						_addBank(){
+							plus.nativeUI.alert( "您还没有绑定银行卡", function(){
+								mui.openWindow({
+									url: './banks/banks.html',
+									id: 'banks',
+									styles: {
+										top: '0px', //新页面顶部位置
+										bottom: '0px', //新页面底部位置
+										scrollIndicator: "none",
+										plusrequire: 'ahead'
+									},
+									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+									show: {
+										autoShow: false, //页面loaded事件发生后自动显示，默认为true
+										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+									},
+									extras: {
+										product:this.detail
+									},
+									waiting: {
+										autoShow: true, //自动显示等待框，默认为true
+										title: '正在加载...', //等待对话框上显示的提示内容
+									}
+								})								
+							}, "马嘿嘿提醒您", "前去绑定" );
+						}
+					}
+				})
+			})
+		</script>
+	</body>
+
+</html>

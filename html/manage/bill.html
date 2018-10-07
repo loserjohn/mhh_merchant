@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>账户明细</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../css/animate.css" />
+		<style>
+			/*账户明细*/
+			
+			.scrollBar {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				/*background: pink;*/
+			}
+			
+			.billIcon {
+				border-radius: 50%;
+			}
+			
+			.add {
+				color: orange;
+			}
+			
+			.sub {
+				color: #404040;
+			}
+			
+			.scrollBox {
+				/*background: red;*/
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<!--<div class="reset clearfix">-->
+			<header class="mui-bar mui-bar-nav " id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">账户明细</h1>
+			</header>
+
+			<!--账户报表-->
+			<div class="cm_tabBars " id="content" ref="content">
+				<ul class="cm_tabsT flex">
+					<li @tap="_changeTab(0)" class="cm_tabTitle f1" :class="{active:currtab==0?true:false}">全部</li>
+					<li @tap="_changeTab(1)" class="cm_tabTitle f1" :class="{active:currtab==1?true:false}">店铺营收</li>
+					<li @tap="_changeTab(2)" class="cm_tabTitle f1" :class="{active:currtab==2?true:false}">账户提现</li>
+				</ul>
+				<div ref="scroll" class="cm_tabsContent scrollBox" :style="{top:tabContenTop}">
+					<div class="slider clearfix" style="min-height: 101%;">
+						<!--刷新提示框-->
+					<div class="refresh">
+						<p class="t_c cor_y  refresh_txt">有种你放开我</p>
+					</div>
+						<!--全部-->
+						<div class="animated fadeInDownBig" v-show="currtab==0?true:false">
+							<ul class="mui-table-view  ">
+								<!--全部-->
+
+								<li class="mui-table-view-cell mui-media" v-for="item in detailList[0].list">
+
+									<img class="mui-media-object mui-pull-left billIcon" :src="item.DETAIL_TYPE==5?'../../images/spyy.png':'../../images/sptx.png'">
+									<div class="mui-media-body">
+										<div class="flex billBody">
+											<div class="f1 cm_name">{{item.DETAIL_REMARK}}</div>
+											<div class="cm_title sub">{{item.DETAIL_MONEY}}</div>
+										</div>
+										<p class='mui-ellipsis'>{{item.DETAIL_TIME}}</p>
+									</div>
+								</li>
+<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{detailList[0].norest?'没有数据了':'加载更多'}}</li>
+							</ul>
+						</div>
+
+						<!--账户提现-->
+						<div class="animated fadeInDownBig" v-show="currtab==1?true:false">
+							<ul class="mui-table-view  ">
+
+
+								<li class="mui-table-view-cell mui-media" v-for="item in detailList[1].list">
+
+									<img class="mui-media-object mui-pull-left billIcon" src="../../images/spyy.png">
+									<div class="mui-media-body">
+										<div class="flex billBody">
+											<div class="f1 cm_name">{{item.DETAIL_REMARK}}</div>
+											<div class="cm_title sub">{{item.DETAIL_MONEY}}</div>
+										</div>
+										<p class='mui-ellipsis'>{{item.DETAIL_TIME}}</p>
+									</div>
+								</li>
+<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{detailList[1].norest?'没有数据了':'加载更多'}}</li>
+							</ul>
+						</div>
+
+						<!--店铺营业额-->
+						<div class="animated fadeInDownBig" v-show="currtab==2?true:false">
+							<ul class="mui-table-view  ">
+								<!--历史顾客-->
+
+								<li class="mui-table-view-cell mui-media" v-for="item in detailList[2].list">
+
+									<img class="mui-media-object mui-pull-left billIcon" src="../../images/sptx.png">
+									<div class="mui-media-body">
+										<div class="flex billBody">
+											<div class="f1 cm_name">{{item.DETAIL_REMARK}}</div>
+											<div class="cm_title sub">{{item.DETAIL_MONEY}}</div>
+										</div>
+										<p class='mui-ellipsis'>{{item.DETAIL_TIME}}</p>
+									</div>
+								</li>
+								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{detailList[2].norest?'没有数据了':'加载更多'}}</li>		
+							</ul>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/vue.js"></script>
+		<script src="../../js/bscroll.min.js"></script>
+		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			})
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						scroll: '',
+						message: '',
+						tabContenTop: '',
+						currtab: 0,
+						note:'加载更多',
+						detailList: [{ //全部
+								index: 1,
+								list: [],
+								norest: false
+							},
+							{ //提现
+								index: 1,
+								list: [],
+								norest: false
+							},
+							{ //营收
+								index: 1,
+								list: [],
+								norest: false
+							}
+						]
+					},
+					created: function() {
+						//							alert(1)
+						app.initHeader();
+					},
+					mounted: function() {
+						var _this = this
+						var scroll = this.$refs.scroll
+						this.tabContenTop = document.getElementById('header').offsetHeight + 40 + 'px';
+
+						this.$nextTick(function() {
+							//							初始化scrool
+							if(!_this.scroll) {
+								//							初始化下拉框
+								_this.scroll = new BScroll(scroll, {
+									click: true,
+									probeType: 3,
+									bounceTime: 200,
+									pullUpLoad: {
+										threshold: -50 // 当上拉距离超过30px时触发 pullingUp 事件
+									}
+								})
+							} else {
+								_this.scroll.refresh();
+							};
+							this.scroll.on('pullingUp', function(e) {
+								_this._getData((b) => {
+										if(b){
+											
+										}else{
+											_this.scroll.finishPullUp()
+											
+										}
+									})
+							})
+						})
+						
+						/*初始化项目数据*/
+							this._getData((b)=>{
+								 plus.nativeUI.closeWaiting()
+								 mui.currentWebview.show('pop-in', 300, function () {}, {});
+								 if(b){
+											
+										}else{
+											_this.scroll.finishPullUp()
+											
+										}
+							});
+					},
+					methods: {
+						_jumpToDetail(key) {
+						},
+						_changeTab: function(key) {
+							this.currtab = parseInt(key)
+							if(this.detailList[this.currtab].index == 1) {
+									this._getData((b) => {
+										if(b){
+//											this.note = "没有数据了"
+										}else{
+											this.scroll.finishPullUp()
+//											this.note = "加载更多"
+										}
+									})
+								} else {
+									if(!this.detailList[this.currtab].norest){
+//										该分类还有数据
+										this.scroll.finishPullUp()								
+									}
+									this.scroll.refresh();
+									return
+								}	
+						},
+						/*加载数据*/
+						_getData(callback) {
+							var _this = this
+							var tabType = this.currtab;
+							var index = this.detailList[tabType].index;
+							
+							var data={
+								pageIndex: index,
+								pageSize: 10								
+							}
+							var status;
+						
+							if(tabType == 1){
+								status = 5
+								data.DETAIL_TYPE = status
+							}
+							if(tabType == 2){
+								status = 6
+								data.DETAIL_TYPE = status
+							}
+
+							app.ajax(app.baseUrl + '/api/BusiAccount/GetDetails', {
+								data: data,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								success: function(result) {
+									//										plus.nativeUI.closeWaiting()
+									if(result.Success) {
+										var l = _this.detailList[tabType].list.length;
+										var arr = _this.detailList[tabType].list
+										_this.detailList[tabType].list = arr.concat(result.Data.ListInfo);
+//											console.log(_this.detailList[tabType].list.length,l)			
+
+										if(_this.detailList[tabType].list.length == l) {
+											_this.detailList[tabType].norest = true;
+												if(callback)callback(true);
+												return;
+										}
+										//											console.log('当前页'+_this.productsList[tabType].index)
+										_this.detailList[tabType].index += 1
+										mui.later(() => {
+											_this.scroll.refresh();												
+												if(callback)callback(false);
+										}, 300)
+									} else {
+										/*验证失败*/
+										plus.nativeUI.toast(result.Msg)
+
+									}
+								}
+							});
+						},
+					}
+				})
+			})
+		</script>
+	</body>
+
+</html>

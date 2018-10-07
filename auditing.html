@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>正在审核中...</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/iconfont.css" />
+		<style>
+			.mark{
+				width: 100%;
+				margin-top: 200px;
+				text-align: center;
+				color: #404040;
+				font-size: 26px;
+				line-height: 3;
+			}
+			.lh26{
+				line-height: 36px;
+			}
+		</style>
+	</head>
+
+	<body style="background: #fff;">
+		<div  id="app">
+			<header class="mui-bar mui-bar-nav " id="header" style="background: transparent">
+				<!--<a class="mui-action-back mui-pull-left">
+					<i class="iconfont icon-xitongfanhui cm_back"></i>
+				</a>-->
+				<!--<h1 class="mui-title" >审核中...</h1>-->
+			</header>
+			
+			<h3 class="mark">你的申请正在审核中...</h3>
+			<p class="t_c lh26">--马嘿嘿提醒您--</p>
+			<p class="t_c lh26">您的申请结果将会以短信形式通知您!</p>
+			<p class="t_c lh26">请您随时保持手机畅通哟</p>
+			<div class="container " id = "content">			
+				<img src="images/logo4.png" alt="" class="logo_bg" />				
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/vue.js"></script>
+		<script src="js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function(){
+				
+				var APP = new Vue({
+						el: '#app',
+						data: {
+							mobile:'',/* 电话 */
+							password:'', /* 密码 */
+							toggleType:true
+						},
+						created: function() {
+							app.initHeader();
+						},
+						mounted: function() {
+							/*首次加载获取商户信息*/
+							var backButtonPress = 0;
+							mui.back = function(event) {
+								backButtonPress++;
+								if(backButtonPress > 1) {
+									plus.runtime.quit();
+								} else {
+									plus.nativeUI.toast('再按一次退出应用');
+								}
+								setTimeout(function() {
+									backButtonPress = 0;
+								}, 1000);
+								return false;
+							};
+//							plus.storage.clear()
+						},
+						methods: {
+	
+						}
+
+					})
+			})
+		</script>
+	</body>
+
+</html>
