@@ -108,7 +108,7 @@
 			<div class="container " id="content" style="background: #fff">
 				<div >
 					<h3 class="t_c detailTitle">{{detailContent.title}}</h3>
-					<div class="detailAbstract cor_y">{{detailContent.infoAbstract}}</div>
+					<div class="detailAbstract cor_y" v-if="detailContent.infoAbstract">{{detailContent.infoAbstract}}</div>
 					<ul class="clearfix " style="padding-top: 10px;margin-bottom: 20px;">
 						<li class="fl cor_g   tags " v-for="labels in detail.infoLable">
 							<i class="iconfont icon-shengqian"></i> {{labels}}
@@ -318,7 +318,7 @@
 						/*获取数据*/
 						_getData(callback) {
 							var _this = this
-							plus.nativeUI.showWaiting()
+//							plus.nativeUI.showWaiting()
 							app.ajax(app.baseUrl + '/api/Info/GetMhhCmsItem', {
 								data: {
 									infoCode: this.detail.infoCode
@@ -326,7 +326,7 @@
 								type: 'post', //HTTP请求类型
 								success: function(result) {
 									if(result.Success) {
-										plus.nativeUI.closeWaiting()
+//										plus.nativeUI.closeWaiting()
 										_this.detailContent = result.Data	
 										_this.isGood = result.Data.isGood;
 										if(callback) callback();

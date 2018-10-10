@@ -8,6 +8,7 @@
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/common.css" />
 		<link rel="stylesheet" href="../../css/iconfont.css" />
+		
 		<style>
 			/*头部信息*/
 			
@@ -226,7 +227,7 @@
 										<p class="t_l fs12" style="line-height: 2;">
 											小草值 <i class="iconfont icon-rfq cor_y fontIcon"></i>：
 										</p>
-										<p class="f1 cor_g fs12  msg_p" style="line-height: 2;">{{scoreNum?scoreNum:'--'}}</p>
+										<p class="f1 cor_g fs12  msg_p" style="line-height: 2;">{{scoreNum?scoreNum:0}}</p>
 									</div>
 
 								</div>
@@ -236,7 +237,7 @@
 						<!--店铺公告-->
 						<div class="notice ">
 							<div class="txtBox">
-								<textarea name="noticeText" placeholder="店铺公告！" rows="" cols="" class="noticeText cover" v-model="shopNotice"></textarea>
+								<textarea name="noticeText" placeholder="店铺公告！" ref="GGtext" rows="" cols="" class="noticeText cover" v-model="shopNotice"></textarea>
 								<div class="reset cor_g" id="reset" @touchstart="_reset">清空</div>
 								<div class="issue" id="issue" @touchstart="_issue">确认发布</div>
 							</div>
@@ -432,7 +433,8 @@
 						
 						
 					},
-					methods: { /*更改公告*/
+					methods: { 
+						/*更改公告*/
 						_issue: function(e) {
 							var _this = this
 							if(!_this.shopNotice) {
@@ -459,7 +461,8 @@
 										},
 										success: function(result) {
 											/*登陆成功*/
-											plus.nativeUI.toast('修改成功')
+											plus.nativeUI.toast('修改成功');
+											_this.$refs.GGtext.blur()
 										}
 									});
 								} else {
@@ -503,7 +506,7 @@
 										//									_this.level=result.Data.ACCOUNT_PETNAME;
 										_this.levelNum = result.Data.SHOP.SHOP_STAR;
 										_this.scoreNum = result.Data.SHOP.INTEGRAL;
-						
+//										console.log(_this.scoreNum )
 										_this.businessArea = result.Data.SHOP.SHOP_AREA;					
 										_this.avatar = result.Data.SHOP.SHOP_LOGO;
 										_this.shopNotice = result.Data.SHOP.SHOP_NOTICE;
@@ -599,18 +602,33 @@
 									top: '0px', //新页面顶部位置
 									bottom: '0px', //新页面底部位置
 									scrollIndicator: "none",
-									plusrequire: 'ahead'
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
 								},
 								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 								show: {
-									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
 									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 								},
 								extras: {
 									account: this.account
 								},
 								waiting: {
-									autoShow: true, //自动显示等待框，默认为true
+									autoShow: false, //自动显示等待框，默认为true
 									title: '正在加载...', //等待对话框上显示的提示内容
 								}
 							})

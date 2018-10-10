@@ -39,15 +39,12 @@
 
 	<body>
 		<div id="app">
-			<header class="fixed  header flex" id="header" style="background:#ccaa42">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<div class=" f1  cor_w t_c page_title">
-					系统消息
-				</div>
-				<button class=" mui-btn  mui-btn-link mui-btn-nav mui-pull-right cor_w">
-					须知				
-				</button>
+			<header class="mui-bar mui-bar-nav" style="background: #ccaa42;" id="header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#fff"></a>
+				<h1 class="mui-title" style="color:#fff">系统消息</h1>
+				<button class="mui-btn  mui-btn-link mui-pull-right" id="postSelft"></button>
 			</header>
+			
 
 			<!--卡片-->
 			<div class="cards scrollBox " ref="scroll" :style="{top:scrollTop}" id="scroll">
@@ -149,7 +146,7 @@
 						_getData(callback) {
 							var _this = this
 //							alert(0)
-							app.ajax(app.baseUrl + '/api/Push/GetMemberPushList', {
+							app.ajax(app.baseUrl + '/api/Push/GetBusiPushList', {
 								data: {
 									pageIndex: parseInt(_this.index)  ,
 									pageSize: 8

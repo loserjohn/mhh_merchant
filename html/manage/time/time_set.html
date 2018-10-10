@@ -8,10 +8,11 @@
 		<link href="../../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
 		<style>
 			.setBox {
-				background: rgba(21, 21, 21, 1);
-				padding-bottom: 15px;
+				background: #fff;
+				padding-top: 15px;
 			}
 			
 			.allDatRest {
@@ -28,7 +29,7 @@
 			}
 			
 			.btn {
-				width: 80px;
+				width: 60px;
 				height: 44px 
 			}
 			
@@ -97,35 +98,42 @@
 
 	<body>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">{{today}}</h1>
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px">
-					常见问题
-				</a>
-			</header>
+			
+			<!--等待页面-->
+			<div class="loader" style="top:0" v-if="loader">
+				<ul>
+					<li id='a'></li>
+					<li id='b'></li>
+					<li id='c'></li>
+					<li id='d'></li>
+					<li id='e'></li>
+					<li id='f'></li>
+					<li id='g'></li>
+					<li id='h'></li>
+					<li id='i'></li>
+				</ul>
+			</div>
 			<!--操作菜单-->
 			<div class="setBox container flex" id="content" ref="starsBox">
-				<div class="flex allDatRest">
-					<div class="cor_w f1 text">全天休息</div>
+				<div class="flex allDatRest f1">
+					<div class=" f1 text">全天休息</div>
 					<div class="">
 						<div class="mui-switch" :class="{'mui-active':allDayRest}" @tap="_allDayRest">
 							<div class="mui-switch-handle"></div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<!--时段休息-->
-			<div class="timeRest ">
-				<div class="flex container">
-					<div class="cm_name f1 lh4">时段休息</div>
-					<div class="btn">
+				<div class="flex  f1">
+					<div class="cm_name f1 t_c">时段休息</div>
+					<div class="btn fr t_r">
 						<div class="cm_btn" @tap="_save">
 							设置
 						</div>
 					</div>
 				</div>
-
+			</div>
+			<!--时段休息-->
+			<div class="timeRest flex">
 				<ul class="dateBox flex">
 					<li class="timeItem " v-for="(item,index) in timeList">
 						<label :for="'item'+index" class="itemBox " :class="{canOrder:item.orderStatus == '2',hasOrder:item.orderStatus == '3',selectTime:_selectTime(item)}"  >{{item.time}}</label>
@@ -140,7 +148,7 @@
 		<script src="../../../js/app.js"></script>
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
-		<!--<script src="../../../js/bscroll.min.js"></script>-->
+
 		<script type="text/javascript">
 			(function() {
 				mui.init({
@@ -151,6 +159,7 @@
 					var APP = new Vue({
 						el: '#app',
 						data: {
+							loader:true,
 							today: '',
 
 							timeList:[],
@@ -159,26 +168,10 @@
 							allDayRest: false,
 							
 							enbled:true
-//							demo:{
-//								allRestEnbled:false  ,  // 全天休息  true   可以  false   状态
-//								timeList:[  //48个时段
-//									{
-//										time:'00:00',
-//										value:'00:00',
-//										orderStatus:1    //1 。休息时段  2.可预约时段   3.已被客户真实预约 不可修改时段
-//									},
-//									{
-//										time:'00:30',
-//										value:'00:00',
-//										orderStatus:1    //1 。休息时段  2.可预约时段   3.已被客户真实预约 不可修改时段
-//									}
-//									//.....
-//								],
-// 							}
 
 						},
 						created: function() {
-							app.initHeader();
+
 							var self = plus.webview.currentWebview();
 							var td = new Date(self.date);
 							this.today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate()
@@ -303,6 +296,7 @@
 							},
 							/*获取当天数据*/
 							_getData() {
+								this.loader = true
 								var _this = this
 								this.selectList = [];
 								app.ajax(app.baseUrl + '/api/BusiAccount/GetBookingTimeByDate', {
@@ -312,12 +306,14 @@
 									},
 									type: 'get', //HTTP请求类型
 									success: function(result) {
+										_this.loader = false
 										/*登陆成功*/
 										_this.timeList = result.Data.timeList
 										
 										_this.allDayRest = result.Data.allRestEnbled //当前状态
 										
 										_this._allRestEnable()
+										
 										
 									}
 								});

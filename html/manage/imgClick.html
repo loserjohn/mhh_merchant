@@ -304,6 +304,10 @@
 				position: absolute;
 				z-index: 2;
 			}
+			.cm_btn{
+				height: 44px;
+				line-height: 44px;
+			}
 		</style>
 
 	</head>
@@ -344,10 +348,10 @@
 				</div>
 				<div class='cropper-config flex'>
 					<div class="f1">
-						<div><button type="warn" class="cm_btn" @tap="getImageInfo" > 剪裁图片 </button></div>
-						<div><button type="warn"  class="cm_btn" @tap="_upload" > 确认提交</button></div>		
+						<!--<div><button type="warn" class="cm_btn" @tap="getImageInfo" > 剪裁图片 </button></div>-->
+						<div   class="cm_btn" @tap="_upload" > 确认提交</div>
 					</div>
-					<div class="f1">
+					<div class="f1" style="display: none;">
 						<canvas id="myCanvas" ref="myCanvas" style="border: 1px solid #000; width:150px;height:150px"></canvas> 
 					</div>		
 				</div>
@@ -477,8 +481,7 @@
 							IMG_REAL_W = SCREEN_WIDTH * IMG_RATIO
 							IMG_REAL_H = SCREEN_WIDTH
 						}
-//						console.log(IMG_REAL_W,IMG_REAL_H)
-						
+				
 						
 						let minRange = IMG_REAL_W > IMG_REAL_H ? IMG_REAL_W : IMG_REAL_H
 //						alert(minRange)
@@ -579,7 +582,7 @@
 				},
 
 				// 获取图片
-				getImageInfo() {
+				getImageInfo(callback) {
 					
 					plus.nativeUI.showWaiting()
 					var _this = this;
@@ -600,7 +603,7 @@
 					rctx.drawImage(img, x, y,this.clipW*this.rRadio, this.clipW*this.rRadio,0,0,this.clipW*this.rRadio,this.clipW*this.rRadio); 
 					
 					mui.later(()=>{
-						plus.nativeUI.closeWaiting()
+						if(callback)callback()
 					},1500)
 					_this.convertCanvasToImage(realCanvas)  
 				},
@@ -679,8 +682,10 @@
 			},
 			_upload(){
 //				plus.nativeUI.showWaiting();
+		this.getImageInfo(()=>{
 				if(!this.curSrc ){
 					plus.nativeUI.toast('请先剪裁图片');
+					plus.nativeUI.closeWaiting()
 					return false
 				}else{
 					Clip.unpload64(this.curSrc,size,(res)=>{
@@ -693,11 +698,11 @@
 						var parent = plus.webview.getWebviewById(pid);
 //						console.log(JSON.stringify(data))
 						parent.evalJS("choosePic('"+JSON.stringify(data)+"')")
-
+				plus.nativeUI.closeWaiting()
 						mui.back()
 					})
 				}
-						
+			})			
 						
 //				plus.nativeUI.closeWaiting()
 

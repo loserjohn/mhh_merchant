@@ -51,7 +51,7 @@
 						<div class="cm_groups_title">
 							密码
 						</div>	
-						<input class="f1 cm_groups_input" :type="toggleType?'password':'text'"  v-model="password" placeholder="请输入您的密码" value="" />
+						<input class="f1 cm_groups_input" :type="toggleType?'password':'text'"  v-model="password" placeholder="密码由6~16位数字和字母组成" value="" />
 						<i class="iconfont icon-kanguo fs16" @click="_toggleType" :class="{cor_y:toggleType?true:false}"></i>
 					</div>					
 				</div>
@@ -155,7 +155,7 @@
 									plus.nativeUI.alert("请您务必同意马嘿嘿用户协议", function(){},'马嘿嘿提醒您');
 									return;
 								}else if(!this.enables ){
-									plus.nativeUI.alert("超过时限", function(){
+									plus.nativeUI.alert("验证码失效", function(){
 										return false; 
 									},'马嘿嘿提醒您');
 									return;

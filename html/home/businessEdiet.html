@@ -475,16 +475,18 @@
 
 								var li = document.getElementById('itemli_' + i)
 								//							console.log(li)
-								mui.swipeoutClose(li)
+							
 
-								var arr = _this.selecteBusiness;
-								var arr2 = arr.splice(i, 1);
-								_this.selecteBusiness = arr;
+								
 								//								console.log(JSON.stringify(_this.selecteBusiness))
 								if(event.index == 0) {
+									var arr = _this.selecteBusiness;
+									var arr2 = arr.splice(i, 1);
+									_this.selecteBusiness = arr;
+									
 									_this._save()
 								}
-
+								mui.swipeoutClose(li)
 							}, {
 								title: '马嘿嘿提醒您'
 							})
@@ -515,6 +517,8 @@
 								success: function(result) {
 									/*登陆成功*/
 									plus.nativeUI.toast('修改成功');
+									var  p  = plus.webview.getWebviewById('home')
+									p.evalJS('refresh()') 
 									if(callback)callback()
 								},
 								error: function(xhr, type, errorThrown) {

@@ -127,24 +127,28 @@
 			.detailPic .detailPicItem>img {
 				width: 100%;
 			}
-			/*.addTime{
-				width: 24px;
-				height:24px;
-				background: #000000;
-				text-align: center;
-				line-height: 24px;
-				border-radius: 50%;
-				color: #ccaa42;
-				padding: 0;
-			}*/
-			
-			.addTime {
-				margin-left: 20px;
-				margin-right: 0!important;
+			.subTime {
+				/*margin-right: 20px;*/
 				background: #404040;
 				color: #fff;
 				padding: 0 10px;
-				line-height: 3;
+				line-height: 40px;
+				margin: 0!important;
+			}
+			.dayNumTxt{
+				line-height: 40px;
+				text-align: center;
+				background: #f1f1f1;
+				min-width: 40px;
+				margin: 0 10px;
+			}
+			.addTime {
+				/*margin-left: 20px;*/
+				margin: 0!important;
+				background: #404040;
+				color: #fff;
+				padding: 0 10px;
+				line-height: 40px;
 			}
 		</style>
 	</head>
@@ -202,7 +206,7 @@
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">项目折扣价</div>
-							<input type="text" v-model="currentPrice" class="cellInputTxt" placeholder="金额" />
+							<input type="number" v-model="currentPrice" class="cellInputTxt" placeholder="金额" />
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">是否使用打折券</div>
@@ -218,15 +222,17 @@
 						</li>-->
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">耗时（分钟）</div>
-							<input type="number" v-model="consuming" class="cellInputTxt" placeholder="分钟" @change="_updatedMsg(5)" />
+							<input type="number" v-model="consuming" class="cellInputTxt" placeholder="分钟" @input="_updatedMsg(5)" />
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">消耗时段
 								<p>(一时段15分钟)</p>
 							</div>
-							<div class="cellInputTxt">{{time}}</div>
-							<i class="iconfont icon-add addTime" @tap="_updatedMsg(6)"></i>
-
+							<div class="f1 flex">	
+								<i class="iconfont icon-minus subTime" @tap="_updatedMsg(10)"></i>
+								<div class="dayNumTxt">{{time}}</div>
+								<i class="iconfont icon-add addTime" @tap="_updatedMsg(6)"></i>
+							</div>					
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">维持（天数）</div>
@@ -251,13 +257,8 @@
 						<li class="mui-table-view-cell">
 							<!--<div class="f1 cellName ">用卡说明</div>-->
 							<textarea name="" rows="" cols="" class="cellInputArea" v-model="produtDetail" placeholder="项目详情"></textarea>
-
 						</li>
-						<!--<li class="mui-table-view-cell">
-							<textarea name="" rows="" cols="" v-model="produtExplain " class="cellInputArea" placeholder="项目说明">		            		
-				            	</textarea>
-
-						</li>-->
+						
 					</ul>
 				</div>
 			</div>
@@ -311,7 +312,8 @@
 						productImg2: '',
 						productImg3: '',
 						produtDetail: '', //项目详情
-						//						produtExplain: '' //项目说明
+						
+						mintime:0
 					},
 					created: function() {
 
@@ -320,7 +322,7 @@
 						var _this = this
 						app.initHeader();
 						var self = plus.webview.currentWebview()
-						//						alert(self.product)
+						
 						if(self.product) {
 							this.dstProduct = self.product
 							this.title = "编辑项目"
@@ -431,7 +433,22 @@
 									break;
 								case 5:
 									/*计算时段*/
+									_this.mintime = Math.ceil(_this.consuming / 15)//记录最小时段
 									_this.time = Math.ceil(_this.consuming / 15)
+									break;
+								case 10:
+									/*添加时段*/
+									if(!_this.consuming) {
+										plus.nativeUI.alert("请先填写耗时时间", function() {}, "马嘿嘿提醒您", "ok");
+										return
+									}
+									if(_this.time >_this.mintime){
+										_this.time -= 1
+									}else{
+										plus.nativeUI.toast('不能小于最小耗时时间')
+										_this.time = _this.mintime
+									}
+									
 									break;
 								case 6:
 									/*添加时段*/
@@ -443,11 +460,12 @@
 									break;
 									/*图片上传*/
 								case 7:
-									//									app.getIMG('上传项目图片', (src) => {
-									//										this.productImg1 = src
-									////										console.log(src)
-									//									})
-									Clip.getIMG('选择头像', (src) => {
+								
+									Clip.getIMGPro('项目图片', (src) => {
+										if(!src){
+											_this.productImg1 = ''
+											return
+										}
 										mui.openWindow({
 											url: '../imgClick.html',
 											id: 'imgClick',
@@ -476,11 +494,12 @@
 									})
 									break;
 								case 8:
-									//									app.getIMG('上传项目图片', (src) => {
-									//										this.productImg2 = src
-									////										console.log(src)
-									//									})
-									Clip.getIMG('选择头像', (src) => {
+		
+									Clip.getIMGPro('项目图片', (src) => {
+										if(!src){
+											_this.productImg2 = ''
+											return
+										}
 										mui.openWindow({
 											url: '../imgClick.html',
 											id: 'imgClick',
@@ -513,7 +532,12 @@
 									//										this.productImg3 = src
 									////										console.log(src)
 									//									})
-									Clip.getIMG('选择头像', (src) => {
+									Clip.getIMGPro('项目图片', (src) => {
+										
+										if(!src){
+											_this.productImg3 = ''
+											return
+										}
 										mui.openWindow({
 											url: '../imgClick.html',
 											id: 'imgClick',
@@ -531,7 +555,7 @@
 											extras: {
 												img: src,
 												pid: 'product_edit',
-												size: 1,
+												size: 2,
 												mark: 3
 											},
 											waiting: {
@@ -539,6 +563,8 @@
 												title: '正在加载...', //等待对话框上显示的提示内容
 											}
 										})
+										
+										
 									})
 									break;
 								default:
@@ -553,7 +579,7 @@
 								plus.nativeUI.alert("请完善当项目资料信息", function() {}, "马嘿嘿提醒您", "ok");
 								return
 							}
-							if(!this.productImg1) {
+							if(!this.productImg1 &&!this.productImg2&&!this.productImg3) {
 								plus.nativeUI.alert("请完善上传项目图片", function() {}, "马嘿嘿提醒您", "ok");
 								return
 							}
@@ -563,7 +589,6 @@
 							var self = plus.webview.currentWebview()
 							/*若是编辑*/
 							if(self.product) {
-
 								_this._addProduction()
 								return;
 							}
@@ -623,15 +648,22 @@
 								PROJECT_IMG3: _this.productImg3
 							}
 							var url = '/api/BusiProject/UpdateProject'
-
+	
 							if(t == 0 || t == 2) {
 								data.PROJECT_STATUS = t
-								url = '/api/BusiProject/CreateProject'
+								url = '/api/BusiProject/CreateProject'	
+								
 							} else {
 								data.PROJECT_CODE = this.dstProduct.PROJECT_CODE;
-								data.PROJECT_STATUS = 2
-							}
+			
+									data.PROJECT_IMG1 = this.PROJECT_IMG1?this.PROJECT_IMG1:'_'
+	
+									data.PROJECT_IMG2 = this.PROJECT_IMG2?this.PROJECT_IMG2:'_'
 
+									data.PROJECT_IMG3 = this.PROJECT_IMG3?this.PROJECT_IMG3:'_'
+								
+							}
+							console.log(JSON.stringify(data))
 							app.ajax(app.baseUrl + url, {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
@@ -661,15 +693,26 @@
 						_chooseAvatar(res){
 							var key = res.mark;
 //							alert(key)
+					plus.nativeUI.closeWaiting()
 							switch (key){
 								case 1:
 								this.productImg1 = res.src
 									break;
 								case 2:
-								this.productImg2 = res.src
+								if(!this.productImg1){
+									this.productImg1 = res.src
+								}else{
+									this.productImg2 = res.src
+								}							
 									break;
 								case 3:
-								this.productImg3 = res.src
+								if(!this.productImg1){
+									this.productImg1 = res.src									
+								}else if(!this.productImg2){
+									this.productImg2 = res.src
+								}else{
+									this.productImg3 = res.src
+								}		
 									break;
 								default:
 									break;
@@ -680,7 +723,7 @@
 				})
 			})
 			function choosePic(res) {
-				plus.nativeUI.closeWaiting()
+				
 				res = JSON.parse(res)
 				APP._chooseAvatar(res)
 			}

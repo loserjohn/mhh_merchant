@@ -37,6 +37,10 @@
 			.card .address .payIcon {
 				font-size: 30px;
 			}
+			.account{
+				height: 52px;
+				line-height: 52px;
+			}
 			/*金额*/
 			
 			.momney {
@@ -94,6 +98,12 @@
 
 			<!--提现操作-->
 			<div id="content" class="card ">
+				<div class="flex  address container">
+					<i class="iconfont icon-jinnang cor_y payIcon"></i>
+					<div class="f1 account  t_r" >
+						{{allMoney}}
+					</div>
+				</div>
 				<div class="flex address container">
 					<i class="iconfont icon-bangdingyinhangqia cor_y payIcon"></i>
 					<div class="f1" style="margin-right: 10px;">

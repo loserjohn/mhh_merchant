@@ -40,6 +40,48 @@
 			}, false);
 		}
 	}
+	/*选择图片2 ke取消*/  
+	owner.getIMGPro = function(title, callback) {
+		if(mui.os.plus) {
+			var a = [{
+				title: '拍照'
+			}, {
+				title: '从手机相册选择'
+			},{
+				title: '清除图片'
+			}];
+			plus.nativeUI.actionSheet({
+				title: title,
+				cancel: '取消',
+				buttons: a
+			}, function(b) {
+
+				switch(b.index) {
+					case 0:
+						break;
+					case 1:
+						//拍照 
+
+						owner.cameraImages(function(src) {
+							if(callback) callback(src);
+						});
+
+						break;
+					case 2:
+						//打开相册 
+						owner.galleryImages(1, function(src) {
+							if(callback) callback(src);
+						});
+					case 3:
+						//清除 
+						if(callback)callback(false)
+						break;
+					default:
+						break;
+				}
+			}, false);
+		}
+	}
 	/*从相册获取图片*/
 	owner.galleryImages = function(num, callback) {
 		// 从相册中选择图片
@@ -160,7 +202,7 @@
 			foldName:plus.storage.getItem('userName'),
 			size:size
 		}
-//		console.log(Info.size)
+
    		mui.ajax(owner.baseUrl + '/api/Upload/UploadByBase64', {
 			data: Info,
 			// dataType:'json',//服务器返回json格式数据
@@ -172,9 +214,9 @@
 			success: function(result) {
 
 				if(callback) callback(result.Data);
-				plus.nativeUI.closeWaiting();
-					mui.later(function() {
-						
+				
+				mui.later(function() {	
+						plus.nativeUI.closeWaiting();
 				}, 1500)
 			},
 			error:function(xhr, type, errorThrown){

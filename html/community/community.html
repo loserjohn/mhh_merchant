@@ -290,12 +290,13 @@
 									contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
 									contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
 									callback: function() {
+//								alert(1)										
 										_this._getData(_this.index, function(b) {
 											if(b) {
 												
 											}
 											mui('#app').pullRefresh().endPullupToRefresh(b);
-
+											mui('#app').pullRefresh().endPulldown(b);
 										})
 									} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 								},
@@ -307,6 +308,7 @@
 									offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
 									auto: false, //可选,默认false.首次加载自动上拉刷新一次
 									callback: function() {
+
 										_this.list = [];
 										_this.index = 1;
 										_this._getData(_this.index, function(b) {
@@ -355,7 +357,7 @@
 							var _this = this
 							var data = {
 								pageIndex: index,
-								pageSize: 4
+								pageSize:5
 							}
 
 							app.ajax(app.baseUrl + '/api/Info/GetBusiMhhCmsList', {

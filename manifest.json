@@ -118,7 +118,7 @@
 			"splashscreen": {
 				"ios": {
 					"iphone": {
-						"default": ""
+						"default": "","iphonex":"F:/mywork/马嘿嘿/马嘿嘿启动页/启动页/ix.png","retina40":"F:/mywork/马嘿嘿/马嘿嘿启动页/启动页/i5.png","retina47":"F:/mywork/马嘿嘿/马嘿嘿启动页/启动页/i6.png","retina55":"F:/mywork/马嘿嘿/马嘿嘿启动页/启动页/i6p.png","retina35":"F:/mywork/马嘿嘿/马嘿嘿启动页/启动页/i4.png"
 					},
 					"ipad": {
 						"portrait": "", /*iPad竖屏启动图片，分辨率：768x1004*/
@@ -133,7 +133,7 @@
 				},
 				"android": {
 					"mdpi": "", /*普通屏启动图片，分辨率：240x282*/
-					"ldpi": ""
+					"ldpi": "","hdpi":"F:/mywork/马嘿嘿/马嘿嘿启动页/启动页/a480.png","xhdpi":"F:/mywork/马嘿嘿/马嘿嘿启动页/启动页/a720.png","xxhdpi":"F:/mywork/马嘿嘿/马嘿嘿启动页/启动页/a1080.png"
 				}
 			},
 			"debug": false
@@ -164,7 +164,8 @@
 					"html/manage/orders/orders.html",
 					"html/manage/production/production.html",
 					"html/manage/deposit.html",
-					"html/home/businessEdiet.html"
+					"html/home/businessEdiet.html",
+					"html/manage/time/time.html"
 				],
 				"priority": 0
 			},
@@ -232,7 +233,8 @@
 			"html/manage/production/product_detail.html": {
 				"resources": [],
 				"refer": [
-					"html/manage/production/product_common.html"
+					"html/manage/production/product_common.html",
+					"html/manage/production/product_edit.html"
 				],
 				"priority": 0
 			},
@@ -272,7 +274,8 @@
 					"yzmLogin.html",
 					"registe.html",
 					"forgetPass.html",
-					"msg.html"
+					"msg.html",
+					"html/home/home.html"
 				],
 				"priority": 0
 			},
@@ -316,7 +319,8 @@
 			"bound.html": {
 				"resources": [],
 				"refer": [
-					"html/home/home.html"
+					"html/home/home.html",
+					"registe.html"
 				],
 				"priority": 0
 			}

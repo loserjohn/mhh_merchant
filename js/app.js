@@ -67,11 +67,10 @@
 		var info = plus.push.getClientInfo();
 		//		透传消息监听
 		plus.push.addEventListener("receive", function(msg) {
-
 			//			新消息红点提示
 			//			alert('receive')
 			if(plus.os.name == "iOS") {
-				switch(msg.payload) {
+				switch(msg.payload) {	
 					case "LocalMSG":
 						/*本地消息*/
 
@@ -89,7 +88,7 @@
 						break;
 				}
 			} else {
-				plus.nativeUI.alert(msg.content);
+//				plus.nativeUI.alert(msg.content);
 				if(plus.webview.getWebviewById('information')) {
 					plus.webview.getWebviewById('information').evalJS('redSet(' + JSON.stringify(msg.content) + ')')
 				}
@@ -98,8 +97,7 @@
 			//				plus.nativeUI.alert(msg.content);
 		}, false);
 		//		点击消息监听
-		plus.push.addEventListener("click", function(msg) {
-			
+		plus.push.addEventListener("click", function(msg) {		
 			switch(msg.payload) {
 				case "LocalMSG":
 					/*本地消息*/
@@ -137,6 +135,7 @@
 			cover: false
 		};
 		plus.push.createMessage(msg.content, "LocalMSG", options);
+		
 		//		if(plus.os.name == "iOS") {
 		//			alert('*如果无法创建消息，请到"设置"->"通知"中配置应用在通知中心显示!');
 		//		}
@@ -776,7 +775,7 @@
 			data: Info,
 			// dataType:'json',//服务器返回json格式数据
 			type: 'post', //HTTP请求类型
-			timeout: 10000, //超时时间设置为10秒；
+			timeout: 6000, //超时时间设置为10秒；
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
@@ -793,7 +792,7 @@
 			},
 			error: function(xhr, type, errorThrown) {
 				//异常处理；
-				console.log(type);
+				owner.catchErr(type, errorThrown);
 			}
 		});
 	}
