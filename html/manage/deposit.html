@@ -8,6 +8,8 @@
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/common.css" />
 		<link rel="stylesheet" href="../../css/iconfont.css" />
+			<link rel="stylesheet" href="../../css/loading.css" />
+		
 		<style>
 			/*提现至*/
 			
@@ -90,11 +92,21 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+				<ul>
+					<li id='a'></li>
+					<li id='b'></li>
+					<li id='c'></li>
+					<li id='d'></li>
+					<li id='e'></li>
+					<li id='f'></li>
+					<li id='g'></li>
+					<li id='h'></li>
+					<li id='i'></li>
+				</ul>
+		</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">账户提现</h1>
-			</header>
 
 			<!--提现操作-->
 			<div id="content" class="card ">
@@ -163,8 +175,7 @@
 						allMoney:''
 					},
 					created: function() {
-						//							alert(1)
-						app.initHeader();
+	
 					},
 					mounted: function() {
 						var _this = this
@@ -189,6 +200,7 @@
 									'Authorization': app.mark + plus.storage.getItem('token')
 								},
 								success: function(result) {
+									document.getElementById('loader').style.display='none'
 									if(result.Success) {
 //										console.log(JSON.stringify(result.Data.ListInfo))
 										_this.allBankCard = result.Data.ListInfo

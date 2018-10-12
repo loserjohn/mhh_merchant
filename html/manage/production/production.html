@@ -9,6 +9,8 @@
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/animate.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+		
 		<style>
 			/*列表项样式*/
 			
@@ -93,6 +95,20 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+				<ul>
+					<li id='a'></li>
+					<li id='b'></li>
+					<li id='c'></li>
+					<li id='d'></li>
+					<li id='e'></li>
+					<li id='f'></li>
+					<li id='g'></li>
+					<li id='h'></li>
+					<li id='i'></li>
+				</ul>
+		</div>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav " id="header">
 				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
@@ -373,7 +389,7 @@
 							this.$nextTick(function() {
 								/*竖向下拉刷新*/
 								if(!_this.scroll) {
-									//							初始化标题栏
+									//初始化标题栏
 									_this.scroll = new BScroll(scroll, {
 										click: true,
 										probeType: 3,
@@ -410,8 +426,6 @@
 //								 mui.currentWebview.show('pop-in', 300, function () {}, {});
 							/*初始化项目数据*/
 							this._getData((b)=>{
-								 plus.nativeUI.closeWaiting()
-								 mui.currentWebview.show('pop-in', 300, function () {}, {});
 								 if(b){
 									}else{
 									_this.scroll.finishPullUp()
@@ -428,7 +442,6 @@
 						methods: {
 							//							tab切换
 							_changeTab: function(key) {
-								//								alert(key)
 								this.currtab = parseInt(key)
 //								this.scroll.scrollTo(0,0,300);
 								if(this.productsList[this.currtab].index == 1) {
@@ -461,14 +474,14 @@
 									},
 									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 									show: {
-										autoShow: false, //页面loaded事件发生后自动显示，默认为true
+										autoShow: true, //页面loaded事件发生后自动显示，默认为true
 										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 									},
 									extras: {
 										productId:e										
 									},
 									waiting: {
-										autoShow: true, //自动显示等待框，默认为true
+										autoShow: false, //自动显示等待框，默认为true
 										title: '正在加载...', //等待对话框上显示的提示内容
 									}
 								})
@@ -538,28 +551,31 @@
 									// dataType:'json',//服务器返回json格式数据
 									type: 'get', //HTTP请求类型
 									success: function(result) {	
-										if(result.Success) {
-											var l = _this.productsList[tabType].infoList.length;
-											var arr = _this.productsList[tabType].infoList
-											_this.productsList[tabType].infoList = arr.concat(result.Data.ListInfo);
-											
-//											console.log(_this.productsList[tabType].infoList.length,l)
-											if(_this.productsList[tabType].infoList.length == l) {
-												_this.productsList[tabType].norest = true;
-												if(callback)callback(true);
-												return;
-											} 
-
-											_this.productsList[tabType].index += 1
-											mui.later(()=>{
-												_this.scroll.refresh();												
-												if(callback)callback(false);
-											},300)
-										} else {
-											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
-											
-										}
+										mui.later(()=>{
+											document.getElementById('loader').style.display='none'
+											if(result.Success) {
+												var l = _this.productsList[tabType].infoList.length;
+												var arr = _this.productsList[tabType].infoList
+												_this.productsList[tabType].infoList = arr.concat(result.Data.ListInfo);
+												
+	//											console.log(_this.productsList[tabType].infoList.length,l)
+												if(_this.productsList[tabType].infoList.length == l) {
+													_this.productsList[tabType].norest = true;
+													if(callback)callback(true);
+													return;
+												} 
+	
+												_this.productsList[tabType].index += 1
+												
+													_this.scroll.refresh();												
+													if(callback)callback(false);
+												
+											} else {
+												/*验证失败*/
+												plus.nativeUI.toast(result.Msg)
+												
+											}
+										},500)
 									}
 								});
 															

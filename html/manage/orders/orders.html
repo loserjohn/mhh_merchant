@@ -9,6 +9,8 @@
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/animate.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+		
 		<style>
 			/*列表项样式*/
 			
@@ -61,6 +63,20 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+				<ul>
+					<li id='a'></li>
+					<li id='b'></li>
+					<li id='c'></li>
+					<li id='d'></li>
+					<li id='e'></li>
+					<li id='f'></li>
+					<li id='g'></li>
+					<li id='h'></li>
+					<li id='i'></li>
+				</ul>
+		</div>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav " id="header">
 				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
@@ -468,12 +484,13 @@
 									// dataType:'json',//服务器返回json格式数据
 									type: 'get', //HTTP请求类型
 									success: function(result) {
-//										plus.nativeUI.closeWaiting()
+										mui.later(()=>{
+										document.getElementById('loader').style.display='none'
+
 										if(result.Success) {
 											var arr = _this.orderList[tabType].infoList
 											var l = _this.orderList[tabType].infoList.length; 
 											_this.orderList[tabType].infoList = arr.concat(result.Data.ListInfo);
-//			console.log(_this.orderList[tabType].infoList.length,l)
 											if(_this.orderList[tabType].infoList.length == l) {	
 												
 												_this.orderList[tabType].norest = true;
@@ -481,15 +498,16 @@
 												return;
 											} 
 											_this.orderList[tabType].index += 1
-											mui.later(()=>{
+											
 												_this.scroll.refresh();												
 												if(callback)callback(false);
-											},300)											
+																					
 										} else {
 											/*验证失败*/
 											plus.nativeUI.toast(result.Msg)
 
 										}
+										},500)	
 									}
 								});
 							},

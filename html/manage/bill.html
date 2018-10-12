@@ -9,6 +9,8 @@
 		<link rel="stylesheet" href="../../css/common.css" />
 		<link rel="stylesheet" href="../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../css/animate.css" />
+		<link rel="stylesheet" href="../../css/loading.css" />
+		
 		<style>
 			/*账户明细*/
 			
@@ -43,12 +45,21 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			<!--<div class="reset clearfix">-->
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">账户明细</h1>
-			</header>
 
 			<!--账户报表-->
 			<div class="cm_tabBars " id="content" ref="content">
@@ -165,13 +176,12 @@
 						]
 					},
 					created: function() {
-						//							alert(1)
-						app.initHeader();
+
 					},
 					mounted: function() {
 						var _this = this
 						var scroll = this.$refs.scroll
-						this.tabContenTop = document.getElementById('header').offsetHeight + 40 + 'px';
+						this.tabContenTop = 40 + 'px';
 
 						this.$nextTick(function() {
 							//							初始化scrool
@@ -261,29 +271,31 @@
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
 								success: function(result) {
-									//										plus.nativeUI.closeWaiting()
-									if(result.Success) {
-										var l = _this.detailList[tabType].list.length;
-										var arr = _this.detailList[tabType].list
-										_this.detailList[tabType].list = arr.concat(result.Data.ListInfo);
-//											console.log(_this.detailList[tabType].list.length,l)			
-
-										if(_this.detailList[tabType].list.length == l) {
-											_this.detailList[tabType].norest = true;
-												if(callback)callback(true);
-												return;
+									mui.later(() => {
+										document.getElementById('loader').style.display='none'
+										if(result.Success) {
+											var l = _this.detailList[tabType].list.length;
+											var arr = _this.detailList[tabType].list
+											_this.detailList[tabType].list = arr.concat(result.Data.ListInfo);
+	//											console.log(_this.detailList[tabType].list.length,l)			
+	
+											if(_this.detailList[tabType].list.length == l) {
+												_this.detailList[tabType].norest = true;
+													if(callback)callback(true);
+													return;
+											}
+											//											console.log('当前页'+_this.productsList[tabType].index)
+											_this.detailList[tabType].index += 1
+											
+												_this.scroll.refresh();												
+													if(callback)callback(false);
+											
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+	
 										}
-										//											console.log('当前页'+_this.productsList[tabType].index)
-										_this.detailList[tabType].index += 1
-										mui.later(() => {
-											_this.scroll.refresh();												
-												if(callback)callback(false);
-										}, 300)
-									} else {
-										/*验证失败*/
-										plus.nativeUI.toast(result.Msg)
-
-									}
+									}, 500)
 								}
 							});
 						},

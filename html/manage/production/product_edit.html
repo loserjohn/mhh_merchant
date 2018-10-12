@@ -115,18 +115,47 @@
 			}
 			
 			.detailPic {
-				justify-content: space-between;
-				margin-top: 10px;
+				justify-content: flex-start margin-top: 10px;
 			}
 			
 			.detailPic .detailPicItem {
-				width: 32%;
-				box-sizing: border-box;
+				background: #fff;
+				max-width: 80px;
+				max-height: 80px;
+				text-align: center;
+				margin: 5px;
+				position: relative;
+			}
+			.detailPic .detailPicItem  .delectBtn{
+				padding: 0;
+				position: absolute;
+				bottom: -10px;
+				left: 50%;
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				background: red;
+				margin-left: -10px;
+				text-align: center;
+				line-height: 20px;
+				overflow: hidden;
+			}
+			.detailPic .detailPicItem  .delectBtn i{
+				margin: 0;
+				padding: 0;
+				font-size: 16px;
+				font-weight: 600;
+				display: block;
+				width: 100%;
+				height: 100%;
+				line-height: 20px;
+			}
+			.detailPic .detailPicItem .pics {
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
 			}
 			
-			.detailPic .detailPicItem>img {
-				width: 100%;
-			}
 			.subTime {
 				/*margin-right: 20px;*/
 				background: #404040;
@@ -135,13 +164,15 @@
 				line-height: 40px;
 				margin: 0!important;
 			}
-			.dayNumTxt{
+			
+			.dayNumTxt {
 				line-height: 40px;
 				text-align: center;
 				background: #f1f1f1;
 				min-width: 40px;
 				margin: 0 10px;
 			}
+			
 			.addTime {
 				/*margin-left: 20px;*/
 				margin: 0!important;
@@ -228,11 +259,11 @@
 							<div class="f1 cellName">消耗时段
 								<p>(一时段15分钟)</p>
 							</div>
-							<div class="f1 flex">	
+							<div class="f1 flex">
 								<i class="iconfont icon-minus subTime" @tap="_updatedMsg(10)"></i>
 								<div class="dayNumTxt">{{time}}</div>
 								<i class="iconfont icon-add addTime" @tap="_updatedMsg(6)"></i>
-							</div>					
+							</div>
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">维持（天数）</div>
@@ -242,15 +273,22 @@
 						<li class="detailPicBox">
 							<div class="f1 cellName ">项目图片</div>
 							<div class="flex detailPic">
-								<div class=" detailPicItem" @tap="_updatedMsg(7)">
-									<img :src="productImg1?productImg1:'../../../images/blank.png'" alt="" />
-								</div>
-								<div class="detailPicItem" @tap="_updatedMsg(8)">
-									<img :src="productImg2?productImg2:'../../../images/blank.png'" alt="" />
-								</div>
-								<div class=" detailPicItem" @tap="_updatedMsg(9)">
-									<img :src="productImg3?productImg3:'../../../images/blank.png'" alt="" />
-								</div>
+								<ul class="flex">
+									<li v-for="(item,index)  in proList" @tap="_delectPic(index)" class=" detailPicItem">
+										<div class="pics">
+											<img :src="item" alt="" class="contain" />
+										</div>
+										<div class="delectBtn">
+											<i class="mui-icon mui-icon-closeempty cor_w"></i>
+										</div>
+									</li>
+									<li class="detailPicItem " @tap="_getPic">
+										<div class="pics">
+											<img src="../../../images/blank.png" class="cover" />
+										</div>
+									</li>
+								</ul>
+
 							</div>
 						</li>
 
@@ -258,7 +296,7 @@
 							<!--<div class="f1 cellName ">用卡说明</div>-->
 							<textarea name="" rows="" cols="" class="cellInputArea" v-model="produtDetail" placeholder="项目详情"></textarea>
 						</li>
-						
+
 					</ul>
 				</div>
 			</div>
@@ -312,8 +350,8 @@
 						productImg2: '',
 						productImg3: '',
 						produtDetail: '', //项目详情
-						
-						mintime:0
+						proList: [],  //图片的数组
+						mintime: 0
 					},
 					created: function() {
 
@@ -322,7 +360,7 @@
 						var _this = this
 						app.initHeader();
 						var self = plus.webview.currentWebview()
-						
+
 						if(self.product) {
 							this.dstProduct = self.product
 							this.title = "编辑项目"
@@ -352,6 +390,44 @@
 						});
 					},
 					methods: {
+//						删除项目图片
+						_delectPic(index){
+							this.proList.splice(index, 1); 
+						},
+//						获取项目图片
+						_getPic() {
+							if(this.proList.length>=3){
+								plus.nativeUI.toast('问题图片不超过三张')
+								return;
+							}
+							var _this = this
+							Clip.getIMGPro('项目图片', (src) => {
+								mui.openWindow({
+									url: '../imgClick.html',
+									id: 'imgClick',
+									styles: {
+										top: '0px', //新页面顶部位置
+										bottom: '0px', //新页面底部位置
+										scrollIndicator: "none",
+										plusrequire: 'ahead'
+									},
+									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+									show: {
+										autoShow: false, //页面loaded事件发生后自动显示，默认为true
+										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+									},
+									extras: {
+										img: src,
+										pid: 'product_edit',
+										size: 1
+									},
+									waiting: {
+										autoShow: true, //自动显示等待框，默认为true
+										title: '正在加载...', //等待对话框上显示的提示内容
+									}
+								})
+							})
+						},
 						/*修改信息测初始化赋值*/
 						_initMsg() {
 							/*赋值信息*/
@@ -369,9 +445,8 @@
 							this.holdDay = this.dstProduct.KEEP_COUNT; //维持时间
 							this.time = this.dstProduct.BOOKING_COUNT;
 							/*计算时段*/
-							if(this.dstProduct.PROJECT_IMG1) this.productImg1 = this.dstProduct.PROJECT_IMG1; //项目图片
-							if(this.dstProduct.PROJECT_IMG2) this.productImg2 = this.dstProduct.PROJECT_IMG2;
-							if(this.dstProduct.PROJECT_IMG3) this.productImg3 = this.dstProduct.PROJECT_IMG3;
+							this.proList = this.dstProduct.PROJECT_IMGS;
+							console.log(this.proList.lenght)
 
 							this.produtDetail = this.dstProduct.PROJECT_DETAILS; //项目详情
 							//							this.produtExplain=this.dstProduct.PROJECT_STATE //项目说明
@@ -433,7 +508,7 @@
 									break;
 								case 5:
 									/*计算时段*/
-									_this.mintime = Math.ceil(_this.consuming / 15)//记录最小时段
+									_this.mintime = Math.ceil(_this.consuming / 15) //记录最小时段
 									_this.time = Math.ceil(_this.consuming / 15)
 									break;
 								case 10:
@@ -442,13 +517,13 @@
 										plus.nativeUI.alert("请先填写耗时时间", function() {}, "马嘿嘿提醒您", "ok");
 										return
 									}
-									if(_this.time >_this.mintime){
+									if(_this.time > _this.mintime) {
 										_this.time -= 1
-									}else{
+									} else {
 										plus.nativeUI.toast('不能小于最小耗时时间')
 										_this.time = _this.mintime
 									}
-									
+
 									break;
 								case 6:
 									/*添加时段*/
@@ -457,116 +532,7 @@
 										return
 									}
 									_this.time += 1
-									break;
-									/*图片上传*/
-								case 7:
-								
-									Clip.getIMGPro('项目图片', (src) => {
-										if(!src){
-											_this.productImg1 = ''
-											return
-										}
-										mui.openWindow({
-											url: '../imgClick.html',
-											id: 'imgClick',
-											styles: {
-												top: '0px', //新页面顶部位置
-												bottom: '0px', //新页面底部位置
-												scrollIndicator: "none",
-												plusrequire: 'ahead'
-											},
-											createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-											show: {
-												autoShow: false, //页面loaded事件发生后自动显示，默认为true
-												duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-											},
-											extras: {
-												img: src,
-												pid: 'product_edit',
-												size: 1,
-												mark: 1
-											},
-											waiting: {
-												autoShow: true, //自动显示等待框，默认为true
-												title: '正在加载...', //等待对话框上显示的提示内容
-											}
-										})
-									})
-									break;
-								case 8:
-		
-									Clip.getIMGPro('项目图片', (src) => {
-										if(!src){
-											_this.productImg2 = ''
-											return
-										}
-										mui.openWindow({
-											url: '../imgClick.html',
-											id: 'imgClick',
-											styles: {
-												top: '0px', //新页面顶部位置
-												bottom: '0px', //新页面底部位置
-												scrollIndicator: "none",
-												plusrequire: 'ahead'
-											},
-											createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-											show: {
-												autoShow: false, //页面loaded事件发生后自动显示，默认为true
-												duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-											},
-											extras: {
-												img: src,
-												pid: 'product_edit',
-												size: 1,
-												mark: 2
-											},
-											waiting: {
-												autoShow: true, //自动显示等待框，默认为true
-												title: '正在加载...', //等待对话框上显示的提示内容
-											}
-										})
-									})
-									break;
-								case 9:
-									//									app.getIMG('上传项目图片', (src) => {
-									//										this.productImg3 = src
-									////										console.log(src)
-									//									})
-									Clip.getIMGPro('项目图片', (src) => {
-										
-										if(!src){
-											_this.productImg3 = ''
-											return
-										}
-										mui.openWindow({
-											url: '../imgClick.html',
-											id: 'imgClick',
-											styles: {
-												top: '0px', //新页面顶部位置
-												bottom: '0px', //新页面底部位置
-												scrollIndicator: "none",
-												plusrequire: 'ahead'
-											},
-											createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-											show: {
-												autoShow: false, //页面loaded事件发生后自动显示，默认为true
-												duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-											},
-											extras: {
-												img: src,
-												pid: 'product_edit',
-												size: 2,
-												mark: 3
-											},
-											waiting: {
-												autoShow: true, //自动显示等待框，默认为true
-												title: '正在加载...', //等待对话框上显示的提示内容
-											}
-										})
-										
-										
-									})
-									break;
+									break;							
 								default:
 									break;
 							}
@@ -579,7 +545,7 @@
 								plus.nativeUI.alert("请完善当项目资料信息", function() {}, "马嘿嘿提醒您", "ok");
 								return
 							}
-							if(!this.productImg1 &&!this.productImg2&&!this.productImg3) {
+							if(this.proList.length<1) {
 								plus.nativeUI.alert("请完善上传项目图片", function() {}, "马嘿嘿提醒您", "ok");
 								return
 							}
@@ -643,25 +609,23 @@
 								LIFETIME_COUNT: _this.consuming,
 								BOOKING_COUNT: _this.time,
 								KEEP_COUNT: _this.holdDay,
-								PROJECT_IMG1: _this.productImg1,
-								PROJECT_IMG2: _this.productImg2,
-								PROJECT_IMG3: _this.productImg3
+								PROJECT_IMGS:_this.proList.join(',')
 							}
 							var url = '/api/BusiProject/UpdateProject'
-	
+
 							if(t == 0 || t == 2) {
 								data.PROJECT_STATUS = t
-								url = '/api/BusiProject/CreateProject'	
-								
+								url = '/api/BusiProject/CreateProject'
+
 							} else {
 								data.PROJECT_CODE = this.dstProduct.PROJECT_CODE;
-			
-									data.PROJECT_IMG1 = this.PROJECT_IMG1?this.PROJECT_IMG1:'_'
-	
-									data.PROJECT_IMG2 = this.PROJECT_IMG2?this.PROJECT_IMG2:'_'
 
-									data.PROJECT_IMG3 = this.PROJECT_IMG3?this.PROJECT_IMG3:'_'
-								
+								data.PROJECT_IMG1 = this.PROJECT_IMG1 ? this.PROJECT_IMG1 : '_'
+
+								data.PROJECT_IMG2 = this.PROJECT_IMG2 ? this.PROJECT_IMG2 : '_'
+
+								data.PROJECT_IMG3 = this.PROJECT_IMG3 ? this.PROJECT_IMG3 : '_'
+
 							}
 							console.log(JSON.stringify(data))
 							app.ajax(app.baseUrl + url, {
@@ -690,40 +654,18 @@
 								}
 							});
 						},
-						_chooseAvatar(res){
-							var key = res.mark;
-//							alert(key)
-					plus.nativeUI.closeWaiting()
-							switch (key){
-								case 1:
-								this.productImg1 = res.src
-									break;
-								case 2:
-								if(!this.productImg1){
-									this.productImg1 = res.src
-								}else{
-									this.productImg2 = res.src
-								}							
-									break;
-								case 3:
-								if(!this.productImg1){
-									this.productImg1 = res.src									
-								}else if(!this.productImg2){
-									this.productImg2 = res.src
-								}else{
-									this.productImg3 = res.src
-								}		
-									break;
-								default:
-									break;
-							}
+						_chooseAvatar(res) {
+							this.proList.push(res.src)
+							plus.nativeUI.closeWaiting()
+						
 						}
 					}
 
 				})
 			})
+
 			function choosePic(res) {
-				
+
 				res = JSON.parse(res)
 				APP._chooseAvatar(res)
 			}

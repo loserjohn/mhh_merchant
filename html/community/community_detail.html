@@ -3,11 +3,12 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>详情</title>
+		<title>新闻详情</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/common.css" />
 		<link rel="stylesheet" href="../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../css/loading.css" />
 		<style>
 			.detailTitle {
 				line-height: 60px;
@@ -97,13 +98,22 @@
 	</head>
 
 	<body>
+		
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav mui-clearfix "  id="header">
-				<a class="mui-action-back mui-pull-left">
-					<i class="iconfont icon-xitongfanhui cm_back"></i>
-				</a>
-				<h1 class="mui-title" >新闻详情</h1>
-			</header>
 
 			<div class="container " id="content" style="background: #fff">
 				<div >
@@ -325,6 +335,7 @@
 								},
 								type: 'post', //HTTP请求类型
 								success: function(result) {
+									document.getElementById('loader').style.display='none'
 									if(result.Success) {
 //										plus.nativeUI.closeWaiting()
 										_this.detailContent = result.Data	

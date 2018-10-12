@@ -9,6 +9,8 @@
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/animate.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+		
 		<style>
 			/*充值卡管理*/
 			
@@ -89,15 +91,22 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">优惠券管理</h1>
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px">
-					须知
-				</a>
-			</header>
-
+		
 			<!--卡片-->
 			<div class="cards scrollBox "   :style="{top:scrollTop}" id="scroll" ref="scroll">
 				<div class="reset" style="min-height: 101%;"> 	
@@ -189,14 +198,12 @@
 						detailPre:{}
 					},
 					created: function() {
-						//							alert(1)
-	app.initHeader();
 					},
 					mounted: function() {
 						
 						var _this = this
 						var scroll =  this.$refs.scroll
-						this.scrollTop = document.getElementById('header').offsetHeight + 'px'
+						this.scrollTop = 0 + 'px'
 							/*首次加载数据*/
 						this._getData(() => {
 							plus.nativeUI.closeWaiting()
@@ -259,7 +266,22 @@
 									top: '0px', //新页面顶部位置
 									bottom: '0px', //新页面底部位置
 									scrollIndicator: "none",
-									plusrequire: 'ahead'
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
 								},
 								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 								show: {
@@ -270,7 +292,7 @@
 									//自定义扩展参数，可以用来处理页面间传值  
 								},
 								waiting: {
-									autoShow: true, //自动显示等待框，默认为true
+									autoShow: false, //自动显示等待框，默认为true
 									title: '正在加载...', //等待对话框上显示的提示内容
 								}
 							})
@@ -300,7 +322,22 @@
 									top: '0px', //新页面顶部位置
 									bottom: '0px', //新页面底部位置
 									scrollIndicator: "none",
-									plusrequire: 'ahead'
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
 								},
 								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 								show: {
@@ -311,16 +348,14 @@
 									coupon:item
 								},
 								waiting: {
-									autoShow: true, //自动显示等待框，默认为true
+									autoShow: false, //自动显示等待框，默认为true
 									title: '正在加载...', //等待对话框上显示的提示内容
 								}
 							})
 						},
 						/*删除操作*/
 						_delect(code){
-//							console.log(11)
 								var li = document.getElementById(code)
-										//							console.log(li)
 								mui.swipeoutClose(li)
 								var _this = this 
 								var data={
@@ -398,17 +433,20 @@
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
 								success: function(result) {
-									if(result.Success) {
-										_this.couponsList = result.Data.ListInfo
-										 mui.later(()=>{
-											 	_this.scroll.refresh();
-											 	if(callback) callback();
-										},300)
-									} else {
-										/*验证失败*/
-										plus.nativeUI.toast(result.Msg)
-
-									}
+									mui.later(()=>{
+										document.getElementById('loader').style.display='none'
+										if(result.Success) {
+											_this.couponsList = result.Data.ListInfo
+											 
+												 	_this.scroll.refresh();
+												 	if(callback) callback();
+											
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+	
+										}
+									},500)
 								}
 							});
 						}

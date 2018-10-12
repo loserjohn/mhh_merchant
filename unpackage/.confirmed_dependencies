@@ -23,7 +23,9 @@
 			"html/manage/production/production.html",
 			"html/manage/deposit.html",
 			"html/home/businessEdiet.html",
-			"html/manage/time/time.html"
+			"html/manage/time/time.html",
+			"html/manage/personSet/personSet.html",
+			"html/manage/production/product_detail.html"
 		]
 	},
 	"html/manage/manage.html": {
@@ -38,7 +40,9 @@
 			"html/manage/deposit.html",
 			"html/manage/refillcard/refillcard.html",
 			"html/manage/coupons/coupons.html",
-			"html/manage/share/share.html"
+			"html/manage/share/share.html",
+			"html/manage/kefu.html",
+			"html/manage/banks/banks.html"
 		],
 		"resources": []
 	},
@@ -102,14 +106,16 @@
 	},
 	"html/manage/coupons/coupons.html": {
 		"refer": [
-			"html/manage/coupons/addCoupon.html"
+			"html/manage/coupons/addCoupon.html",
+			"html/manage/coupons/editCoupon.html"
 		],
 		"resources": []
 	},
 	"html/manage/personSet/personSet.html": {
 		"refer": [
 			"html/manage/banks/banks.html",
-			"index.html"
+			"index.html",
+			"html/manage/imgClick.html"
 		],
 		"resources": []
 	},
@@ -136,7 +142,8 @@
 	"html/information/information.html": {
 		"refer": [
 			"html/information/sysMessege.html",
-			"html/information/chat.html"
+			"html/information/chat.html",
+			"html/information/sysMessage.html"
 		]
 	},
 	"html/information/chat.html": {
@@ -154,6 +161,11 @@
 		"refer": [
 			"html/home/home.html",
 			"registe.html"
+		]
+	},
+	"html/manage/banks/banks.html": {
+		"refer": [
+			"html/manage/banks/addBank.html"
 		]
 	}
 }

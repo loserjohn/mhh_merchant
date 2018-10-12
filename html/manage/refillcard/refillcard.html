@@ -8,6 +8,8 @@
 		<link href="../../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+
 		<style>
 			/*充值卡管理*/
 			
@@ -86,14 +88,22 @@
 	</head>
 
 	<body>
+
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">充值卡管理</h1>
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px">
-					须知
-				</a>
-			</header>
 
 			<!--卡片-->
 			<div class="cards scrollBox " ref="scroll" :style="{top:scrollTop}" id="scroll">
@@ -102,7 +112,7 @@
 					<div class="refresh">
 						<p class="t_c cor_y  refresh_txt">有种你放开我</p>
 					</div>
-					<ul class="reset cm_ul cards_ul " >
+					<ul class="reset cm_ul cards_ul ">
 						<li style="box-sizing: border-box;padding: 10px;" v-for="item  in cardsList">
 							<div class="cardList container " @click="_toDetail(item)">
 								<div class="flex containe ">
@@ -119,8 +129,8 @@
 								</div>
 							</div>
 						</li>
-						
-						<li v-if="cardsList.length==0" class="t_c cm_noItem" >
+
+						<li v-if="cardsList.length==0" class="t_c cm_noItem">
 							<img src="../../../images/no1.png" alt="" />
 							<div class="t_c">--您还没有充值卡--</div>
 						</li>
@@ -141,7 +151,7 @@
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
-		
+
 		<script type="text/javascript">
 			mui.init({
 				swipeBack: true
@@ -153,7 +163,7 @@
 					el: '#app',
 					data: {
 						scrollTop: '',
-						scroll:'',
+						scroll: '',
 						cardsList: ''
 					},
 					filters: {
@@ -180,9 +190,9 @@
 					mounted: function() {
 
 						var _this = this
-						app.initHeader();
+
 						var scroll = this.$refs.scroll;
-						this.scrollTop = document.getElementById('header').offsetHeight + 'px'
+						this.scrollTop = 0 + 'px'
 
 						this.$nextTick(function() {
 							//							初始化scrool
@@ -193,35 +203,32 @@
 									probeType: 3,
 									bounceTime: 200,
 									pullDownRefresh: {
-											  threshold: 50,
-											  stop: 20
-											}
+										threshold: 50,
+										stop: 20
+									}
 								})
 							} else {
 								_this.scroll.refresh();
 							};
 							/*下拉刷新*/
 							_this.scroll.on('pullingDown', function(e) {
-								
-									plus.nativeUI.showWaiting()
-									_this._getData(()=>{
-										plus.nativeUI.closeWaiting();
-										_this.scroll.finishPullDown()
-									})
-									
+
+								plus.nativeUI.showWaiting()
+								_this._getData(() => {
+									plus.nativeUI.closeWaiting();
+									_this.scroll.finishPullDown()
+								})
+
 							})
 						})
 
 						/*首次加载数据*/
-						this._getData(() => {
-							plus.nativeUI.closeWaiting()
-							mui.currentWebview.show('pop-in', 300, function () {}, {});
-						})
+						this._getData()
 
 					},
 					methods: {
 						/*查看详细*/
-						_toDetail(item){
+						_toDetail(item) {
 							mui.openWindow({
 								url: './editCard.html',
 								id: 'editCard',
@@ -229,28 +236,43 @@
 									top: '0px', //新页面顶部位置
 									bottom: '0px', //新页面底部位置
 									scrollIndicator: "none",
-									plusrequire: 'ahead'
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
 								},
 								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 								show: {
-									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
 									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 								},
 								extras: {
-									cardDetail:item
+									cardDetail: item
 								},
 								waiting: {
-									autoShow: true, //自动显示等待框，默认为true
+									autoShow: false, //自动显示等待框，默认为true
 									title: '正在加载...', //等待对话框上显示的提示内容
 								}
 							})
 						},
-						/*添加新卡*/  
+						/*添加新卡*/
 						_toAddNewCard(item) {
-							var data={};
-							if(item){
-								data={
-									cardDetail:item
+							var data = {};
+							if(item) {
+								data = {
+									cardDetail: item
 								}
 							}
 							mui.openWindow({
@@ -260,7 +282,22 @@
 									top: '0px', //新页面顶部位置
 									bottom: '0px', //新页面底部位置
 									scrollIndicator: "none",
-									plusrequire: 'ahead'
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
 								},
 								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 								show: {
@@ -269,7 +306,7 @@
 								},
 								extras: data,
 								waiting: {
-									autoShow: true, //自动显示等待框，默认为true
+									autoShow: false, //自动显示等待框，默认为true
 									title: '正在加载...', //等待对话框上显示的提示内容
 								}
 							})
@@ -278,32 +315,35 @@
 						_getData(callback) {
 							var _this = this
 							app.ajax(app.baseUrl + '/api/BusiRecharge/GetRechargeList', {
-								//									data: data,
+
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
 								success: function(result) {
-									if(result.Success) {
-										_this.cardsList = result.Data.ListInfo
-										 mui.later(()=>{
-											 	_this.scroll.refresh();
-//											 	alert(_this.detail.PROJECT_STATUS)
-											 	if(callback) callback();
-											 },300)
-									} else {
-										/*验证失败*/
-										plus.nativeUI.toast(result.Msg)
+									mui.later(() => {
+										document.getElementById('loader').style.display = 'none'
+										if(result.Success) {
+											_this.cardsList = result.Data.ListInfo
 
-									}
+											_this.scroll.refresh();
+											//											 	alert(_this.detail.PROJECT_STATUS)
+											if(callback) callback();
+
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+
+										}
+									}, 500)
 								}
 							});
 						}
 					}
 				})
 			})
-			function refresh(){
+
+			function refresh() {
 				APP._getData()
 			}
-			
 		</script>
 	</body>
 

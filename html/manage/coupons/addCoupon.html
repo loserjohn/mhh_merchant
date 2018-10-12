@@ -8,6 +8,8 @@
 		<link href="../../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+		
 		<style>
 			.btns {
 				margin-top: 15px;
@@ -123,14 +125,21 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">添加新券</h1>
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px">
-					须知
-				</a>
-			</header>
 
 			<!--新卡信息-->
 			<div class="newCardMsg" id="content">
@@ -271,9 +280,9 @@
 
 					},
 					mounted: function() {
-						var _this = this
-						app.initHeader();
-
+//						mui.later(()=>{
+							document.getElementById('loader').style.display='none'
+//						},2500)
 					},
 					methods: {
 						//						选择起始时间

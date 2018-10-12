@@ -97,17 +97,17 @@
 				</div>
 				<!--便捷按钮-->
 				<div class="quickBtns flex panel main">
-					<div class="f1 flex quickMenus">
-						<a href="./deposit.html" hid="deposit" class="flex">
+					<div class="f1 flex quickMenus " >
+						<div href="./deposit.html" hid="deposit" class="flex naviTitle">
 							<img src="../../images/demo3.png" alt="" class="menuPic" />
 							<p class="menuTxt f1">账户提现</p>
-						</a>
+						</div>
 					</div>
-					<div class="f1  quickMenus">
-						<a href="./bill.html" hid="bill" class="flex">
+					<div class="f1 flex  quickMenus">
+						<div href="./bill.html" hid="bill" class="flex naviTitle">
 							<img src="../../images/demo3.png" alt="" class="menuPic" />
 							<p class="menuTxt f1">账目明细</p>
-						</a>
+						</div>
 					</div>
 				</div>
 
@@ -118,46 +118,46 @@
 					</div>
 					<ul class="flex otherMenus">
 						<li class="menus " >
-							<a href="./production/production.html" hid="production">
+							<div href="./production/production.html" hid="production" class="navigate">
 								<i class="iconfont icon-similarproduct menusIcon cor_g"></i>
 								<p class="t_c fs12">作品管理</p>
-							</a>
+							</div>
 						</li>
 						<li class="menus " >
-							<a href="./time/time.html" hid="time">
+							<div href="./time/time.html" hid="time" class="naviTitle">
 								<i class="iconfont icon-shijian menusIcon cor_g"></i>
 								<p class="t_c fs12">时间管理</p>
-							</a>
+							</div>
 						</li>
 						<li class="menus " >
-							<a href="./orders/orders.html" hid="orders">
+							<div href="./orders/orders.html" hid="orders" class="navigate">
 								<i class="iconfont icon-fuzhi menusIcon cor_g"></i>
 								<p class="t_c fs12">订单管理</p>
-							</a>
+							</div>
 						</li>
 						<li class="menus " >
-							<a href="./comment/comment.html" hid="comment">
+							<div href="./comment/comment.html" hid="comment" class="naviTitle">
 								<i class="iconfont icon-bianji menusIcon cor_g"></i>
 								<p class="t_c fs12">评价管理</p>
-							</a>
+							</div>
 						</li>
 						<li class="menus " >
-							<a href="./refillcard/refillcard.html" hid="refillcard">
+							<div href="./refillcard/refillcard.html" hid="refillcard" class="naviTitle">
 								<i class="iconfont icon-huiyuanqia menusIcon cor_g"></i>
 								<p class="t_c fs12">充值卡管理</p>
-							</a>
+							</div>
 						</li>
 						<li class="menus " >
-							<a href="./coupons/coupons.html" hid="coupons">
+							<div href="./coupons/coupons.html" hid="coupons" class="naviTitle">
 								<i class="iconfont icon-qiaquan menusIcon cor_g"></i>
 								<p class="t_c fs12">优惠券管理</p>
-							</a>
+							</div>
 						</li>
 						<li class="menus " >
-							<a href="./personSet/personSet.html" hid="personSet">
+							<div href="./personSet/personSet.html" hid="personSet" class="naviTitle">
 								<i class="iconfont icon-shezhi menusIcon cor_g"></i>
 								<p class="t_c fs12">个人设置</p>
-							</a>
+							</div>
 						</li>
 						<!--<li class="menus ">
 							<a href="./custom/custom.html" hid="custom">
@@ -167,22 +167,22 @@
 						</li>-->
 
 						<li class="menus " >
-							<a href="./share/share.html" hid="share">
+							<div href="./share/share.html" hid="share" class="naviTitle">
 								<i class="iconfont icon-geren menusIcon cor_g"></i>
 								<p class="t_c fs12">店铺分享</p>
-							</a>
+							</div>
 						</li>
-						<li class="menus " >
-							<!-- <a href="./share/share.html" hid="share"> -->
+						<!--<li class="menus " >
+							 <a href="./share/share.html" hid="share"> 
 								<i class="iconfont icon-xinxi menusIcon cor_g"></i>
 								<p class="t_c fs12">商户须知</p>
-							<!-- </a> -->
-						</li>
+							 </a> 
+						</li>-->
 						<li class="menus " >
-							<a href="./kefu.html" hid="kefu">
+							<div href="./kefu.html" hid="kefu"  class="naviTitle">
 								<i class="iconfont icon-service1 menusIcon cor_g"></i>
 								<p class="t_c fs12">平台客服</p>
-							</a>
+							</div>
 						</li>
 						<!--<li class="menus ">
 							<a href="">
@@ -191,10 +191,10 @@
 							</a>
 						</li>-->
 						<li class="menus " >
-							<a href="./banks/banks.html" hid="banks">
+							<div href="./banks/banks.html" hid="banks" class="naviTitle">
 								<i class="iconfont icon-bangdingyinhangqia   menusIcon cor_g"></i>
 								<p class="t_c fs12">银行卡管理</p>
-							</a>
+							</div>
 						</li>
 						<li class="menus ">
 							<!--<a href="">-->
@@ -250,8 +250,7 @@
 						});
 						
 						this._getData()
-						mui('.main').on('tap', 'a', function() {
-	
+						mui('.main').on('tap', '.navigate', function() {
 							var desturl = this.getAttribute('href')
 							var destid = this.getAttribute('hid')
 
@@ -269,7 +268,7 @@
 								},
 								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 								show: {
-									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
 									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 								},
 								extras: {
@@ -277,38 +276,61 @@
 									num:_this.num
 								},
 								waiting: {
-									autoShow: true, //自动显示等待框，默认为true
+									autoShow: false, //自动显示等待框，默认为true
 									title: '正在加载...', //等待对话框上显示的提示内容
 								}
 							})
 						});
+						
+						mui('.main').on('tap', '.naviTitle', function() {
+							var desturl = this.getAttribute('href')
+							var destid = this.getAttribute('hid')
+							mui.openWindow({
+								url: desturl,
+								id: destid,
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
+								},
+								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {
+									account: _this.account,
+									num:_this.num
+								},
+								waiting: {
+									autoShow: false, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						})
+						
+						
+						
 					},
 					methods: {
 						/*跳转页面*/
-//						_navigateTo(desturl, destid,extras) {
-//							mui.openWindow({
-//								url: desturl,
-//								id: destid,
-//								styles: {
-//									top: '0px', //新页面顶部位置
-//									bottom: '0px', //新页面底部位置
-//									scrollIndicator: "none",
-//									plusrequire: 'ahead'
-//								},
-//								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-//								show: {
-//									autoShow: false, //页面loaded事件发生后自动显示，默认为true
-//									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-//								},
-//								extras: {
-//									account: _this.account
-//								},
-//								waiting: {
-//									autoShow: true, //自动显示等待框，默认为true
-//									title: '正在加载...', //等待对话框上显示的提示内容
-//								}
-//							})
-//						},
+						
 						/*加载数据*/
 						_getData(callback) {
 //							alert(app.mark + plus.storage.getItem('token'))

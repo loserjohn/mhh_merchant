@@ -8,10 +8,12 @@
 		<link href="../../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+		
 		<style>
 			.personMsg {
 				background: rgba(21, 21, 21, 1);
-				padding-bottom: 10px;
+				padding:10px 0;
 			}
 			
 			.personMsg .avatar {
@@ -40,14 +42,21 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+			<div class="loader" style="top:0" id="loader">
+				<ul>
+					<li id='a'></li>
+					<li id='b'></li>
+					<li id='c'></li>
+					<li id='d'></li>
+					<li id='e'></li>
+					<li id='f'></li>
+					<li id='g'></li>
+					<li id='h'></li>
+					<li id='i'></li>
+				</ul>
+			</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">个人中心</h1>
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px" @tap="_navigaterTo('../../../notice.html','notice',{type:1})">
-					须知
-				</a>
-			</header>
 			<!--简要信息-->
 			<div class="personMsg  " id="content">
 				<div class="flex container" style="">
@@ -168,14 +177,10 @@
 						avatar: ''
 					},
 					created: function() {
-						app.initHeader();
 					},
 					mounted: function() {
 
-						this._getData(() => {
-							plus.nativeUI.closeWaiting()
-							mui.currentWebview.show('pop-in', 300, function() {}, {});
-						})
+						this._getData()
 					},
 					methods: {
 						/*跳转页面*/
@@ -210,6 +215,7 @@
 								type: 'get', //HTTP请求类型
 								success: function(result) {
 									/*登陆成功*/
+									document.getElementById('loader').style.display='none'
 									if(result.Success) {
 										_this.personMsg = result.Data
 										_this.avatar = result.Data.SHOP.SHOP_LOGO

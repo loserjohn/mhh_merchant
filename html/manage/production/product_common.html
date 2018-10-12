@@ -3,12 +3,14 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>评价管理</title>
+		<title>项目评价</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/animate.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+
 		<style>
 			/*星级评价*/
 			
@@ -34,7 +36,7 @@
 			.commont .tabsItems {
 				background: #fff;
 				border-bottom: 1px solid #d3d3d3;
-				padding-top: 15px ;
+				padding-top: 15px;
 				margin: 0;
 				box-sizing: border-box;
 			}
@@ -109,196 +111,204 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">项目评价</h1>
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px">
-					常见问题
-				</a>
-			</header>
+
 			<!--分类作品-->
-				<!--作品评价-->
-				<div class="commont" id="content">
-					<div class="cm_tabBars ">
-						<ul class="cm_tabsT flex container">
-							<li @tap="_changeTab(1)" class="cm_tabTitle" :class="{active:currtab==1?true:false}">非常非常嘿皮</li>
-							<li @tap="_changeTab(2)" class="cm_tabTitle f1" :class="{active:currtab==2?true:false}">很嗨皮</li>
-							<li @tap="_changeTab(3)" class="cm_tabTitle f1" :class="{active:currtab==3?true:false}">嘿皮</li>
-							<li @tap="_changeTab(4)" class="cm_tabTitle f1" :class="{active:currtab==4?true:false}">不嘿皮</li>
-						</ul>
-						<div class="scrollBox" :style="{top:tabTop}" id="scroll" ref="scroll" >
-							<div class=" reset " style="min-height: 101%;">
-								<!--非常非常嘿皮-->
-								<div class="animated fadeInRight" v-show="currtab==1?true:false">
-									<ul class="reset">
-										<li class="tabsItems container" v-for="item in commonList[1].list" @tap="_jumpDetail(item)">
-											<div class="tabsItems_top flex">
-												<img :src="item.MEMBER_HEAD" alt="" class="avatar" />
-												<div class="f1">
-													<div class="cm_name">{{item.MEMBER_NIKENAME}}</div>
-													<p class="cor_y">{{item.REVIEW_TIME}}</p>
-												</div>
-												<i class="iconfont icon-arrowright"></i>
+			<!--作品评价-->
+			<div class="commont" id="content">
+				<div class="cm_tabBars ">
+					<ul class="cm_tabsT flex container">
+						<li @tap="_changeTab(1)" class="cm_tabTitle" :class="{active:currtab==1?true:false}">非常非常嘿皮</li>
+						<li @tap="_changeTab(2)" class="cm_tabTitle f1" :class="{active:currtab==2?true:false}">很嗨皮</li>
+						<li @tap="_changeTab(3)" class="cm_tabTitle f1" :class="{active:currtab==3?true:false}">嘿皮</li>
+						<li @tap="_changeTab(4)" class="cm_tabTitle f1" :class="{active:currtab==4?true:false}">不嘿皮</li>
+					</ul>
+					<div class="scrollBox" :style="{top:tabTop}" id="scroll" ref="scroll">
+						<div class=" reset " style="min-height: 101%;">
+							<!--非常非常嘿皮-->
+							<div class="animated fadeInRight" v-show="currtab==1?true:false">
+								<ul class="reset">
+									<li class="tabsItems container" v-for="item in commonList[1].list" @tap="_jumpDetail(item)">
+										<div class="tabsItems_top flex">
+											<img :src="item.MEMBER_HEAD" alt="" class="avatar" />
+											<div class="f1">
+												<div class="cm_name">{{item.MEMBER_NIKENAME}}</div>
+												<p class="cor_y">{{item.REVIEW_TIME}}</p>
 											</div>
-											<div class="commont_body ">
-												<div class="flex">
-													<div class="f1">{{item.REVIEW_CONTENT}}</div>
-													<i class="iconfont icon-tupian" v-show ="item.HAS_PICTURE=='1'?true:false"></i>
-												</div>
-												<div class=" flex commontBuy">
-													<img :src="item.PROJECT_IMG1" alt="" class="commontPic" />
-													<div class="f1">
-														<h3 class="cm_name lh26">{{item.PROJECT_NAME }}</h3>
-														<div class="flex">
-															<h3 class="prize lh24">￥{{item.PROJECT_DISCOUNT}}</h3>
-															<p class="delec_prize lh24">￥{{item.PROJECT_PRICE}}</p>
-														</div>
+											<i class="iconfont icon-arrowright"></i>
+										</div>
+										<div class="commont_body ">
+											<div class="flex">
+												<div class="f1">{{item.REVIEW_CONTENT}}</div>
+												<i class="iconfont icon-tupian" v-show="item.HAS_PICTURE=='1'?true:false"></i>
+											</div>
+											<div class=" flex commontBuy">
+												<img :src="item.PROJECT_IMG1" alt="" class="commontPic" />
+												<div class="f1">
+													<h3 class="cm_name lh26">{{item.PROJECT_NAME }}</h3>
+													<div class="flex">
+														<h3 class="prize lh24">￥{{item.PROJECT_DISCOUNT}}</h3>
+														<p class="delec_prize lh24">￥{{item.PROJECT_PRICE}}</p>
 													</div>
 												</div>
-												<!--回复记录-->
-												<div class="recommont cor_g">
-													<ul class="recommontList">
-														<li><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
-														<li><span class="cm_name">{{item.MEMBER_NIKENAME}}： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
-													</ul>
-												</div>
 											</div>
-										</li>
-										<li class="t_c lh44 cor_g" v-show="commonList[1].noRest">没有数据咯</li>
-									</ul>
-								</div>
-								<!--很嗨皮-->
-								<div class="animated fadeInRight" v-show="currtab==2?true:false">
-									<ul class="reset">
-										<li class="tabsItems container" v-for="item in commonList[2].list" @tap="_jumpDetail(item)">
-											<div class="tabsItems_top flex">
-												<img :src="item.MEMBER_HEAD?item.MEMBER_HEAD:'../../../images/default_avatar.jpg'" alt="" class="avatar" />
-												<div class="f1">
-													<div class="cm_name">{{item.MEMBER_NIKENAME}}</div>
-													<p class="cor_y">{{item.REVIEW_TIME}}</p>
-												</div>
-												<!--<i class="iconfont icon-arrowright"></i>-->
+											<!--回复记录-->
+											<div class="recommont cor_g">
+												<ul class="recommontList">
+													<li><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
+													<li><span class="cm_name">{{item.MEMBER_NIKENAME}}： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
+												</ul>
 											</div>
-											<div class="commont_body ">
-												<div class="flex">
-													<div class="f1">{{item.REVIEW_CONTENT}}</div>
-													<i class="iconfont icon-tupian" v-show="item.REPLY_IMG1"></i>
-												</div>
-												<div class=" flex commontBuy">
-													<img :src="item.PROJECT_IMG1" alt="" class="commontPic" />
-													<div class="f1">
-														<h3 class="cm_name lh26">{{item.PROJECT_NAME }}</h3>
-														<div class="flex">
-															<h3 class="prize lh24">￥{{item.PROJECT_DISCOUNT}}</h3>
-															<p class="delec_prize lh24">￥{{item.PROJECT_PRICE}}</p>
-														</div>
-													</div>
-												</div>
-												<!--回复记录-->
-												<div class="recommont cor_g">
-													<ul class="recommontList">
-														<li><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
-														<li><span class="cm_name">杀害呵呵： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="t_c lh44 cor_g" v-show="commonList[2].noRest">没有数据咯</li>
-									</ul>
-								</div>
-								<!--嘿皮-->
-								<div class="animated fadeInRight" v-show="currtab==3?true:false">
-									<ul class="reset">
-										<li class="tabsItems container" v-for="item in commonList[3].list" @tap="_jumpDetail(item)">
-											<div class="tabsItems_top flex">
-												<img :src="item.MEMBER_HEAD" alt="" class="avatar" />
-												<div class="f1">
-													<div class="cm_name">{{item.MEMBER_NIKENAME}}</div>
-													<p class="cor_y">{{item.REVIEW_TIME}}</p>
-												</div>
-												<i class="iconfont icon-arrowright"></i>
-											</div>
-											<div class="commont_body ">
-												<div class="flex">
-													<div class="f1">{{item.REVIEW_CONTENT}}</div>
-													<i class="iconfont icon-tupian" v-show="item.REPLY_IMG1"></i>
-												</div>
-												<div class=" flex commontBuy">
-													<img :src="item.PROJECT_IMG1" alt="" class="commontPic" />
-													<div class="f1">
-														<h3 class="cm_name lh26">{{item.PROJECT_NAME }}</h3>
-														<div class="flex">
-															<h3 class="prize lh24">￥{{item.PROJECT_DISCOUNT}}</h3>
-															<p class="delec_prize lh24">￥{{item.PROJECT_PRICE}}</p>
-														</div>
-													</div>
-												</div>
-												<!--回复记录-->
-												<div class="recommont cor_g">
-													<ul class="recommontList">
-														<li><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
-														<li><span class="cm_name">杀害呵呵： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="t_c lh44 cor_g" v-show="commonList[3].noRest">没有数据咯</li>
-									</ul>
-								</div>
-								<!--不嘿皮-->
-								<div class="animated fadeInRight" v-show="currtab==4?true:false">
-									<ul class="reset">
-										<li class="tabsItems container" v-for="item in commonList[4].list" @tap="_jumpDetail(item)"> 
-											<div class="tabsItems_top flex">
-												<img :src="item.MEMBER_HEAD" alt="" class="avatar" />
-												<div class="f1">
-													<div class="cm_name">{{item.MEMBER_NIKENAME}}</div>
-													<p class="cor_y">{{item.REVIEW_TIME}}</p>
-												</div>
-												<i class="iconfont icon-arrowright"></i>
-											</div>
-											<div class="commont_body ">
-												<div class="flex">
-													<div class="f1">{{item.REVIEW_CONTENT}}</div>
-													<i class="iconfont icon-tupian" v-show="item.REPLY_IMG1"></i>
-												</div>
-												<div class=" flex commontBuy">
-													<img :src="item.PROJECT_IMG1" alt="" class="commontPic" />
-													<div class="f1">
-														<h3 class="cm_name lh26">{{item.PROJECT_NAME }}</h3>
-														<div class="flex">
-															<h3 class="prize lh24">￥{{item.PROJECT_DISCOUNT}}</h3>
-															<p class="delec_prize lh24">￥{{item.PROJECT_PRICE}}</p>
-														</div>
-													</div>
-												</div>
-												<!--回复记录-->
-												<div class="recommont cor_g">
-													<ul class="recommontList">
-														<li><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
-														<li><span class="cm_name">杀害呵呵： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
-													</ul>
-												</div>
-											</div>
-										</li>
-										<li class="t_c lh44 cor_g" v-show="commonList[4].noRest">没有数据咯</li>
-									</ul>
-								</div>
-							
-								<!--<p class="t_c" style="margin-bottom: 10px;line-height: 40px;">{{note}}</p>-->
+										</div>
+									</li>
+									<li class="t_c lh44 cor_g" v-show="commonList[1].noRest">没有数据咯</li>
+								</ul>
 							</div>
+							<!--很嗨皮-->
+							<div class="animated fadeInRight" v-show="currtab==2?true:false">
+								<ul class="reset">
+									<li class="tabsItems container" v-for="item in commonList[2].list" @tap="_jumpDetail(item)">
+										<div class="tabsItems_top flex">
+											<img :src="item.MEMBER_HEAD?item.MEMBER_HEAD:'../../../images/default_avatar.jpg'" alt="" class="avatar" />
+											<div class="f1">
+												<div class="cm_name">{{item.MEMBER_NIKENAME}}</div>
+												<p class="cor_y">{{item.REVIEW_TIME}}</p>
+											</div>
+											<!--<i class="iconfont icon-arrowright"></i>-->
+										</div>
+										<div class="commont_body ">
+											<div class="flex">
+												<div class="f1">{{item.REVIEW_CONTENT}}</div>
+												<i class="iconfont icon-tupian" v-show="item.REPLY_IMG1"></i>
+											</div>
+											<div class=" flex commontBuy">
+												<img :src="item.PROJECT_IMG1" alt="" class="commontPic" />
+												<div class="f1">
+													<h3 class="cm_name lh26">{{item.PROJECT_NAME }}</h3>
+													<div class="flex">
+														<h3 class="prize lh24">￥{{item.PROJECT_DISCOUNT}}</h3>
+														<p class="delec_prize lh24">￥{{item.PROJECT_PRICE}}</p>
+													</div>
+												</div>
+											</div>
+											<!--回复记录-->
+											<div class="recommont cor_g">
+												<ul class="recommontList">
+													<li><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
+													<li><span class="cm_name">杀害呵呵： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="t_c lh44 cor_g" v-show="commonList[2].noRest">没有数据咯</li>
+								</ul>
+							</div>
+							<!--嘿皮-->
+							<div class="animated fadeInRight" v-show="currtab==3?true:false">
+								<ul class="reset">
+									<li class="tabsItems container" v-for="item in commonList[3].list" @tap="_jumpDetail(item)">
+										<div class="tabsItems_top flex">
+											<img :src="item.MEMBER_HEAD" alt="" class="avatar" />
+											<div class="f1">
+												<div class="cm_name">{{item.MEMBER_NIKENAME}}</div>
+												<p class="cor_y">{{item.REVIEW_TIME}}</p>
+											</div>
+											<i class="iconfont icon-arrowright"></i>
+										</div>
+										<div class="commont_body ">
+											<div class="flex">
+												<div class="f1">{{item.REVIEW_CONTENT}}</div>
+												<i class="iconfont icon-tupian" v-show="item.REPLY_IMG1"></i>
+											</div>
+											<div class=" flex commontBuy">
+												<img :src="item.PROJECT_IMG1" alt="" class="commontPic" />
+												<div class="f1">
+													<h3 class="cm_name lh26">{{item.PROJECT_NAME }}</h3>
+													<div class="flex">
+														<h3 class="prize lh24">￥{{item.PROJECT_DISCOUNT}}</h3>
+														<p class="delec_prize lh24">￥{{item.PROJECT_PRICE}}</p>
+													</div>
+												</div>
+											</div>
+											<!--回复记录-->
+											<div class="recommont cor_g">
+												<ul class="recommontList">
+													<li><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
+													<li><span class="cm_name">杀害呵呵： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="t_c lh44 cor_g" v-show="commonList[3].noRest">没有数据咯</li>
+								</ul>
+							</div>
+							<!--不嘿皮-->
+							<div class="animated fadeInRight" v-show="currtab==4?true:false">
+								<ul class="reset">
+									<li class="tabsItems container" v-for="item in commonList[4].list" @tap="_jumpDetail(item)">
+										<div class="tabsItems_top flex">
+											<img :src="item.MEMBER_HEAD" alt="" class="avatar" />
+											<div class="f1">
+												<div class="cm_name">{{item.MEMBER_NIKENAME}}</div>
+												<p class="cor_y">{{item.REVIEW_TIME}}</p>
+											</div>
+											<i class="iconfont icon-arrowright"></i>
+										</div>
+										<div class="commont_body ">
+											<div class="flex">
+												<div class="f1">{{item.REVIEW_CONTENT}}</div>
+												<i class="iconfont icon-tupian" v-show="item.REPLY_IMG1"></i>
+											</div>
+											<div class=" flex commontBuy">
+												<img :src="item.PROJECT_IMG1" alt="" class="commontPic" />
+												<div class="f1">
+													<h3 class="cm_name lh26">{{item.PROJECT_NAME }}</h3>
+													<div class="flex">
+														<h3 class="prize lh24">￥{{item.PROJECT_DISCOUNT}}</h3>
+														<p class="delec_prize lh24">￥{{item.PROJECT_PRICE}}</p>
+													</div>
+												</div>
+											</div>
+											<!--回复记录-->
+											<div class="recommont cor_g">
+												<ul class="recommontList">
+													<li><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
+													<li><span class="cm_name">杀害呵呵： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="t_c lh44 cor_g" v-show="commonList[4].noRest">没有数据咯</li>
+								</ul>
+							</div>
+
+							<!--<p class="t_c" style="margin-bottom: 10px;line-height: 40px;">{{note}}</p>-->
 						</div>
 					</div>
 				</div>
+			</div>
 		</div>
 
 		<script src="../../../js/mui.min.js"></script>
 		<script src="../../../js/app.js"></script>
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
-				<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
-		
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+
 		<script type="text/javascript">
 			(function() {
 				mui.init({
@@ -313,41 +323,36 @@
 							tabTop: '',
 							scroll: '',
 							message: '',
-							note:'加载更多',
+							note: '加载更多',
 							commonList: [{},
 								{
 									index: 1,
 									list: [],
-									noRest:false
+									noRest: false
 								},
 								{
 									index: 1,
 									list: [],
-									noRest:false
+									noRest: false
 								},
 								{
 									index: 1,
 									list: [],
-									noRest:false
+									noRest: false
 								},
 								{
 									index: 1,
 									list: [],
-									noRest:false
+									noRest: false
 								}
 							]
 						},
 						created: function() {
-							//							alert(1)
-							app.initHeader();
 						},
 						mounted: function() {
 							var _this = this
-//							alert(0)
-							this._getData(1, () => {
-								plus.nativeUI.closeWaiting()
-								mui.currentWebview.show('pop-in', 300, function () {}, {});
-							})
+							//							alert(0)
+							this._getData(1, () => {})
 							var scroll = this.$refs.scroll
 							this.$nextTick(function() {
 								//							初始化scrool
@@ -371,65 +376,67 @@
 
 								})
 							})
-							
-							this.tabTop = document.getElementById('header').offsetHeight + 42 + 'px'
+
+							this.tabTop = 42 + 'px'
 						},
 						methods: {
 							//							tab切换
 							_changeTab: function(key) {
 								this.currtab = parseInt(key)
-//								this.scroll.refresh()
+								//								this.scroll.refresh()
 								if(this.commonList[this.currtab].index == 1) {
 									this._getData(1, () => {})
 								} else {
 									return
-								}	
+								}
 							},
 							/*加载数据*/
 							_getData(index, callback) {
-//								alert(1)
+								//								alert(1)
 								var self = plus.webview.currentWebview()
 								var tabType = this.currtab;
-								var code = self.productId	
+								var code = self.productId
 								var _this = this
 								var data = {
 									pageIndex: index,
 									pageSize: 5,
 									REVIEW_TYPE: tabType,
-									PROJECT_CODE:code
+									PROJECT_CODE: code
 								}
 								app.ajax(app.baseUrl + '/api/BusiOrderReview/GetReviewList', {
 									data: data,
 									// dataType:'json',//服务器返回json格式数据
 									type: 'get', //HTTP请求类型
 									success: function(result) {
-										//										plus.nativeUI.closeWaiting()
-										if(result.Success) {
-//											alert(2)
-											var l = _this.commonList[tabType].list.length;
-											if(result.Data.Total == l) {
-												_this.commonList[tabType].noRest = true;
-												if(callback) callback();
-												return 
-											}
-											_this.commonList[tabType].list = _this.commonList[tabType].list.concat(result.Data.ListInfo);									
-											_this.commonList[tabType].index += 1
-											mui.later(()=>{
-//												alert(3)
-												_this.scroll.refresh()														
-												if(callback) callback();
-											},300)											
-										} else {
-											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
 
-										}
+										mui.later(() => {
+											document.getElementById('loader').style.display = 'none'
+											if(result.Success) {
+												//											alert(2)
+												var l = _this.commonList[tabType].list.length;
+												if(result.Data.Total == l) {
+													_this.commonList[tabType].noRest = true;
+													if(callback) callback();
+													return
+												}
+												_this.commonList[tabType].list = _this.commonList[tabType].list.concat(result.Data.ListInfo);
+												_this.commonList[tabType].index += 1
+
+												_this.scroll.refresh()
+												if(callback) callback();
+
+											} else {
+												/*验证失败*/
+												plus.nativeUI.toast(result.Msg)
+
+											}
+										}, 500)
 									}
 								});
 							},
 							/*跳转详情*/
-							_jumpDetail(item){
-//								console.log(JSON.stringify(item)) 
+							_jumpDetail(item) {
+								//								console.log(JSON.stringify(item)) 
 								mui.openWindow({
 									url: '../comment/common_detail.html',
 									id: 'common_detail',
@@ -445,7 +452,7 @@
 										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 									},
 									extras: {
-										commonData:item
+										commonData: item
 									},
 									waiting: {
 										autoShow: true, //自动显示等待框，默认为true

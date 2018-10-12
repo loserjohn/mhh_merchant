@@ -9,16 +9,19 @@
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/animate.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+
 		<style>
 			/*星级评价*/
 			
 			.starsBox {
 				background: rgba(21, 21, 21, 1);
-				padding-bottom: 15px;
+				/*padding:15px 0;*/
 			}
 			
 			.commontList {
-				/*margin-bottom: 5px;*/
+				height: 44px;
+				line-height: 44px;
 			}
 			/*主要评价信息*/
 			
@@ -34,7 +37,7 @@
 			.commont .tabsItems {
 				background: #fff;
 				border-bottom: 1px solid #d3d3d3;
-				padding-top: 15px ;
+				padding-top: 15px;
 				margin: 0;
 				box-sizing: border-box;
 			}
@@ -109,15 +112,23 @@
 	</head>
 
 	<body>
+
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">评价管理</h1>
-				<!-- <a class=" mui-pull-right cor_y fs16" style="line-height: 45px" @tap="_navigateTo('../richText.html','richText',{type:'notice',msg:2})" > -->
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px" >
-					常见问题
-				</a>
-			</header>
+
 			<!--分类作品-->
 			<div>
 				<!--星级-->
@@ -144,7 +155,7 @@
 							<li @tap="_changeTab(3)" class="cm_tabTitle f1" :class="{active:currtab==3?true:false}">嘿皮</li>
 							<li @tap="_changeTab(4)" class="cm_tabTitle f1" :class="{active:currtab==4?true:false}">不嘿皮</li>
 						</ul>
-						<div class="scrollBox" :style="{top:tabTop}" id="scroll" ref="scroll" >
+						<div class="scrollBox" :style="{top:tabTop}" id="scroll" ref="scroll">
 							<div class=" reset " style="min-height:101%">
 								<!--非常非常嘿皮-->
 								<div class="animated fadeInRight" v-show="currtab==1?true:false">
@@ -161,7 +172,7 @@
 											<div class="commont_body ">
 												<div class="flex">
 													<div class="f1">{{item.REVIEW_CONTENT}}</div>
-													<i class="iconfont icon-tupian" v-show ="item.HAS_PICTURE=='1'?true:false"></i>
+													<i class="iconfont icon-tupian" v-show="item.HAS_PICTURE=='1'?true:false"></i>
 												</div>
 												<div class=" flex commontBuy">
 													<img :src="item.PROJECT_IMG1" alt="" class="commontPic" />
@@ -182,7 +193,7 @@
 												</div>
 											</div>
 										</li>
-											<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{commonList[1].norest?'没有数据了':'加载更多'}}</li>	
+										<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{commonList[1].norest?'没有数据了':'加载更多'}}</li>
 									</ul>
 								</div>
 								<!--很嗨皮-->
@@ -221,7 +232,7 @@
 												</div>
 											</div>
 										</li>
-											<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{commonList[2].norest?'没有数据了':'加载更多'}}</li>	
+										<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{commonList[2].norest?'没有数据了':'加载更多'}}</li>
 									</ul>
 								</div>
 								<!--嘿皮-->
@@ -260,13 +271,13 @@
 												</div>
 											</div>
 										</li>
-											<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{commonList[3].norest?'没有数据了':'加载更多'}}</li>	
+										<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{commonList[3].norest?'没有数据了':'加载更多'}}</li>
 									</ul>
 								</div>
 								<!--不嘿皮-->
 								<div class="animated fadeInRight" v-show="currtab==4?true:false">
 									<ul class="reset">
-										<li class="tabsItems container" v-for="item in commonList[4].list" @tap="_jumpDetail(item)"> 
+										<li class="tabsItems container" v-for="item in commonList[4].list" @tap="_jumpDetail(item)">
 											<div class="tabsItems_top flex">
 												<img :src="item.MEMBER_HEAD?item.MEMBER_HEAD:'../../../images/default_avatar.jpg'" alt="" class="avatar" />
 												<div class="f1">
@@ -299,11 +310,10 @@
 												</div>
 											</div>
 										</li>
-										<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{commonList[4].norest?'没有数据了':'加载更多'}}</li>	
+										<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{commonList[4].norest?'没有数据了':'加载更多'}}</li>
 									</ul>
 								</div>
-							
-							
+
 							</div>
 						</div>
 					</div>
@@ -316,286 +326,283 @@
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
-		
+
 		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			})
+			var APP
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				APP = new Vue({
+					el: '#app',
+					data: {
+						currtab: 1,
+						tabTop: '',
+						scroll: '',
+						message: '',
+						note: '加载更多',
+						commonList: [{},
+							{
+								index: 1,
+								list: [],
+								norest: false
+							},
+							{
+								index: 1,
+								list: [],
+								norest: false
+							},
+							{
+								index: 1,
+								list: [],
+								norest: false
+							},
+							{
+								index: 1,
+								list: [],
+								norest: false
+							}
+						],
+						timeScore: 5,
+						skillScore: 5,
+						serverScore: 5
+					},
+					created: function() {
+					},
+					mounted: function() {
+						var _this = this
 
-				mui.init({
-					swipeBack: true
-				})
-				var APP 
-				mui.plusReady(function() {
-					app.WXinit(CryptoJS)
-					APP = new Vue({
-						el: '#app',
-						data: {
-							currtab: 1,
-							tabTop: '',
-							scroll: '',
-							message: '',
-							note:'加载更多',
-							commonList: [{},
-								{
-									index: 1,
-									list: [],
-									norest: false
-								},
-								{
-									index: 1,
-									list: [],
-									norest: false
-								},
-								{
-									index: 1,
-									list: [],
-									norest: false
-								},
-								{
-									index: 1,
-									list: [],
-									norest: false
-								}
-							],
-							timeScore:5,
-							skillScore:5,
-							serverScore:5
-						},
-						created: function() {
-							//							alert(1)
-							app.initHeader();
-						},
-						mounted: function() {
+						var scroll = this.$refs.scroll
+						this.$nextTick(function() {
+							//							初始化scrool
+							/*竖向下拉刷新*/
+							if(!_this.scroll) {
+								//							初始化标题栏
+								_this.scroll = new BScroll(scroll, {
+									click: true,
+									probeType: 3,
+									bounceTime: 200,
+									pullUpLoad: {
+										threshold: -20 // 当上拉距离超过30px时触发 pullingUp 事件
+									},
+									pullDownRefresh: {
+										threshold: 50,
+										stop: 0
+									}
+								})
+							} else {
+								_this.scroll.refresh();
+							};
+							/*下拉刷新*/
+							_this.scroll.on('pullingDown', function(e) {
+								_this._refresh()
+							})
+							_this.scroll.on('pullingUp', function(e) {
+								_this._getData((b) => {
+									if(b) {
+
+									} else {
+										_this.scroll.finishPullUp()
+
+									}
+								})
+							})
+						})
+						this._initScore();
+
+						this._getData((b) => {
+							if(b) {
+
+							} else {
+								_this.scroll.finishPullUp()
+
+							}
+						})
+						this.tabTop = 88 + 'px'
+					},
+					methods: {
+						//							获取店铺评分
+						_initScore() {
 							var _this = this
+							app.ajax(app.baseUrl + '/api/BusiAccount/GetAccountInfo', {
+								//									data: data,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
 
-							
-							var scroll = this.$refs.scroll
-							this.$nextTick(function() {
-								//							初始化scrool
-								/*竖向下拉刷新*/
-								if(!_this.scroll) {
-									//							初始化标题栏
-									_this.scroll = new BScroll(scroll, {
-										click: true,
-										probeType: 3,
-										bounceTime: 200,
-										pullUpLoad: {
-											threshold: -20 // 当上拉距离超过30px时触发 pullingUp 事件
-										},
-										pullDownRefresh: {
-											  threshold: 50,
-											  stop: 0
-											}
-									})
-								} else {
-									_this.scroll.refresh();
-								};
-								/*下拉刷新*/
-								_this.scroll.on('pullingDown', function(e) {									
-									_this._refresh()									
-								})
-								_this.scroll.on('pullingUp', function(e) {
-									_this._getData((b) => {
-										if(b){
-									
-										}else{
-											_this.scroll.finishPullUp()
-										
-										}
-									})
-								})
-							})
-							this._initScore();
-							
-							
-							this._getData((b) => {
-								plus.nativeUI.closeWaiting()
-								mui.currentWebview.show('pop-in', 300, function () {}, {});
-								if(b){
-											
-										}else{
-											_this.scroll.finishPullUp()
-											
-										}
-							})
-							this.tabTop = this.$refs.starsBox.offsetHeight + 42 + 'px'
-						},
-						methods: {
-//							获取店铺评分
-							_initScore(){
-								var _this = this
-								app.ajax(app.baseUrl + '/api/BusiAccount/GetAccountInfo', {
-//									data: data,
-									// dataType:'json',//服务器返回json格式数据
-									type: 'get', //HTTP请求类型
-		
-									success: function(result) {
-										if(result.Success) {
-											_this.timeScore = 	result.Data.SHOP.PUNCTUAL_POINT
-											_this.skillScore = 	result.Data.SHOP.SKILL_POINT	
-											_this.serverScore = 	result.Data.SHOP.SEVICE_POINT	
-										} else {
-											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
+								success: function(result) {
 
-										}
+									if(result.Success) {
+										_this.timeScore = result.Data.SHOP.PUNCTUAL_POINT
+										_this.skillScore = result.Data.SHOP.SKILL_POINT
+										_this.serverScore = result.Data.SHOP.SEVICE_POINT
+									} else {
+										/*验证失败*/
+										plus.nativeUI.toast(result.Msg)
+
 									}
-								});	
-							},
-							//							tab切换
-							_changeTab(key) {
-								this.currtab = parseInt(key)
-//								this.scroll.scrollTo(0,0,300);
-								
-								if(this.commonList[this.currtab].index == 1) {
-									this._getData((b) => {
-										if(b){
-//											this.note = "没有数据了"
-										}else{
-											this.scroll.finishPullUp()
-//											this.note = "加载更多"
-										}
-									})
-								} else {
-									if(!this.commonList[this.currtab].norest){
-//										该分类还有数据
-										this.scroll.finishPullUp()								
-									}
-									this.scroll.refresh();
-									return
-								}	
-							},
-							/*加载数据*/
-							_getData(callback) {
-								var _this = this
-								var tabType = this.currtab;
-								var index = this.commonList[tabType].index;
-								
-								var data = {
-									pageIndex: index,
-									pageSize: 5,
-									REVIEW_TYPE: tabType
 								}
-								app.ajax(app.baseUrl + '/api/BusiOrderReview/GetReviewList', {
-									data: data,
-									// dataType:'json',//服务器返回json格式数据
-									type: 'get', //HTTP请求类型
-									success: function(result) {
+							});
+						},
+						//							tab切换
+						_changeTab(key) {
+							this.currtab = parseInt(key)
+							//								this.scroll.scrollTo(0,0,300);
+
+							if(this.commonList[this.currtab].index == 1) {
+								this._getData((b) => {
+									if(b) {
+										//											this.note = "没有数据了"
+									} else {
+										this.scroll.finishPullUp()
+										//											this.note = "加载更多"
+									}
+								})
+							} else {
+								if(!this.commonList[this.currtab].norest) {
+									//										该分类还有数据
+									this.scroll.finishPullUp()
+								}
+								this.scroll.refresh();
+								return
+							}
+						},
+						/*加载数据*/
+						_getData(callback) {
+							var _this = this
+							var tabType = this.currtab;
+							var index = this.commonList[tabType].index;
+
+							var data = {
+								pageIndex: index,
+								pageSize: 5,
+								REVIEW_TYPE: tabType
+							}
+							app.ajax(app.baseUrl + '/api/BusiOrderReview/GetReviewList', {
+								data: data,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								success: function(result) {
+									mui.later(() => {
+										document.getElementById('loader').style.display = 'none'
 										if(result.Success) {
-											var l = _this.commonList[tabType].list.length;	
+											var l = _this.commonList[tabType].list.length;
 											_this.commonList[tabType].list = _this.commonList[tabType].list.concat(result.Data.ListInfo);
-//											console.log(_this.commonList[tabType].list.length,l)			
+											//											console.log(_this.commonList[tabType].list.length,l)			
 											if(_this.commonList[tabType].list.length == l) {
 												_this.commonList[tabType].norest = true;
-												if(callback)callback(true);
+												if(callback) callback(true);
 												return;
 											}
 											_this.commonList[tabType].index += 1
-											mui.later(()=>{
-												_this.scroll.refresh();												
-												if(callback)callback(false);
-											},300)											
+
+											_this.scroll.refresh();
+											if(callback) callback(false);
+
 										} else {
 											/*验证失败*/
 											plus.nativeUI.toast(result.Msg)
 
 										}
-									}
-								});
-							},
-							/*跳转详情*/
-							_jumpDetail(item){
-//								console.log(JSON.stringify(item)) 
-								mui.openWindow({
-									url: './common_detail.html',
-									id: 'common_detail',
-									styles: {
-										top: '0px', //新页面顶部位置
-										bottom: '0px', //新页面底部位置
-										scrollIndicator: "none",
-										plusrequire: 'ahead'
-									},
-									createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-									show: {
-										autoShow: true, //页面loaded事件发生后自动显示，默认为true
-										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-									},
-									extras: {
-										commonData:item
-									},
-									waiting: {
-										autoShow: true, //自动显示等待框，默认为true
-										title: '正在加载...', //等待对话框上显示的提示内容
-									}
-								})
-							},
-//							刷新
-							_refresh(){
-								this.commonList= [{},
-									{
-										index: 1,
-										list: [],
-										norest: false
-									},
-									{
-										index: 1,
-										list: [],
-										norest: false
-									},
-									{
-										index: 1,
-										list: [],
-										norest: false
-									},
-									{
-										index: 1,
-										list: [],
-										norest: false
-									}
-								]
-								plus.nativeUI.showWaiting()
-								this._getData((b)=>{
-									if(b){
-								
-										}else{
-											this.scroll.finishPullUp()
-										
-									}									
-									this.scroll.finishPullDown()
-									plus.nativeUI.closeWaiting()
-								})
-								
-							},
-							/*跳转页面*/
-							_navigateTo(desturl, destid, extras) {
-								mui.openWindow({
-									url: desturl,
-									id: destid,
-									styles: {
-										top: '0px', //新页面顶部位置
-										bottom: '0px', //新页面底部位置
-										scrollIndicator: "none",
-										plusrequire: 'ahead'
-									},
-									createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-									show: {
-										autoShow: false, //页面loaded事件发生后自动显示，默认为true
-										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-									},
-									extras: extras ? extras : {},
-									waiting: {
-										autoShow: true, //自动显示等待框，默认为true
-										title: '正在加载...', //等待对话框上显示的提示内容
-									}
-								})
-							}
+									}, 500)
+								}
+							});
+						},
+						/*跳转详情*/
+						_jumpDetail(item) {
+							//								console.log(JSON.stringify(item)) 
+							mui.openWindow({
+								url: './common_detail.html',
+								id: 'common_detail',
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead'
+								},
+								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {
+									commonData: item
+								},
+								waiting: {
+									autoShow: true, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						},
+						//							刷新
+						_refresh() {
+							this.commonList = [{},
+								{
+									index: 1,
+									list: [],
+									norest: false
+								},
+								{
+									index: 1,
+									list: [],
+									norest: false
+								},
+								{
+									index: 1,
+									list: [],
+									norest: false
+								},
+								{
+									index: 1,
+									list: [],
+									norest: false
+								}
+							]
+							plus.nativeUI.showWaiting()
+							this._getData((b) => {
+								if(b) {
 
+								} else {
+									this.scroll.finishPullUp()
+
+								}
+								this.scroll.finishPullDown()
+								plus.nativeUI.closeWaiting()
+							})
+
+						},
+						/*跳转页面*/
+						_navigateTo(desturl, destid, extras) {
+							mui.openWindow({
+								url: desturl,
+								id: destid,
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead'
+								},
+								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: extras ? extras : {},
+								waiting: {
+									autoShow: true, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
 						}
-					})
 
-				});
-			function refresh(){
+					}
+				})
+
+			});
+
+			function refresh() {
 				APP._refresh()
 			}
-			
 		</script>
 	</body>
 
