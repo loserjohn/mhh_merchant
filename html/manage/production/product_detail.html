@@ -154,7 +154,7 @@
 		</div>
 		<div id="app">
 
-			<header class="mui-bar mui-bar-nav" id="header">
+			<header class="mui-bar mui-bar-nav" id="header" :style="{top:0,background:'rgba(21,21,21,'+opacity+')'}">
 				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
 				<h1 class="mui-title">作品详情</h1>
 			</header>
@@ -165,7 +165,7 @@
 				<li @tap="_changeTab(3)" class="cm_tabTitle f1" :class="{active:currtab==3?true:false}">评价</li>
 			</ul>
 			<!--分类作品-->
-			<div class="scrollBox" ref="scroll" :style="{top:top}">
+			<div class="scrollBox" ref="scroll" :style="{top:0}">
 
 				<div class="reset">
 					<!--刷新提示框-->
