@@ -1006,41 +1006,11 @@
 				/*	自动重新登陆*/
 				owner.reLogin()
 			} else {
-				plus.nativeUI.toast('未知错误')
-				//				if(plus.webview.currentWebview().id == plus.webview.getLaunchWebview().id) {
-				//					mui.openWindow({
-				//						url: './error.html',
-				//						id: 'error',
-				//						styles: {
-				//							top: '0px', //新页面顶部位置
-				//							bottom: '0px', //新页面底部位置
-				//							scrollIndicator: "none",
-				//							plusrequire: 'ahead'
-				//						},
-				//						show: {
-				//							autoShow: true, //页面loaded事件发生后自动显示，默认为true
-				//							duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-				//						},
-				//						extras: {
-				//							//自定义扩展参数，可以用来处理页面间传值  
-				//						},
-				//						waiting: {
-				//							autoShow: false, //自动显示等待框，默认为true
-				//							title: '正在加载...', //等待对话框上显示的提示内容
-				//						}
-				//					})
-				//				}
+				plus.nativeUI.toast('未知错误')				
 			}
 		}
 		mui.ajax(url, option)
-		//		if(curTime < tokenLife) {
-		//			/*未失效*/
-		//			mui.ajax(url, option)
-		//		} else {
-		//			/*失效*/
-		//			/*判断之前的登陆方式*/
-		//
-		//		}
+
 	}
 	//	错误捕获
 	owner.catchErr = function(type, errorThrown) {
@@ -1051,30 +1021,7 @@
 			/*	自动重新登陆*/
 			owner.reLogin()
 		} else {
-			plus.nativeUI.toast('未知错误');
-			//			if(plus.webview.currentWebview().id == plus.webview.getLaunchWebview().id) {
-			//				mui.openWindow({
-			//					url: './error.html',
-			//					id: 'error',
-			//					styles: {
-			//						top: '0px', //新页面顶部位置
-			//						bottom: '0px', //新页面底部位置
-			//						scrollIndicator: "none",
-			//						plusrequire: 'ahead'
-			//					},
-			//					show: {
-			//						autoShow: true, //页面loaded事件发生后自动显示，默认为true
-			//						duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-			//					},
-			//					extras: {
-			//						//自定义扩展参数，可以用来处理页面间传值  
-			//					},
-			//					waiting: {
-			//						autoShow: false, //自动显示等待框，默认为true
-			//						title: '正在加载...', //等待对话框上显示的提示内容
-			//					}
-			//				})
-			//			}
+			plus.nativeUI.toast('未知错误');			
 		}
 	}
 	/*加密函数*/

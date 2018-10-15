@@ -257,7 +257,7 @@
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">消耗时段
-								<p>(一时段15分钟)</p>
+								<p>(一时段30分钟)</p>
 							</div>
 							<div class="f1 flex">
 								<i class="iconfont icon-minus subTime" @tap="_updatedMsg(10)"></i>
@@ -508,7 +508,7 @@
 									break;
 								case 5:
 									/*计算时段*/
-									_this.mintime = Math.ceil(_this.consuming / 15) //记录最小时段
+									_this.mintime = Math.ceil(_this.consuming / 15)+1 //记录最小时段
 									_this.time = Math.ceil(_this.consuming / 15)
 									break;
 								case 10:

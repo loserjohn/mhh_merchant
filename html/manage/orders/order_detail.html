@@ -32,9 +32,11 @@
 					
 			/*服务信息*/
 			.mainMsg{
-				background: rgba(21, 21, 21, 1);
+				background:#fff;
 				position: relative;
+				margin-top: 15px;
 				padding-bottom: 15px;
+				border-bottom: 1px dotted #d3d3d3;
 			}
 			.mainMsg .address{
 				width: 100%;
@@ -102,7 +104,7 @@
 			<div class="" >
 				<!--服务地址-->
 				<div class="mainMsg container" id="content">
-					<div class="address cor_w fs16 flex">
+					<div class="address  fs16 flex">
 						<aside>
 							服务地点：
 						</aside>
@@ -113,12 +115,12 @@
 					<!--<div class="location">
 							<i class="iconfont icon-wei-  cor_y locationIcon"></i>
 					</div>-->
-					<div class="orderTime cor_y fs16 flex" v-if="detail.BOOK_DATE">
+					<div class="orderTime cor_y fs16 flex" >
 						<aside>
 							预约时间：
 						</aside>
 						<article class="f1">
-						 {{detail.BOOK_DATE.replace('00:00:00',detail.BOOK_PERIOD) }}
+						 {{detail.BOOK_DATE?detail.BOOK_DATE.replace('00:00:00',detail.BOOK_PERIOD):'暂未预约时间' }}
 						</article>	
 					</div>
 				</div>
@@ -143,14 +145,14 @@
 					<div class="customMsg">
 						<h3 class="cm_title">客户信息</h3>
 						<div class="flex">
-							<img :src="detail.MEMBER_HEAD?detail.MEMBER_HEAD:'../../../images/default_avatar.jpg'" alt="" class="avatar" />
+							<img :src="detail.MEMBER_HEAD?detail.MEMBER_HEAD:'../../../images/default_avatar.jpg'" @error="_default"   alt="" class="avatar" />
 							<div class="cm_name f1">{{detail.MEMBER_NIKENAME}}</div>
 							<!--<i class="iconfont  icon-arrowright"></i>-->
 						</div>
 						<p class="cm_name fs12">联系方式：{{detail.MEMBER_MOBILE}}   </p>
 						<div class="flex">
 							<p class="cm_name fs12">备注：</p>
-							<p class=" f1 ">
+							<p class="cm_name f1 fs12">
 								{{detail.REMARK}}
 							</p>
 						</div>
@@ -175,7 +177,7 @@
 					<h3 class="cm_title t_c">开始服务</h3>
 					<div class="flex " style="box-sizing: border-box;padding: 0 20px;margin-top: 8px;">
 						<h3 class="cm_name f1 t_c" style="margin-top: 15px;">服务码:</h3>
-						<input class="serverNum f2" type="text" v-model = "serverNum"/>
+						<input class="serverNum f2" type="number" v-model = "serverNum"/>
 					</div>	
 					<div class="flex">
 						
@@ -263,6 +265,11 @@
 					       	}
 					    },
 						methods: {
+							_default(e){
+							var dom = e.target;
+//							console.log(dom)
+							dom.src="../../../images/default_avatar.jpg"
+							},
 							_initData(callback){
 								var _this =this
 								var self =plus.webview.currentWebview();	

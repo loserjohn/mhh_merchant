@@ -52,6 +52,15 @@
 				<li id='i'></li>
 			</ul>
 		</div>
+		<header class="mui-bar mui-bar-nav " id="header">
+				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
+				<h1 class="mui-title">
+					平台客服
+				</h1>
+				<a class=" mui-pull-right cor_y fs16 " style="width: 66px;" >
+					
+				</a>
+			</header>
 		<div id="content">
 			<div id="rcs-app"></div>
 		</div>
@@ -67,7 +76,7 @@
 			mui.init({
 				swipeBack: true
 			});
-			
+			app.initHeader()
 			mui.plusReady(function() {
 				RCS.init({
 					appKey: "n19jmcy5n8ke9", // 应用 appkey
