@@ -257,9 +257,9 @@
 							<img src="../../images/demo3.png" alt="" class="menusIcon" />
 							<p class="menuTxt">订单管理</p>
 						</div>
-						<div class="f1" @click="_jumpMenus('deposit')">
+						<div class="f1" @click="_jumpMenus('activity')">
 							<img src="../../images/demo3.png" alt="" class="menusIcon" />
-							<p class="menuTxt">提现</p>
+							<p class="menuTxt">活动</p>
 						</div>
 					</div>
 				</div>
@@ -620,9 +620,7 @@
 						_jumpMenus: function(key) {
 							//							alert(1)
 							var url = '../manage/' + key + '/' + key + '.html';
-							if(key == 'deposit') {
-								url = '../manage/' + key + '.html'
-							};
+	
 							mui.openWindow({
 								url: url,
 								id: key,
