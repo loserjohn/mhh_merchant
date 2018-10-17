@@ -360,7 +360,7 @@
 						
 						direction: 'forward', //切换方向
 						//						第一步
-						avatar: plus.storage.getItem('pic_head'), //头像
+						avatar: '', //头像
 						nickname: plus.storage.getItem('petname'), //昵称					
 						sex: 1, //性别
 						lifePic1: '', //生活照1
@@ -391,6 +391,9 @@
 					},
 					created: function() {
 						app.initHeader();
+						if(plus.storage.getItem('pic_head')){
+							this.avatar = plus.storage.getItem('pic_head')
+						}
 					},
 					mounted: function() {
 //						console.log(this.avatar)
@@ -457,7 +460,7 @@
 								case 1:
 								/*判断第一页表单*/
 								if(!this.avatar || !this.nickname ){
-									plus.nativeUI.alert( "请完善当前步骤资料信息", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );
+									plus.nativeUI.alert( "请完善当前头像和昵称信息", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );
 									return;
 								}								
 									break;
@@ -588,11 +591,7 @@
 
 							switch(key) {
 								case 0:
-//									app.getIMG('修改头像', (src) => {
-//										this.avatar = src
-//									})
-									Clip.getIMG('选择头像', (src) => {
-										//								console.log(src)
+									Clip.getIMG('选择头像', (src) => {		
 										mui.openWindow({
 											url: './html/manage/imgClick.html',
 											id: 'imgClick',
@@ -621,6 +620,7 @@
 									break;
 								case 1:
 									app.getIMG('选择生活照', (src) => {
+				
 										this.lifePic1 = src
 									})
 									break;
@@ -636,6 +636,7 @@
 									break;
 								case 4:
 									app.getIMG('选择身分证正面', (src) => {
+										console.log(src)
 										this.frontSFZ = src
 									})
 									break;
@@ -651,7 +652,6 @@
 						_chooseAvatar(res) {
 							var _this = this
 							if(!res) return;
-							
 							_this.avatar = res.src
 						},
 						//	更新城市选项

@@ -23,7 +23,7 @@
 			}
 			
 			.cropper-config {
-				padding:0px 40px;
+				padding: 0px 40px;
 			}
 			
 			.cropper-content {
@@ -304,7 +304,8 @@
 				position: absolute;
 				z-index: 2;
 			}
-			.cm_btn{
+			
+			.cm_btn {
 				height: 44px;
 				line-height: 44px;
 			}
@@ -313,11 +314,11 @@
 	</head>
 
 	<body>
-		<div  id="app">
-			<header class="mui-bar mui-bar-nav "  id="header">
+		<div id="app">
+			<header class="mui-bar mui-bar-nav " id="header">
 				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">个人中心</h1>
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px" ></a>
+				<h1 class="mui-title">剪裁图片</h1>
+				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px"></a>
 			</header>
 
 			<div class="page-body uni-content-info">
@@ -349,13 +350,13 @@
 				<div class='cropper-config flex'>
 					<div class="f1">
 						<!--<div><button type="warn" class="cm_btn" @tap="getImageInfo" > 剪裁图片 </button></div>-->
-						<div   class="cm_btn" @tap="_upload" > 确认提交</div>
+						<div class="cm_btn" @tap="_upload"> 确认提交</div>
 					</div>
 					<div class="f1" style="display: none;">
-						<canvas id="myCanvas" ref="myCanvas" style="border: 1px solid #000; width:150px;height:150px"></canvas> 
-					</div>		
+						<canvas id="myCanvas" ref="myCanvas" style="border: 1px solid #000; width:150px;height:150px"></canvas>
+					</div>
 				</div>
-				<canvas id="realCanvas" ref="realCanvas"  style="display: none;"></canvas>
+				<canvas id="realCanvas" ref="realCanvas" style="display: none;"></canvas>
 			</div>
 		</div>
 	</body>
@@ -390,13 +391,13 @@
 			INIT_DRAG_POSITION = 200, // 初始化屏幕宽度和裁剪区域的宽度之差，用于设置初始化裁剪的宽度
 			DRAW_IMAGE_W = plus.screen.resolutionWidth // 设置生成的图片宽度
 		var img;
-		var pid;//上一级页面的id
+		var pid; //上一级页面的id
 		var size;
 		var mark;
 		var APP = new Vue({
 			el: '#app',
 			data() {
-				return {			
+				return {
 					imageSrc: "",
 					isShowImg: false,
 					// 初始化的宽高
@@ -407,7 +408,7 @@
 					cropperH: SCREEN_WIDTH,
 					// 动态的left top值
 					cropperL: 0,
-					cropperT: 0, 
+					cropperT: 0,
 
 					transL: 0,
 					transT: 0,
@@ -424,11 +425,11 @@
 					cutR: '100%',
 					qualityWidth: DRAW_IMAGE_W,
 					innerAspectRadio: DRAFG_MOVE_RATIO,
-					
-					clipW:0,  //短边的长度
-					rRadio:1 , //真实图片和预览图的比例
-					
-					curSrc:''
+
+					clipW: 0, //短边的长度
+					rRadio: 1, //真实图片和预览图的比例
+
+					curSrc: ''
 				}
 			},
 			/**
@@ -462,16 +463,17 @@
 					var _this = this
 					img = new Image();
 					img.src = this.imageSrc;
+
 					img.onload = function() {
-						
+
 						plus.nativeUI.closeWaiting()
 						mui.currentWebview.show('pop-in', 300, function() {}, {});
-						
+
 						var res = {
 							width: img.width,
 							height: img.height
 						}
-						
+
 						IMG_RATIO = res.width / res.height
 
 						if(IMG_RATIO >= 1) {
@@ -481,20 +483,19 @@
 							IMG_REAL_W = SCREEN_WIDTH * IMG_RATIO
 							IMG_REAL_H = SCREEN_WIDTH
 						}
-				
-						
+
 						let minRange = IMG_REAL_W > IMG_REAL_H ? IMG_REAL_W : IMG_REAL_H
-//						alert(minRange)
+						//						alert(minRange)
 						INIT_DRAG_POSITION = minRange > INIT_DRAG_POSITION ? INIT_DRAG_POSITION : minRange
 						// 根据图片的宽高显示不同的效果   保证图片可以正常显示
 						if(IMG_RATIO >= 1) {
 							let cutT = 0;
 							let cutB = cutT;
-							let cutL = Math.ceil((SCREEN_WIDTH-SCREEN_WIDTH/IMG_RATIO)/ 2);
+							let cutL = Math.ceil((SCREEN_WIDTH - SCREEN_WIDTH / IMG_RATIO) / 2);
 							let cutR = cutL;
-							_this.rRadio = res.width /SCREEN_WIDTH
-							_this.clipW = Math.ceil(SCREEN_WIDTH/IMG_RATIO)
-							
+							_this.rRadio = res.width / SCREEN_WIDTH
+							_this.clipW = Math.ceil(SCREEN_WIDTH / IMG_RATIO)
+
 							_this.setData({
 								cropperW: SCREEN_WIDTH,
 								cropperH: SCREEN_WIDTH / IMG_RATIO,
@@ -515,11 +516,11 @@
 						} else {
 							let cutL = 0;
 							let cutR = cutL;
-							let cutT = Math.ceil((SCREEN_WIDTH- SCREEN_WIDTH*IMG_RATIO)/ 2);
+							let cutT = Math.ceil((SCREEN_WIDTH - SCREEN_WIDTH * IMG_RATIO) / 2);
 							let cutB = cutT;
-							_this.rRadio = res.height /SCREEN_WIDTH
-							_this.clipW = Math.ceil(SCREEN_WIDTH*IMG_RATIO)
-							
+							_this.rRadio = res.height / SCREEN_WIDTH
+							_this.clipW = Math.ceil(SCREEN_WIDTH * IMG_RATIO)
+
 							_this.setData({
 								cropperW: SCREEN_WIDTH * IMG_RATIO,
 								cropperH: SCREEN_WIDTH,
@@ -583,130 +584,124 @@
 
 				// 获取图片
 				getImageInfo(callback) {
-					
+
 					plus.nativeUI.showWaiting()
 					var _this = this;
-//					var canvas=document.getElementById('myCanvas');
-					var canvas=this.$refs.myCanvas;
+					//					var canvas=document.getElementById('myCanvas');
+					//					var canvas=this.$refs.myCanvas;
 					var realCanvas = this.$refs.realCanvas
-//					alert( this.clipW*this.rRadio)
-					realCanvas.width = this.clipW*this.rRadio
-					realCanvas.height = this.clipW*this.rRadio
-					var ctx=canvas.getContext("2d") 
-					var rctx=realCanvas.getContext("2d") 		
-					
-					var x = this.cutL*this.rRadio;
-					var y = this.cutT*this.rRadio;
-					
+					//					alert( this.clipW*this.rRadio)
+					realCanvas.width = 1000
+					realCanvas.height = 1000
+					//					var ctx=canvas.getContext("2d") 
+					var rctx = realCanvas.getContext("2d")
 
-					ctx.drawImage(img, x, y,this.clipW*this.rRadio, this.clipW*this.rRadio,0,0,300,150); 
-					rctx.drawImage(img, x, y,this.clipW*this.rRadio, this.clipW*this.rRadio,0,0,this.clipW*this.rRadio,this.clipW*this.rRadio); 
-					
-					mui.later(()=>{
-						if(callback)callback()
-					},1500)
-					_this.convertCanvasToImage(realCanvas)  
+					var x = this.cutL * this.rRadio;
+					var y = this.cutT * this.rRadio;
+
+					//					ctx.drawImage(img, x, y,this.clipW*this.rRadio, this.clipW*this.rRadio,0,0,300,150); 
+					rctx.drawImage(img, x, y, this.clipW * this.rRadio, this.clipW * this.rRadio, 0, 0, 1000, 1000);
+					_this.convertCanvasToImage(realCanvas, callback)
 				},
-//				存为图片
-				convertCanvasToImage(canvas) {
-						var image = new Image();
-						image.src = canvas.toDataURL("image/png");
-						
-						var src = image.src;
-						src= src.substr(22);
-						this.curSrc = 	src
-//						return image;
+				//				存为图片
+				convertCanvasToImage(canvas, callback) {
+					var image = new Image();
+					image.src = canvas.toDataURL("image/jpg");
+
+					var src = image.src;
+					src = src.substr(22);
+					this.curSrc = src;
+					if(callback) callback()
+					//						return image;
 				},
 				// 设置大小的时候触发的touchStart事件
 				dragStart(e) {
-//					T_PAGE_X = e.touches[0].pageX
-//					T_PAGE_Y = e.touches[0].pageY
-//					CUT_L = this.cutL
-//					CUT_R = this.cutR
-//					CUT_B = this.cutB
-//					CUT_T = this.cutT
+					//					T_PAGE_X = e.touches[0].pageX
+					//					T_PAGE_Y = e.touches[0].pageY
+					//					CUT_L = this.cutL
+					//					CUT_R = this.cutR
+					//					CUT_B = this.cutB
+					//					CUT_T = this.cutT
 				},
 
 				// 设置大小的时候触发的touchMove事件
 				dragMove(e) {
-//					var _this = this
-//					var dragType = e.target.dataset.drag
-//					switch(dragType) {
-//						case 'right':
-//							var dragLength = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
-//							if(CUT_R + dragLength < 0) dragLength = -CUT_R
-//							this.setData({
-//								cutR: CUT_R + dragLength
-//							})
-//							break;
-//						case 'left':
-//							var dragLength = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
-//							if(CUT_L - dragLength < 0) dragLength = CUT_L
-//							if((CUT_L - dragLength) > (this.cropperW - this.cutR)) dragLength = CUT_L - (this.cropperW - this.cutR)
-//							this.setData({
-//								cutL: CUT_L - dragLength
-//							})
-//							break;
-//						case 'top':
-//							var dragLength = (T_PAGE_Y - e.touches[0].pageY) * DRAFG_MOVE_RATIO
-//							if(CUT_T - dragLength < 0) dragLength = CUT_T
-//							if((CUT_T - dragLength) > (this.cropperH - this.cutB)) dragLength = CUT_T - (this.cropperH - this.cutB)
-//							this.setData({
-//								cutT: CUT_T - dragLength
-//							})
-//							break;
-//						case 'bottom':
-//							var dragLength = (T_PAGE_Y - e.touches[0].pageY) * DRAFG_MOVE_RATIO
-//							if(CUT_B + dragLength < 0) dragLength = -CUT_B
-//							this.setData({
-//								cutB: CUT_B + dragLength
-//							})
-//							break;
-//						case 'rightBottom':
-//							var dragLengthX = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
-//							var dragLengthY = (T_PAGE_Y - e.touches[0].pageY) * DRAFG_MOVE_RATIO
-//
-//							if(CUT_B + dragLengthY < 0) dragLengthY = -CUT_B
-//							if(CUT_R + dragLengthX < 0) dragLengthX = -CUT_R
-//							let cutB = CUT_B + dragLengthY;
-//							let cutR = CUT_R + dragLengthX;
-//
-//							this.setData({
-//								cutB: cutB,
-//								cutR: cutR
-//							})
-//							break;
-//						default:
-//							break;
-//					}
-			},
-			_upload(){
-//				plus.nativeUI.showWaiting();
-		this.getImageInfo(()=>{
-				if(!this.curSrc ){
-					plus.nativeUI.toast('请先剪裁图片');
-					plus.nativeUI.closeWaiting()
-					return false
-				}else{
-					Clip.unpload64(this.curSrc,size,(res)=>{
-						
-						var data = {
-							src:res,
-							mark:mark
-						}
-						
-						var parent = plus.webview.getWebviewById(pid);
-//						console.log(JSON.stringify(data))
-						parent.evalJS("choosePic('"+JSON.stringify(data)+"')")
-						plus.nativeUI.closeWaiting()
-						mui.back()
-					})
-				}
-			})			
-						
-//				plus.nativeUI.closeWaiting()
+					//					var _this = this
+					//					var dragType = e.target.dataset.drag
+					//					switch(dragType) {
+					//						case 'right':
+					//							var dragLength = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
+					//							if(CUT_R + dragLength < 0) dragLength = -CUT_R
+					//							this.setData({
+					//								cutR: CUT_R + dragLength
+					//							})
+					//							break;
+					//						case 'left':
+					//							var dragLength = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
+					//							if(CUT_L - dragLength < 0) dragLength = CUT_L
+					//							if((CUT_L - dragLength) > (this.cropperW - this.cutR)) dragLength = CUT_L - (this.cropperW - this.cutR)
+					//							this.setData({
+					//								cutL: CUT_L - dragLength
+					//							})
+					//							break;
+					//						case 'top':
+					//							var dragLength = (T_PAGE_Y - e.touches[0].pageY) * DRAFG_MOVE_RATIO
+					//							if(CUT_T - dragLength < 0) dragLength = CUT_T
+					//							if((CUT_T - dragLength) > (this.cropperH - this.cutB)) dragLength = CUT_T - (this.cropperH - this.cutB)
+					//							this.setData({
+					//								cutT: CUT_T - dragLength
+					//							})
+					//							break;
+					//						case 'bottom':
+					//							var dragLength = (T_PAGE_Y - e.touches[0].pageY) * DRAFG_MOVE_RATIO
+					//							if(CUT_B + dragLength < 0) dragLength = -CUT_B
+					//							this.setData({
+					//								cutB: CUT_B + dragLength
+					//							})
+					//							break;
+					//						case 'rightBottom':
+					//							var dragLengthX = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
+					//							var dragLengthY = (T_PAGE_Y - e.touches[0].pageY) * DRAFG_MOVE_RATIO
+					//
+					//							if(CUT_B + dragLengthY < 0) dragLengthY = -CUT_B
+					//							if(CUT_R + dragLengthX < 0) dragLengthX = -CUT_R
+					//							let cutB = CUT_B + dragLengthY;
+					//							let cutR = CUT_R + dragLengthX;
+					//
+					//							this.setData({
+					//								cutB: cutB,
+					//								cutR: cutR
+					//							})
+					//							break;
+					//						default:
+					//							break;
+					//					}
+				},
+				_upload() {
+					//				plus.nativeUI.showWaiting();
+					this.getImageInfo(() => {
 
-					
+						if(!this.curSrc) {
+							plus.nativeUI.toast('请先剪裁图片');
+							plus.nativeUI.closeWaiting()
+							return false
+						} else {
+							Clip.unpload64(this.curSrc, size, (res) => {
+
+								var data = {
+									src: res,
+									mark: mark
+								}
+
+								var parent = plus.webview.getWebviewById(pid);
+
+								parent.evalJS("choosePic('" + JSON.stringify(data) + "')")
+								plus.nativeUI.closeWaiting()
+								mui.back()
+							})
+						}
+					})
+
 				}
 			}
 		})

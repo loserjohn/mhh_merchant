@@ -295,7 +295,8 @@
 			"msg.html": {
 				"resources": [],
 				"refer": [
-					"auditing.html"
+					"auditing.html",
+					"html/manage/imgClick.html"
 				],
 				"priority": 0
 			},

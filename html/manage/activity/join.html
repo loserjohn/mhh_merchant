@@ -3,16 +3,97 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>报名活动</title>
+		<title>活动报名</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/animate.css" />
 		<link rel="stylesheet" href="../../../css/loading.css" />
-		
+
 		<style>
+			.scrollBox {
+				/*background: red;*/
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
 			
+			.cm_tabsT {
+				background: #fff;
+			}
+			
+			.proPic {
+				width: 70px;
+				height: 70px;
+				background: #eee;
+				margin-right: 10px;
+			}
+			
+			.wrap2 {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 2;
+				overflow: hidden;
+			}
+			
+			.btn {
+				line-height: 40px;
+				height: 40px;
+				padding: 0 10px;
+				background: #e0c974;
+				color: #fff;
+				border-radius: 3px;
+				/*border: 1px solid #404040;*/
+				box-sizing: border-box;
+			}
+			.mask{
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				background: rgba(0,0,0,.8);
+				justify-content: center;
+				align-items: center;
+				z-index: 1000;
+			}
+			.bar{
+				background: #fff;
+				width: 200px;
+				height: 200px;
+				border-radius: 5px;
+				overflow: hidden;
+				box-sizing: border-box;
+				padding: 10px;
+			}
+			.bar .title{
+				line-height: 2;
+				border-bottom: 1px dotted #d3d3d3;
+			}
+			.bar .numBox{
+				box-sizing: border-box;
+				padding: 10px;
+				/*background: red;*/
+				height: 86px;
+			}
+			.bar .numBox .box {
+				justify-content: center;
+				margin-top: 10px;
+				height: 44px;
+			}
+			.bar .numBox .numInput{
+				border: none;
+				outline: none;
+				/*margin-top: 10px;*/
+			}
+			.bar .footer{
+				border-top: 1px dotted #d3d3d3;
+			}
+			.lh44{
+				line-height: 44px;
+			}
 		</style>
 	</head>
 
@@ -32,316 +113,411 @@
 			</ul>
 		</div>
 		<div id="app">
-		
-			<!--卡片-->
-			<div class="cards scrollBox "   :style="{top:scrollTop}" id="scroll" ref="scroll">
-				<div class="reset" style="min-height: 101%;"> 	
-					<!--刷新提示框-->
-					<div class="refresh">
-						<p class="t_c cor_y  refresh_txt">有种你放开我</p>
+
+			<!--账户报表-->
+			<div class="cm_tabBars ">
+				<ul class="cm_tabsT flex">
+					<li @tap="_changeTab(0)" class="cm_tabTitle f1" :class="{active:currtab==0?true:false}">可报名项目</li>
+					<li @tap="_changeTab(1)" class="cm_tabTitle f1" :class="{active:currtab==1?true:false}">已报名项目</li>
+				</ul>
+				<div ref="scroll" class="cm_tabsContent scrollBox" :style="{top:tabContenTop}">
+					<div class="slider clearfix" style="min-height: 101%;">
+						<!--刷新提示框-->
+						<div class="refresh">
+							<p class="t_c cor_y  refresh_txt">有种你放开我</p>
+						</div>
+						<!--可以报名的所有项目-->
+						<div class="animated fadeInDownBig" v-show="currtab==0?true:false">
+							<ul class="mui-table-view  ">
+								<li class="mui-table-view-cell mui-media flex" v-for="item in MayList.list">
+									<aside class="proPic">
+										<img :src="item.PROJECT_IMG1" alt="" class="contain" />
+									</aside>
+									<article class="f1">
+										<h3 class="wrap2">{{item.PROJECT_NAME}}</h3>
+										<p>类别: {{item.PROJECT_TYPE}}</p>
+									</article>
+									<div class="btns">
+										<p class="t_c lh36 cor_r">未参加</p>
+										<div class="btn" @tap="_joinActivity(item.PROJECT_CODE)">参加活动</div>
+									</div>
+								</li>
+								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{MayList.norest?'没有数据了':'加载更多'}}</li>
+							</ul>
+						</div>
+
+						<!--已报名的所有项目-->
+						<div class="animated fadeInDownBig" v-show="currtab==1?true:false">
+							<ul class="mui-table-view  ">
+								<li class="mui-table-view-cell mui-media flex" v-for="item in happliedList.list">
+									<aside class="proPic">
+										<img :src="item.PROJECT_IMG1" alt="" class="contain" />
+									</aside>
+									<article class="f1">
+										<h3 class="wrap2">{{item.PROJECT_NAME}}</h3>
+										<p>类别: {{item.PROJECT_TYPE}}</p>
+									</article>
+									<div class="btns">
+										<p class="t_c lh36 cor_r">{{item.APPLY_STATUS | status}}</p>
+										<div class="btn" @tap="_cancelJoin(item.APPLY_CODE)">取消参与</div>
+									</div>
+								</li>
+								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{happliedList.norest?'没有数据了':'加载更多'}}</li>
+							</ul>
+						</div>
 					</div>
-					<ul class="reset cm_ul ">
-						<li class="mui-table-view-cell mui-transitioning reset" v-for="item in couponsList" :id="item.DISCOUNT_CODE">
-						
-						</li>
-						
-						<li v-if="couponsList.length==0" class="t_c cm_noItem" >
-							<img src="../../../images/no3.png" alt="" />
-							<div class="t_c">--您还没有优惠券--</div>
-						</li>
-					</ul>
 				</div>
 			</div>
-
-			<!--底部菜单-->
-			<div class=" bottomMenus flex">
-				<h3 class="cor_y t_c menusTxt f1 " @tap="_toAddNewCard">
-					确认添加 
-				</h3>
+			<!--数量数值-->
+			<div class="mask flex" v-show="show" @tap.self="_close">
+				<div class="bar ">
+					<h3 class="t_c title">报名数量</h3>
+					<div class="t_c  numBox">
+						<div class="flex box ">
+							<input type="number" class="numInput" v-model="num" />
+							<p class="lh44"> 份</p>
+						</div>						
+					</div>
+					<div class="footer">
+						<div class="cm_btn" @tap.self="_doJoin">确认报名</div>
+					</div>
+				</div>
 			</div>
-			
 		</div>
 		<script src="../../../js/mui.min.js"></script>
 		<script src="../../../js/app.js"></script>
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
-				<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			mui.init({
-							swipeBack: true
-						})
-			var APP 
+				swipeBack: true
+			})
 			mui.plusReady(function() {
 				app.WXinit(CryptoJS)
-				 APP = new Vue({
+				var APP = new Vue({
 					el: '#app',
 					data: {
-						scrollTop: '',
-						scroll:'',
+						scroll: '',
 						show:false,
-						couponsList:'',
-						detailPre:{}
+						curProCode:'',  //记录当前选中的作品
+						
+						tabContenTop: '',
+						currtab: 0, //当前tab页
+
+						activityId: '',
+						activityType: '',
+
+						note: '加载更多',
+						MayList: { //当前商家可以报名的作品
+							list: [],
+							index: 1,
+							norest: false
+						},
+						happliedList: { //该活动已经报名的作品
+							list: [],
+							index: 1,
+							norest: false
+						},
+						
+						num:10000 //参加活动的购买分数
+
 					},
 					created: function() {
+						var self = plus.webview.currentWebview();
+						this.activityId = self.activityId;
+						this.activityType = self.activityType;
 					},
 					mounted: function() {
-						
 						var _this = this
-						var scroll =  this.$refs.scroll
-						this.scrollTop = 0 + 'px'
-							/*首次加载数据*/
-						this._getData(() => {
-							plus.nativeUI.closeWaiting()
-							mui.currentWebview.show('pop-in', 300, function () {}, {});
-						})
-					
+						scroll = this.$refs.scroll
+						this.tabContenTop = 40 + 'px';
+
 						this.$nextTick(function() {
 							//							初始化scrool
 							if(!_this.scroll) {
-								//							初始化标题栏
+								//							初始化下拉框
 								_this.scroll = new BScroll(scroll, {
 									click: true,
 									probeType: 3,
 									bounceTime: 200,
+									pullUpLoad: {
+										threshold: -50 // 当上拉距离超过30px时触发 pullingUp 事件
+									},
 									pullDownRefresh: {
-											  threshold: 50,
-											  stop: 20
-											}
+										threshold: 50,
+										stop: 0
+									}
 								})
 							} else {
 								_this.scroll.refresh();
 							};
-							/*下拉刷新*/
-							_this.scroll.on('pullingDown', function(e) {
+							this.scroll.on('pullingUp', function(e) {
 								
-									plus.nativeUI.showWaiting()
-									_this._getData(()=>{
-										plus.nativeUI.closeWaiting();
-										_this.scroll.finishPullDown()
-									})
-									
+								_this._getData((b) => {
+									if(b) {
+
+									} else {
+										_this.scroll.finishPullUp()
+									}
+								})
+							});
+							/*下拉刷新*/
+							this.scroll.on('pullingDown', function(e) {								
+								_this._refresh()
 							})
+
 						})
+
+						/*初始化项目数据*/
+						this._getData((b) => {
+							if(b) {
+
+							} else {
+								_this.scroll.finishPullUp()
+
+							}
+						});
 					},
-					filters: {
-						getStatus(k) {
-//							优惠券状态0-未启用，1-启用中,2-审核中
-							switch(k) {
-								case '0':
-									return '未启用'
+					filters:{
+						status(value){
+							value = parseInt(value)
+							switch (value){
+								case 0:
+								return '审核中'
 									break;
-								case '1':
-									return '启用中'
+								case 1:
 									break;
-								case '2':
-									return '审核中...'
-									break;
+								return '已参加'
 								default:
 									break;
 							}
 						}
 					},
 					methods: {
-						/*添加新卡*/
-						_toAddNewCard() {
-							mui.openWindow({
-								url: './addCoupon.html',
-								id: 'addCoupon',
-								styles: {
-									top: '0px', //新页面顶部位置
-									bottom: '0px', //新页面底部位置
-									scrollIndicator: "none",
-									plusrequire: 'ahead',
-									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
-									titleNView: { // 窗口的标题栏控件
-										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
-										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
-										titleSize: "14px", // 字体大小,默认17px
-										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
-										progress: { // 标题栏控件的进度条样式
-											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
-											height: "2px" // 进度条高度,默认值为"2px"         
-										},
-										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
-											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
-											height: "1px" // 分割线高度,默认值为"2px"
-										}
+//						取消参与活动
+						_cancelJoin(key){
+							plus.nativeUI.confirm('确定取消参与该活动？', (event) => {
+								var k = event.index
+								if(k == 0) {
+									var data={
+										APPLY_CODE:key
 									}
-								},
-								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-								show: {
-									autoShow: true, //页面loaded事件发生后自动显示，默认为true
-									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-								},
-								extras: {
-									//自定义扩展参数，可以用来处理页面间传值  
-								},
-								waiting: {
-									autoShow: false, //自动显示等待框，默认为true
-									title: '正在加载...', //等待对话框上显示的提示内容
+									var _this = this;
+									plus.nativeUI.showWaiting()
+									app.ajax(app.baseUrl + '/api/BusiActivity/DisApplyActivity', {
+											data: data,
+											type: 'post', //HTTP请求类型
+											success: function(result) {
+												plus.nativeUI.closeWaiting()
+												if(result.Success) {
+													plus.nativeUI.toast('取消成功')
+													_this._refresh()
+												} else {
+													/*验证失败*/
+													plus.nativeUI.toast(result.Msg)
+												}
+											}
+									});												
+								} else {
+									return false
 								}
-							})
+
+							})					
 						},
-						/*查看详情*/
-						_checkDetail(item) {
-							if(item){
-								this.detailPre = item	
+//						参加活动 打开弹窗
+						_joinActivity(key) {
+							var _this = this;
+							
+							this.curProCode = key
+							this.show = true;
+						},
+//						参加活动接口操作
+						_doJoin(){
+							if(!this.num || this.num<=0){
+								plus.nativeUI.alert( "请输入正确份数", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );
+								return;
 							}
-						
-						this.show = !this.show;
-							if(this.show ){
-//								this.scroll.disable();
-							}else{
-//								this.scroll.enable()
-							}							
-						},
-						/*编辑修改*/
-						_edite(item){
-							var li = document.getElementById(item.DISCOUNT_CODE)
-										//							console.log(li)
-								mui.swipeoutClose(li)
-							mui.openWindow({
-								url: './editCoupon.html',
-								id: 'editCoupon',
-								styles: {
-									top: '0px', //新页面顶部位置
-									bottom: '0px', //新页面底部位置
-									scrollIndicator: "none",
-									plusrequire: 'ahead',
-									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
-									titleNView: { // 窗口的标题栏控件
-										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
-										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
-										titleSize: "14px", // 字体大小,默认17px
-										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
-										progress: { // 标题栏控件的进度条样式
-											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
-											height: "2px" // 进度条高度,默认值为"2px"         
-										},
-										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
-											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
-											height: "1px" // 分割线高度,默认值为"2px"
-										}
-									}
-								},
-								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-								show: {
-									autoShow: true, //页面loaded事件发生后自动显示，默认为true
-									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-								},
-								extras: {
-									coupon:item
-								},
-								waiting: {
-									autoShow: false, //自动显示等待框，默认为true
-									title: '正在加载...', //等待对话框上显示的提示内容
-								}
-							})
-						},
-						/*删除操作*/
-						_delect(code){
-								var li = document.getElementById(code)
-								mui.swipeoutClose(li)
-								var _this = this 
-								var data={
-									DISCOUNT_CODE:code,
-								}
-//
-								plus.nativeUI.showWaiting('删除中...')
-								app.ajax(app.baseUrl + '/api/BusiDiscount/DeleteDiscount', {
-									// dataType:'json',//服务器返回json格式数据
+							
+							var data={
+								ACTIVITY_CODE:this.activityId,
+								PROJECT_CODE:this.curProCode,
+								APPLY_TOTAL_NUM: this.num
+							}
+							var _this = this;
+							plus.nativeUI.showWaiting()
+							app.ajax(app.baseUrl + '/api/BusiActivity/ApplyActivity', {
 									data: data,
-									type: 'post', //HTTP请求类型
-									success: function(result) {											
-										if(result.Success) {
-											
-											var msg = "删除成功";
-											mui.later(()=>{
-												plus.nativeUI.closeWaiting()
-												plus.nativeUI.toast(msg)
-												_this._getData()
-											},1500)
-											
-											/*还原数据*/										
-										} else {
-											plus.nativeUI.closeWaiting()
-											plus.nativeUI.toast(result.Msg)
-											console.log(result.Msg)
-										}
-	
-									}
-								});	
-						},
-						/*启用  禁用操作*/
-						_handle(code,t){
-								var li = document.getElementById(code)
-										//							console.log(li)
-								mui.swipeoutClose(li)
-								var _this = this 
-								var data={
-									DISCOUNT_CODE:code,
-									DISCOUNT_STATUS:t
-								}
-//								console.log(JSON.stringify(data))
-								plus.nativeUI.showWaiting('修改中...')
-								app.ajax(app.baseUrl + '/api/BusiDiscount/UpdateDiscount', {
-									// dataType:'json',//服务器返回json格式数据
-									data: data,
-									type: 'post', //HTTP请求类型
+									type: 'get', //HTTP请求类型
 									success: function(result) {
-										
-												
+										plus.nativeUI.closeWaiting()
 										if(result.Success) {
-											
-											var msg = "修改成功";
-											mui.later(()=>{
-												plus.nativeUI.closeWaiting()
-												plus.nativeUI.toast(msg)
-												_this._getData()
-											},1500)
-											
-											/*还原数据*/										
-										} else {
-											plus.nativeUI.closeWaiting()
-											plus.nativeUI.toast(result.Msg)
-											console.log(result.Msg)
-										}
-	
-									}
-								});	
-						},
-						/*获取数据*/
-						_getData(callback){
-							var _this = this
-							app.ajax(app.baseUrl + '/api/BusiDiscount/GetDiscountList', {
-								//									data: data,
-								// dataType:'json',//服务器返回json格式数据
-								type: 'get', //HTTP请求类型
-								success: function(result) {
-									mui.later(()=>{
-										document.getElementById('loader').style.display='none'
-										if(result.Success) {
-											_this.couponsList = result.Data.ListInfo
-											 
-												 	_this.scroll.refresh();
-												 	if(callback) callback();
-											
+											plus.nativeUI.toast('参与成功')
+											_this._refresh()
 										} else {
 											/*验证失败*/
 											plus.nativeUI.toast(result.Msg)
-	
 										}
-									},500)
-								}
+									}
 							});
+							this.show = false
+						},
+						
+						
+//						关闭弹窗
+						_close(){
+							this.show = false
+						},
+						_changeTab: function(key) {
+							this.currtab = parseInt(key)
+							switch(key) {
+								case 0:
+									if(this.MayList.index == 1) {
+										this._getData((b) => {
+											if(b) {
+												//											this.note = "没有数据了"
+											} else {
+												this.scroll.finishPullUp()
+												//											this.note = "加载更多"
+											}
+										})
+									} else {
+										if(!this.MayList.norest) {
+											//										该分类还有数据
+											this.scroll.finishPullUp()
+										}
+										this.scroll.refresh();
+										return
+									}
+									break;
+								case 1:
+									if(this.happliedList.index == 1) {
+										this._getData((b) => {
+											if(b) {
+												//											this.note = "没有数据了"
+											} else {
+												this.scroll.finishPullUp()
+												//											this.note = "加载更多"
+											}
+										})
+									} else {
+										if(!this.happliedList.norest) {
+											//										该分类还有数据
+											this.scroll.finishPullUp()
+										}
+										this.scroll.refresh();
+										return
+									}
+									break;
+								default:
+									break;
+							}
+
+						},
+						/*加载数据*/
+						_getData(callback) {
+							var _this = this
+							var tabType = this.currtab;
+
+							//							全部未报名的作品
+							if(tabType == 0) {
+								var data = {
+									pageIndex: this.MayList.index,
+									pageSize: 10,
+									PROJECT_TYPE: this.activityType,
+									APPLY_ACTIVITY: true,
+									PROJECT_STATUS: 1
+								}
+
+								app.ajax(app.baseUrl + '/api/BusiProject/GetProjects', {
+									data: data,
+									// dataType:'json',//服务器返回json格式数据
+									type: 'get', //HTTP请求类型
+									success: function(result) {
+										document.getElementById('loader').style.display = 'none'
+										if(result.Success) {
+											var l = _this.MayList.list.length;
+											var arr = _this.MayList.list
+											_this.MayList.list = arr.concat(result.Data.ListInfo);
+
+											if(_this.MayList.list.length == l) {
+												_this.MayList.norest = true;
+												if(callback) callback(true);
+												return;
+											}
+											_this.MayList.index += 1
+											_this.scroll.refresh();
+											if(callback) callback(false);
+
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+										}
+									}
+								});
+							} else if(tabType == 1) {
+								//							已经报名该活动的作品	
+								var data = {
+									pageIndex: this.happliedList.index,
+									pageSize: 10,
+									ACTIVITY_CODE: this.activityId,
+								}
+
+								app.ajax(app.baseUrl + '/api/BusiActivity/GetPrjActivityList', {
+									data: data,
+									// dataType:'json',//服务器返回json格式数据
+									type: 'get', //HTTP请求类型
+									success: function(result) {
+										document.getElementById('loader').style.display = 'none'
+										if(result.Success) {
+											var l = _this.happliedList.list.length;
+											var arr = _this.happliedList.list
+											_this.happliedList.list = arr.concat(result.Data.ListInfo);
+
+											if(_this.happliedList.list.length == l) {
+												_this.happliedList.norest = true;
+												if(callback) callback(true);
+												return;
+											}
+											_this.happliedList.index += 1
+											_this.scroll.refresh();
+											if(callback) callback(false);
+
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+										}
+									}
+								});
+							}
+
+						},
+						_refresh(){
+							this.MayList = { //当前商家可以报名的作品
+								list: [],
+								index: 1,
+								norest: false
+							}
+							this.happliedList = { //该活动已经报名的作品
+								list: [],
+								index: 1,
+								norest: false
+							}
+							var _this = this
+							plus.nativeUI.showWaiting()
+							this._getData((b) => {
+									plus.nativeUI.closeWaiting()
+									_this.scroll.finishPullDown()
+									if(b) {
+
+									} else {
+										_this.scroll.finishPullUp()
+									}
+							})
 						}
 					}
 				})
 			})
-			function refresh(){
-//				alert(1)
-				APP._getData()
-			}
 		</script>
 	</body>
 

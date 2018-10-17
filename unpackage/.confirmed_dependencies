@@ -1,171 +1,172 @@
 {
-  "index.html": {
-    "refer": [
-      "login.html",
-      "html/home/home.html",
-      "registe.html",
-      "auditing.html",
-      "msg.html",
-      "bound.html"
-    ],
-    "resources": []
-  },
-  "html/home/home.html": {
-    "resources": [
-      "html/community/community.html",
-      "images/F7ýu3.png"
-    ],
-    "refer": [
-      "html/community/community.html",
-      "html/manage/manage.html",
-      "html/information/information.html",
-      "html/manage/orders/orders.html",
-      "html/manage/production/production.html",
-      "html/manage/deposit.html",
-      "html/home/businessEdiet.html",
-      "html/manage/time/time.html",
-      "html/manage/personSet/personSet.html",
-      "html/manage/production/product_detail.html"
-    ]
-  },
-  "html/manage/manage.html": {
-    "refer": [
-      "html/manage/production/production.html",
-      "html/manage/time/time.html",
-      "html/manage/comment/comment.html",
-      "html/manage/orders/orders.html",
-      "html/manage/personSet/personSet.html",
-      "html/manage/custom/custom.html",
-      "html/manage/bill.html",
-      "html/manage/deposit.html",
-      "html/manage/refillcard/refillcard.html",
-      "html/manage/coupons/coupons.html",
-      "html/manage/share/share.html",
-      "html/manage/kefu.html",
-      "html/manage/banks/banks.html"
-    ],
-    "resources": []
-  },
-  "html/manage/production/production.html": {
-    "refer": [
-      "html/manage/production/product_detail.html",
-      "html/manage/search/search.html",
-      "html/manage/production/product_edit.html"
-    ],
-    "resources": []
-  },
-  "html/manage/orders/orders.html": {
-    "refer": [
-      "html/manage/orders/order_detail.html"
-    ],
-    "resources": []
-  },
-  "html/manage/custom/custom.html": {
-    "refer": [
-      "html/manage/custom/custom_detail.html"
-    ],
-    "resources": []
-  },
-  "html/manage/time/time.html": {
-    "refer": [
-      "html/manage/time/time_set.html"
-    ],
-    "resources": []
-  },
-  "html/community/community.html": {
-    "refer": [
-      "html/community/community_detail.html"
-    ],
-    "resources": []
-  },
-  "html/manage/search/search.html": {
-    "refer": [
-      "html/manage/production/product_detail.html"
-    ],
-    "resources": []
-  },
-  "html/manage/production/product_detail.html": {
-    "refer": [
-      "html/manage/production/product_common.html",
-      "html/manage/production/product_edit.html"
-    ],
-    "resources": []
-  },
-  "html/manage/comment/comment.html": {
-    "refer": [
-      "html/manage/comment/common_detail.html"
-    ],
-    "resources": []
-  },
-  "html/manage/refillcard/refillcard.html": {
-    "refer": [
-      "html/manage/refillcard/editCard.html",
-      "html/manage/refillcard/addCard.html"
-    ],
-    "resources": []
-  },
-  "html/manage/coupons/coupons.html": {
-    "refer": [
-      "html/manage/coupons/addCoupon.html",
-      "html/manage/coupons/editCoupon.html"
-    ],
-    "resources": []
-  },
-  "html/manage/personSet/personSet.html": {
-    "refer": [
-      "html/manage/banks/banks.html",
-      "index.html",
-      "html/manage/imgClick.html"
-    ],
-    "resources": []
-  },
-  "login.html": {
-    "refer": [
-      "yzmLogin.html",
-      "registe.html",
-      "forgetPass.html",
-      "msg.html",
-      "html/home/home.html"
-    ],
-    "resources": []
-  },
-  "registe.html": {
-    "refer": [
-      "msg.html"
-    ]
-  },
-  "msg.html": {
-    "refer": [
-      "auditing.html"
-    ]
-  },
-  "html/information/information.html": {
-    "refer": [
-      "html/information/sysMessege.html",
-      "html/information/chat.html",
-      "html/information/sysMessage.html"
-    ]
-  },
-  "html/information/chat.html": {
-    "refer": [
-      "html/information/location.html",
-      "html/information/mapPre.html"
-    ]
-  },
-  "html/manage/production/product_edit.html": {
-    "refer": [
-      "html/manage/imgClick.html"
-    ]
-  },
-  "bound.html": {
-    "refer": [
-      "html/home/home.html",
-      "registe.html"
-    ]
-  },
-  "html/manage/banks/banks.html": {
-    "refer": [
-      "html/manage/banks/addBank.html"
-    ]
-  }
+	"index.html": {
+		"refer": [
+			"login.html",
+			"html/home/home.html",
+			"registe.html",
+			"auditing.html",
+			"msg.html",
+			"bound.html"
+		],
+		"resources": []
+	},
+	"html/home/home.html": {
+		"resources": [
+			"html/community/community.html",
+			"images/F7ï¿½u3.png"
+		],
+		"refer": [
+			"html/community/community.html",
+			"html/manage/manage.html",
+			"html/information/information.html",
+			"html/manage/orders/orders.html",
+			"html/manage/production/production.html",
+			"html/manage/deposit.html",
+			"html/home/businessEdiet.html",
+			"html/manage/time/time.html",
+			"html/manage/personSet/personSet.html",
+			"html/manage/production/product_detail.html"
+		]
+	},
+	"html/manage/manage.html": {
+		"refer": [
+			"html/manage/production/production.html",
+			"html/manage/time/time.html",
+			"html/manage/comment/comment.html",
+			"html/manage/orders/orders.html",
+			"html/manage/personSet/personSet.html",
+			"html/manage/custom/custom.html",
+			"html/manage/bill.html",
+			"html/manage/deposit.html",
+			"html/manage/refillcard/refillcard.html",
+			"html/manage/coupons/coupons.html",
+			"html/manage/share/share.html",
+			"html/manage/kefu.html",
+			"html/manage/banks/banks.html"
+		],
+		"resources": []
+	},
+	"html/manage/production/production.html": {
+		"refer": [
+			"html/manage/production/product_detail.html",
+			"html/manage/search/search.html",
+			"html/manage/production/product_edit.html"
+		],
+		"resources": []
+	},
+	"html/manage/orders/orders.html": {
+		"refer": [
+			"html/manage/orders/order_detail.html"
+		],
+		"resources": []
+	},
+	"html/manage/custom/custom.html": {
+		"refer": [
+			"html/manage/custom/custom_detail.html"
+		],
+		"resources": []
+	},
+	"html/manage/time/time.html": {
+		"refer": [
+			"html/manage/time/time_set.html"
+		],
+		"resources": []
+	},
+	"html/community/community.html": {
+		"refer": [
+			"html/community/community_detail.html"
+		],
+		"resources": []
+	},
+	"html/manage/search/search.html": {
+		"refer": [
+			"html/manage/production/product_detail.html"
+		],
+		"resources": []
+	},
+	"html/manage/production/product_detail.html": {
+		"refer": [
+			"html/manage/production/product_common.html",
+			"html/manage/production/product_edit.html"
+		],
+		"resources": []
+	},
+	"html/manage/comment/comment.html": {
+		"refer": [
+			"html/manage/comment/common_detail.html"
+		],
+		"resources": []
+	},
+	"html/manage/refillcard/refillcard.html": {
+		"refer": [
+			"html/manage/refillcard/editCard.html",
+			"html/manage/refillcard/addCard.html"
+		],
+		"resources": []
+	},
+	"html/manage/coupons/coupons.html": {
+		"refer": [
+			"html/manage/coupons/addCoupon.html",
+			"html/manage/coupons/editCoupon.html"
+		],
+		"resources": []
+	},
+	"html/manage/personSet/personSet.html": {
+		"refer": [
+			"html/manage/banks/banks.html",
+			"index.html",
+			"html/manage/imgClick.html"
+		],
+		"resources": []
+	},
+	"login.html": {
+		"refer": [
+			"yzmLogin.html",
+			"registe.html",
+			"forgetPass.html",
+			"msg.html",
+			"html/home/home.html"
+		],
+		"resources": []
+	},
+	"registe.html": {
+		"refer": [
+			"msg.html"
+		]
+	},
+	"msg.html": {
+		"refer": [
+			"auditing.html",
+			"html/manage/imgClick.html"
+		]
+	},
+	"html/information/information.html": {
+		"refer": [
+			"html/information/sysMessege.html",
+			"html/information/chat.html",
+			"html/information/sysMessage.html"
+		]
+	},
+	"html/information/chat.html": {
+		"refer": [
+			"html/information/location.html",
+			"html/information/mapPre.html"
+		]
+	},
+	"html/manage/production/product_edit.html": {
+		"refer": [
+			"html/manage/imgClick.html"
+		]
+	},
+	"bound.html": {
+		"refer": [
+			"html/home/home.html",
+			"registe.html"
+		]
+	},
+	"html/manage/banks/banks.html": {
+		"refer": [
+			"html/manage/banks/addBank.html"
+		]
+	}
 }

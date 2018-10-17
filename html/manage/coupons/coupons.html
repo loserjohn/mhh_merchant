@@ -205,10 +205,7 @@
 						var scroll =  this.$refs.scroll
 						this.scrollTop = 0 + 'px'
 							/*首次加载数据*/
-						this._getData(() => {
-							plus.nativeUI.closeWaiting()
-							mui.currentWebview.show('pop-in', 300, function () {}, {});
-						})
+						this._getData()
 					
 						this.$nextTick(function() {
 							//							初始化scrool
@@ -220,7 +217,7 @@
 									bounceTime: 200,
 									pullDownRefresh: {
 											  threshold: 50,
-											  stop: 20
+											  stop: 0
 											}
 								})
 							} else {
