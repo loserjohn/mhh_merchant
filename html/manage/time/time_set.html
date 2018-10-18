@@ -13,6 +13,7 @@
 			.setBox {
 				background: #fff;
 				padding-top: 15px;
+				/*line-height: 44px;*/
 			}
 			
 			.allDatRest {
@@ -20,7 +21,7 @@
 			}
 			
 			.text {
-				line-height: 30px;
+				line-height: 44px;
 			}
 			
 			.timeRest {
@@ -113,20 +114,21 @@
 					<li id='i'></li>
 				</ul>
 			</div>
+			
 			<!--操作菜单-->
 			<div class="setBox container flex" id="content" ref="starsBox">
 				<div class="flex allDatRest f1">
 					<div class=" f1 text">全天休息</div>
-					<div class="">
+					<div class="" style="margin-top: 5px;">
 						<div class="mui-switch" :class="{'mui-active':allDayRest}" @tap="_allDayRest">
 							<div class="mui-switch-handle"></div>
 						</div>
 					</div>
 				</div>
 				<div class="flex  f1">
-					<div class="cm_name f1 t_c">时段休息</div>
+					<div class=" f1 text t_c">时段休息</div>
 					<div class="btn fr t_r">
-						<div class="cm_btn" @tap="_save">
+						<div class="cm_btn_blank" @tap="_save">
 							设置
 						</div>
 					</div>
@@ -141,6 +143,9 @@
 					</li>
 				</ul>
 			</div>
+			
+			<!--时间选择弹窗-->
+			
 		</div>
 
 		<script src="../../../js/mui.min.js"></script>

@@ -1,0 +1,524 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>活动报名</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/animate.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+
+		<style>
+			.scrollBox {
+				/*background: red;*/
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+			
+			.cm_tabsT {
+				background: #fff;
+			}
+			
+			.proPic {
+				width: 70px;
+				height: 70px;
+				background: #eee;
+				margin-right: 10px;
+			}
+			
+			.wrap2 {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 2;
+				overflow: hidden;
+			}
+			
+			.btn {
+				line-height: 40px;
+				height: 40px;
+				padding: 0 10px;
+				background: #e0c974;
+				color: #fff;
+				border-radius: 3px;
+				/*border: 1px solid #404040;*/
+				box-sizing: border-box;
+			}
+			.mask{
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				background: rgba(0,0,0,.8);
+				justify-content: center;
+				align-items: center;
+				z-index: 1000;
+			}
+			.bar{
+				background: #fff;
+				width: 200px;
+				height: 200px;
+				border-radius: 5px;
+				overflow: hidden;
+				box-sizing: border-box;
+				padding: 10px;
+			}
+			.bar .title{
+				line-height: 2;
+				border-bottom: 1px dotted #d3d3d3;
+			}
+			.bar .numBox{
+				box-sizing: border-box;
+				padding: 10px;
+				/*background: red;*/
+				height: 86px;
+			}
+			.bar .numBox .box {
+				justify-content: center;
+				margin-top: 10px;
+				height: 44px;
+			}
+			.bar .numBox .numInput{
+				border: none;
+				outline: none;
+				/*margin-top: 10px;*/
+			}
+			.bar .footer{
+				border-top: 1px dotted #d3d3d3;
+			}
+			.lh44{
+				line-height: 44px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
+		<div id="app">
+
+			<!--账户报表-->
+			<div class="cm_tabBars ">
+				<ul class="cm_tabsT flex">
+					<li @tap="_changeTab(0)" class="cm_tabTitle f1" :class="{active:currtab==0?true:false}">可报名项目</li>
+					<li @tap="_changeTab(1)" class="cm_tabTitle f1" :class="{active:currtab==1?true:false}">已报名项目</li>
+				</ul>
+				<div ref="scroll" class="cm_tabsContent scrollBox" :style="{top:tabContenTop}">
+					<div class="slider clearfix" style="min-height: 101%;">
+						<!--刷新提示框-->
+						<div class="refresh">
+							<p class="t_c cor_y  refresh_txt">有种你放开我</p>
+						</div>
+						<!--可以报名的所有项目-->
+						<div class="animated fadeInDownBig" v-show="currtab==0?true:false">
+							<ul class="mui-table-view  ">
+								<li class="mui-table-view-cell mui-media flex" v-for="item in MayList.list">
+									<aside class="proPic">
+										<img :src="item.PROJECT_IMG1" alt="" class="contain" />
+									</aside>
+									<article class="f1">
+										<h3 class="wrap2">{{item.PROJECT_NAME}}</h3>
+										<p>类别: {{item.PROJECT_TYPE}}</p>
+									</article>
+									<div class="btns">
+										<p class="t_c lh36 cor_r">未参加</p>
+										<div class="btn" @tap="_joinActivity(item.PROJECT_CODE)">参加活动</div>
+									</div>
+								</li>
+								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{MayList.norest?'没有数据了':'加载更多'}}</li>
+							</ul>
+						</div>
+
+						<!--已报名的所有项目-->
+						<div class="animated fadeInDownBig" v-show="currtab==1?true:false">
+							<ul class="mui-table-view  ">
+								<li class="mui-table-view-cell mui-media flex" v-for="item in happliedList.list">
+									<aside class="proPic">
+										<img :src="item.PROJECT_IMG1" alt="" class="contain" />
+									</aside>
+									<article class="f1">
+										<h3 class="wrap2">{{item.PROJECT_NAME}}</h3>
+										<p>类别: {{item.PROJECT_TYPE}}</p>
+									</article>
+									<div class="btns">
+										<p class="t_c lh36 cor_r">{{item.APPLY_STATUS | status}}</p>
+										<div class="btn" @tap="_cancelJoin(item.APPLY_CODE)">取消参与</div>
+									</div>
+								</li>
+								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{happliedList.norest?'没有数据了':'加载更多'}}</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--数量数值-->
+			<div class="mask flex" v-show="show" @tap.self="_close">
+				<div class="bar ">
+					<h3 class="t_c title">报名数量</h3>
+					<div class="t_c  numBox">
+						<div class="flex box ">
+							<input type="number" class="numInput" v-model="num" />
+							<p class="lh44"> 份</p>
+						</div>						
+					</div>
+					<div class="footer">
+						<div class="cm_btn" @tap.self="_doJoin">确认报名</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/bscroll.min.js"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			})
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						scroll: '',
+						show:false,
+						curProCode:'',  //记录当前选中的作品
+						
+						tabContenTop: '',
+						currtab: 0, //当前tab页
+
+						activityId: '',
+						activityType: '',
+
+						note: '加载更多',
+						MayList: { //当前商家可以报名的作品
+							list: [],
+							index: 1,
+							norest: false
+						},
+						happliedList: { //该活动已经报名的作品
+							list: [],
+							index: 1,
+							norest: false
+						},
+						
+						num:10000 //参加活动的购买分数
+
+					},
+					created: function() {
+						var self = plus.webview.currentWebview();
+						this.activityId = self.activityId;
+						this.activityType = self.activityType;
+					},
+					mounted: function() {
+						var _this = this
+						scroll = this.$refs.scroll
+						this.tabContenTop = 40 + 'px';
+
+						this.$nextTick(function() {
+							//							初始化scrool
+							if(!_this.scroll) {
+								//							初始化下拉框
+								_this.scroll = new BScroll(scroll, {
+									click: true,
+									probeType: 3,
+									bounceTime: 200,
+									pullUpLoad: {
+										threshold: -50 // 当上拉距离超过30px时触发 pullingUp 事件
+									},
+									pullDownRefresh: {
+										threshold: 50,
+										stop: 0
+									}
+								})
+							} else {
+								_this.scroll.refresh();
+							};
+							this.scroll.on('pullingUp', function(e) {
+								
+								_this._getData((b) => {
+									if(b) {
+
+									} else {
+										_this.scroll.finishPullUp()
+									}
+								})
+							});
+							/*下拉刷新*/
+							this.scroll.on('pullingDown', function(e) {								
+								_this._refresh()
+							})
+
+						})
+
+						/*初始化项目数据*/
+						this._getData((b) => {
+							if(b) {
+
+							} else {
+								_this.scroll.finishPullUp()
+
+							}
+						});
+					},
+					filters:{
+						status(value){
+							value = parseInt(value)
+							switch (value){
+								case 0:
+								return '审核中'
+									break;
+								case 1:
+									break;
+								return '已参加'
+								default:
+									break;
+							}
+						}
+					},
+					methods: {
+//						取消参与活动
+						_cancelJoin(key){
+							plus.nativeUI.confirm('确定取消参与该活动？', (event) => {
+								var k = event.index
+								if(k == 0) {
+									var data={
+										APPLY_CODE:key
+									}
+									var _this = this;
+									plus.nativeUI.showWaiting()
+									app.ajax(app.baseUrl + '/api/BusiActivity/DisApplyActivity', {
+											data: data,
+											type: 'post', //HTTP请求类型
+											success: function(result) {
+												plus.nativeUI.closeWaiting()
+												if(result.Success) {
+													plus.nativeUI.toast('取消成功')
+													_this._refresh()
+												} else {
+													/*验证失败*/
+													plus.nativeUI.toast(result.Msg)
+												}
+											}
+									});												
+								} else {
+									return false
+								}
+
+							})					
+						},
+//						参加活动 打开弹窗
+						_joinActivity(key) {
+							var _this = this;
+							
+							this.curProCode = key
+							this.show = true;
+						},
+//						参加活动接口操作
+						_doJoin(){
+							if(!this.num || this.num<=0){
+								plus.nativeUI.alert( "请输入正确份数", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );
+								return;
+							}
+							
+							var data={
+								ACTIVITY_CODE:this.activityId,
+								PROJECT_CODE:this.curProCode,
+								APPLY_TOTAL_NUM: this.num
+							}
+							var _this = this;
+							plus.nativeUI.showWaiting()
+							app.ajax(app.baseUrl + '/api/BusiActivity/ApplyActivity', {
+									data: data,
+									type: 'get', //HTTP请求类型
+									success: function(result) {
+										plus.nativeUI.closeWaiting()
+										if(result.Success) {
+											plus.nativeUI.toast('参与成功')
+											_this._refresh()
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+										}
+									}
+							});
+							this.show = false
+						},
+						
+						
+//						关闭弹窗
+						_close(){
+							this.show = false
+						},
+						_changeTab: function(key) {
+							this.currtab = parseInt(key)
+							switch(key) {
+								case 0:
+									if(this.MayList.index == 1) {
+										this._getData((b) => {
+											if(b) {
+												//											this.note = "没有数据了"
+											} else {
+												this.scroll.finishPullUp()
+												//											this.note = "加载更多"
+											}
+										})
+									} else {
+										if(!this.MayList.norest) {
+											//										该分类还有数据
+											this.scroll.finishPullUp()
+										}
+										this.scroll.refresh();
+										return
+									}
+									break;
+								case 1:
+									if(this.happliedList.index == 1) {
+										this._getData((b) => {
+											if(b) {
+												//											this.note = "没有数据了"
+											} else {
+												this.scroll.finishPullUp()
+												//											this.note = "加载更多"
+											}
+										})
+									} else {
+										if(!this.happliedList.norest) {
+											//										该分类还有数据
+											this.scroll.finishPullUp()
+										}
+										this.scroll.refresh();
+										return
+									}
+									break;
+								default:
+									break;
+							}
+
+						},
+						/*加载数据*/
+						_getData(callback) {
+							var _this = this
+							var tabType = this.currtab;
+
+							//							全部未报名的作品
+							if(tabType == 0) {
+								var data = {
+									pageIndex: this.MayList.index,
+									pageSize: 10,
+									PROJECT_TYPE: this.activityType,
+									APPLY_ACTIVITY: true,
+									PROJECT_STATUS: 1
+								}
+
+								app.ajax(app.baseUrl + '/api/BusiProject/GetProjects', {
+									data: data,
+									// dataType:'json',//服务器返回json格式数据
+									type: 'get', //HTTP请求类型
+									success: function(result) {
+										document.getElementById('loader').style.display = 'none'
+										if(result.Success) {
+											var l = _this.MayList.list.length;
+											var arr = _this.MayList.list
+											_this.MayList.list = arr.concat(result.Data.ListInfo);
+
+											if(_this.MayList.list.length == l) {
+												_this.MayList.norest = true;
+												if(callback) callback(true);
+												return;
+											}
+											_this.MayList.index += 1
+											_this.scroll.refresh();
+											if(callback) callback(false);
+
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+										}
+									}
+								});
+							} else if(tabType == 1) {
+								//							已经报名该活动的作品	
+								var data = {
+									pageIndex: this.happliedList.index,
+									pageSize: 10,
+									ACTIVITY_CODE: this.activityId,
+								}
+
+								app.ajax(app.baseUrl + '/api/BusiActivity/GetPrjActivityList', {
+									data: data,
+									// dataType:'json',//服务器返回json格式数据
+									type: 'get', //HTTP请求类型
+									success: function(result) {
+										document.getElementById('loader').style.display = 'none'
+										if(result.Success) {
+											var l = _this.happliedList.list.length;
+											var arr = _this.happliedList.list
+											_this.happliedList.list = arr.concat(result.Data.ListInfo);
+
+											if(_this.happliedList.list.length == l) {
+												_this.happliedList.norest = true;
+												if(callback) callback(true);
+												return;
+											}
+											_this.happliedList.index += 1
+											_this.scroll.refresh();
+											if(callback) callback(false);
+
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+										}
+									}
+								});
+							}
+
+						},
+						_refresh(){
+							this.MayList = { //当前商家可以报名的作品
+								list: [],
+								index: 1,
+								norest: false
+							}
+							this.happliedList = { //该活动已经报名的作品
+								list: [],
+								index: 1,
+								norest: false
+							}
+							var _this = this
+							plus.nativeUI.showWaiting()
+							this._getData((b) => {
+									plus.nativeUI.closeWaiting()
+									_this.scroll.finishPullDown()
+									if(b) {
+
+									} else {
+										_this.scroll.finishPullUp()
+									}
+							})
+						}
+					}
+				})
+			})
+		</script>
+	</body>
+
+</html>

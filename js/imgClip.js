@@ -79,19 +79,17 @@
 	owner.galleryImages = function(num, callback) {
 		// 从相册中选择图片
 		plus.gallery.pick(function(e) {
-			for(var i in e.files) {
-				var fileSrc = e.files[i]
-				//				owner.uploadIMG(fileSrc, function(src) {
-				if(callback) callback(fileSrc);
-				//				})
-			}
+			var fileSrc = e.files[0]
+			//				压缩图片
+				owner.zipPic(fileSrc,callback)
+//			if(callback) callback(fileSrc);
 		}, function(e) {
 			plus.nativeUI.closeWaiting();
 			console.log("取消选择图片");
 		}, {
 			filter: "image",
 			multiple: true,
-			maximum: num,
+			maximum: 1,
 			system: false,
 			onmaxed: function() {
 				plus.nativeUI.alert('最多只能选择' + num + '张图片');
@@ -103,65 +101,37 @@
 		var mobileCamera = plus.camera.getCamera(1);
 		mobileCamera.captureImage(function(e) {
 			plus.io.resolveLocalFileSystemURL(e, function(entry) {
-				var path = entry.toLocalURL() + '?version=' + new Date().getTime();
-
-				plus.zip.compressImage({
-						src: path,
-						dst: path,
-						quality: 30,
-						width: "50%",
-						overwrite: true
-					},
-					function(event) {
-						dstSRC = event.target;
-						if(callback) callback(dstSRC);
-					},
-					function(error) {
-						alert("压缩失败 error!");
-						//				console.log(JSON.stringify(error))
-					})
-
+				var path = entry.toLocalURL() 			
+//				压缩图片
+				owner.zipPic(path,callback)
+//				if(callback) callback(path);
 			}, function(err) {
 				console.log("读取拍照文件错误");
 			});
 		}, function(e) {
-			console.log("1111er", e);
+			console.log( e);
 		}, function() {
-			filename: '_doc/' + new Date().getTime() + '.png';
+			filename: '_doc/' + new Date().getTime() + '.jpg';
 		});
 	}
-	/*图片上传*/
-	owner.uploadIMG = function(src, callback) {
-
-		var img = new Image();
-		img.src = src;
-		plus.nativeUI.showWaiting();
-		var url = owner.baseUrl + '/api/Upload/UploadImage';
-		var task = plus.uploader.createUpload(url, {
-				method: "POST"
-			},
-			function(t, status) { //上传完成
-				if(status == 200) {
-					var res = JSON.parse(t.responseText)
-					//		            	console.log(res.Data)
-					if(callback) callback(res.Data);
-					mui.later(function() {
-						plus.nativeUI.closeWaiting();
-					}, 1500)
-
-				} else {
-					console.log("上传失败：" + status);
-				}
-			}
-		);
-		var foldName = plus.storage.getItem('userName')
-		//添加其他参数
-		task.addData("foldName", foldName);
-		task.addFile(src, {
-			key: src
-		});
-		task.start();
+//	压缩图片
+	owner.zipPic= function(src,callback){
+		console.log('ZIP--'+src)
+		plus.zip.compressImage({
+				src: src,
+				dst: '_doc/zip_' + src.substr(src.lastIndexOf('/') + 1),
+				overwrite: true,
+				quality: 100,
+				format:'jpg'
+			}, function(zip) {
+				plus.nativeUI.closeWaiting();
+				if(callback)(callback(zip.target))
+			}, function() {
+				plus.nativeUI.closeWaiting();
+				mui.toast('压缩失败！');
+			})
 	}
+	
 	/*base64*/
 	owner.getBase64Image = function(img) {
 		var canvas = document.createElement("canvas"); //创建canvas DOM元素，并设置其宽高和图片一样
@@ -170,42 +140,16 @@
 		var ctx = canvas.getContext("2d");
 		ctx.drawImage(img, 0, 0, img.width, img.height); //使用画布画图
 		var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase(); //动态截取图片的格式
-		var dataURL = canvas.toDataURL("image/" + ext); //返回的是一串Base64编码的URL并指定格式
+		var dataURL = canvas.toDataURL("image/jpg"); //返回的是一串Base64编码的URL并指定格式
 		return dataURL;
 	}
 
 	owner.unpload64 = function(src, size, callback) {
-		size = size || 3
+		size = size || 1
 		plus.nativeUI.showWaiting();
-		//		var url = owner.baseUrl +'/api/Upload/UploadByBase64';
-		//		var task = plus.uploader.createUpload(url, {
-		//				method: "POST"
-		//			},
-		//			function(t, status) { //上传完成
-		//				if(status == 200) {
-		//					var res = JSON.parse(t.responseText)
-		//					//		            	console.log(res.Data)
-		//					if(callback) callback(res.Data);
-		//					mui.later(function() {
-		//						plus.nativeUI.closeWaiting();
-		//					}, 1500)
-		//
-		//				} else {
-		//					console.log("上传失败：" + status);
-		//				}
-		//			}
-		//		);
-		//		var foldName = plus.storage.getItem('userName')
-		//		//添加其他参数
-		//		task.addData("foldName", foldName);
-		//		task.addData("file_name", '.png');
-		//		task.addFile(src, {
-		//			key: src
-		//		});
-		//		task.start();
 		var Info = {
 			image_base64: src,
-			file_name: '.png',
+			file_name: '.jpg',
 			foldName: plus.storage.getItem('userName'),
 			size: size
 		}
@@ -219,7 +163,7 @@
 				'Content-Type': 'application/json'
 			},
 			success: function(result) {
-
+//				console.log(result.Data)
 				if(callback) callback(result.Data);
 
 				mui.later(function() {
@@ -228,6 +172,7 @@
 			},
 			error: function(xhr, type, errorThrown) {
 				plus.nativeUI.closeWaiting()
+				plus.nativeUI.toast('网络不稳定，请重新上传')
 			}
 		})
 	}

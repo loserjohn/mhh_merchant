@@ -1,0 +1,333 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>活动报名</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/animate.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+
+		<style>
+			.btns {
+				line-height: 30px;
+				height: 30px;
+				border-radius: 4px;
+				padding: 0 10px;
+				border: 1px solid #d3d3d3;
+				margin-top: 10px;
+				color: #404040;
+			}
+			
+			.btnYes {
+				background: #e0c974;
+				border: none;
+				color: #fff;
+			}
+			
+			.label {
+				font-size: 12px;
+				line-height: 16px;
+				border-radius: 3px;
+				padding: 0 15px;
+				background: orangered;
+				color: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
+		<div id="app">
+			<!--卡片-->
+			<div class=" ">
+				<ul class="reset cm_ul ">
+					<li class="panel2 reset" v-for="item in activeList">
+						<aside class="activityPic" @tap ="_jump(item.ACTIVITY_URL)">
+							<img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1539694752693&di=b5efbc461f14dbff026ec96d4bbd6d99&imgtype=0&src=http%3A%2F%2Fpicyun.90sheji.com%2Fdesign%2F00%2F02%2F25%2F32%2Fs_1024_54f9447ac2366.jpg" alt="" class="contain" />
+						</aside>
+						<article class="activityTXT flex">
+							<div class="f1">
+								<h3>{{item.ACTIVITY_NAME}}</h3>
+								<div><span class="cor_r lh30 label">{{item.ACTIVITY_LABEL}} </span></div>
+								<p class="lh30">{{item.ACTIVITY_BEGIN_DATE}} 开始</p>
+								<p class="lh30">{{item.ACTIVITY_END_DATE}} 结束</p>
+							</div>
+							<div>
+								<div class="btns"  @tap ="_jump(item.ACTIVITY_URL)">查看详情<span class="mui-icon mui-icon-arrowright fs16"></span></div>
+								<div class="btns btnYes cor_w " @tap="_toJoin(item.ACTIVITY_CODE,item.ACTIVITY_NAME,item.ACTIVITY_PROJECT_TYPE)">立即参加<span class="mui-icon mui-icon-arrowright fs16"></span></div>
+							</div>
+
+						</article>
+					</li>
+
+					<li v-if="activeList.length==0" class="t_c cm_noItem">
+						<img src="../../../images/no3.png" alt="" />
+						<div class="t_c">--暂时没有活动--</div>
+					</li>
+				</ul>
+
+			</div>
+
+		</div>
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/bscroll.min.js"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			})
+			var APP
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				APP = new Vue({
+					el: '#app',
+					data: {
+						activeList: []
+					},
+					created: function() {},
+					mounted: function() {
+
+						var _this = this
+
+						this.scrollTop = 0 + 'px'
+						/*首次加载数据*/
+						this._getData()
+
+					},
+					filters: {
+						getStatus(k) {
+							//							优惠券状态0-未启用，1-启用中,2-审核中
+							switch(k) {
+								case '0':
+									return '未启用'
+									break;
+								case '1':
+									return '启用中'
+									break;
+								case '2':
+									return '审核中...'
+									break;
+								default:
+									break;
+							}
+						}
+					},
+					methods: {
+						//						参加项目跳转
+						_toJoin(code, name, type) {
+							mui.openWindow({
+								url: './join.html',
+								id: 'join',
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题			
+										titleText: name,
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
+								},
+								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {
+									activityId: code,
+									activityType: type
+								},
+								waiting: {
+									autoShow: false, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						},
+						//						跳转活动页面
+						_jump(str) {
+							var key = str.split('||')[0];
+							var code = str.split('||')[1];
+
+							switch(key) {
+								case 'A':
+									//								活动								
+									mui.openWindow({
+										url: code,
+										id: 'activity' + new Date().getTime(),
+										styles: {
+											top: '0px', //新页面顶部位置
+											bottom: '0px', //新页面底部位置
+											scrollIndicator: "none",
+											plusrequire: 'ahead',
+											// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+											titleNView: { // 窗口的标题栏控件
+												autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+												titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+												titleSize: "14px", // 字体大小,默认17px
+												backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+												progress: { // 标题栏控件的进度条样式
+													color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+													height: "2px" // 进度条高度,默认值为"2px"         
+												},
+												splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+													color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+													height: "1px" // 分割线高度,默认值为"2px"
+												}
+											}
+										},
+										createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+										show: {
+											autoShow: true, //页面loaded事件发生后自动显示，默认为true
+											duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+										},
+										extras: {
+											//自定义扩展参数，可以用来处理页面间传值  
+											detail: data
+										},
+										waiting: {
+											autoShow: false, //自动显示等待框，默认为true
+											title: '正在加载...', //等待对话框上显示的提示内容
+										}
+									})
+
+									break;
+								case 'W':
+									//								外链
+									mui.openWindow({
+										url: code,
+										id: 'activity' + new Date().getTime(),
+										styles: {
+											top: '0px', //新页面顶部位置
+											bottom: '0px', //新页面底部位置
+											scrollIndicator: "none",
+											plusrequire: 'ahead',
+											// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+											titleNView: { // 窗口的标题栏控件
+												autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+												titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+												titleSize: "14px", // 字体大小,默认17px
+												backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+												progress: { // 标题栏控件的进度条样式
+													color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+													height: "2px" // 进度条高度,默认值为"2px"         
+												},
+												splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+													color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+													height: "1px" // 分割线高度,默认值为"2px"
+												}
+											}
+										},
+										createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+										show: {
+											autoShow: true, //页面loaded事件发生后自动显示，默认为true
+											duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+										},
+										extras: {
+											//自定义扩展参数，可以用来处理页面间传值  
+											detail: data
+										},
+										waiting: {
+											autoShow: false, //自动显示等待框，默认为true
+											title: '正在加载...', //等待对话框上显示的提示内容
+										}
+									})
+									break;
+								case 'B':
+									//								社区新闻
+									var data = {
+										infoCode: code
+									}
+									mui.openWindow({
+										url: './html/community_detail.html',
+										id: 'community_detail',
+										styles: {
+											top: '0px', //新页面顶部位置
+											bottom: '0px', //新页面底部位置
+											scrollIndicator: "none",
+											plusrequire: 'ahead'
+										},
+										createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+										show: {
+											autoShow: true, //页面loaded事件发生后自动显示，默认为true
+											duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+										},
+										extras: {
+											//自定义扩展参数，可以用来处理页面间传值  
+											detail: data
+										},
+										waiting: {
+											autoShow: false, //自动显示等待框，默认为true
+											title: '正在加载...', //等待对话框上显示的提示内容
+										}
+									})
+
+									break;
+								default:
+									break;
+							}
+						},
+						/*获取数据*/
+						_getData(callback) {
+							var _this = this
+							app.ajax(app.baseUrl + '/api/BusiActivity/GetActivityList', {
+								//									data: data,
+								// dataType:'json',//服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								success: function(result) {
+									mui.later(() => {
+										document.getElementById('loader').style.display = 'none'
+										if(result.Success) {
+											_this.activeList = result.Data.ListInfo
+											if(callback) callback();
+										} else {
+											/*验证失败*/
+											plus.nativeUI.toast(result.Msg)
+
+										}
+									}, 500)
+								}
+							});
+						}
+					}
+				})
+			})
+
+			function refresh() {
+				//				alert(1)
+				APP._getData()
+			}
+		</script>
+	</body>
+
+</html>

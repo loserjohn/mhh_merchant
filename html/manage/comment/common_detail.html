@@ -42,9 +42,10 @@
 			.commonPics{
 				justify-content: space-around;
 			}
-			.commonPics img{
+			.commonPics .commonPicsItem{
 				width: 100px;
 				height: 100px;
+				overflow: hidden;
 			}
 			
 			.commontTxt{
@@ -54,9 +55,13 @@
 				background: #eee;
 				margin-top: 15px;
 				box-sizing: border-box;
-				padding: 10px;
+				padding:10px;
+			}
+			.recommont li{
+				margin: 10px auto;
 			}
 			.recommont li>div{
+				
 				margin: 10px auto;
 			}
 			.edietCommonBox{
@@ -104,15 +109,21 @@
 					</div>
 					
 					<div class="flex commonPics" v-show ="detail.HAS_PICTURE=='1'?true:false">
-						<img :src="detail.REPLY_IMG1" v-if="detail.REPLY_IMG1" class="" alt="" />
-						<img :src="detail.REPLY_IMG2" v-if="detail.REPLY_IMG2" class="" alt="" />
-						<img :src="detail.REPLY_IMG3" v-if="detail.REPLY_IMG3" class="" alt="" />
+						<div class="commonPicsItem">
+							<img :src="detail.REPLY_IMG1" v-if="detail.REPLY_IMG1" class="contain" alt="" />
+						</div>
+						<div class="commonPicsItem">
+							<img :src="detail.REPLY_IMG2" v-if="detail.REPLY_IMG2" class="contain" alt="" />
+						</div>
+						<div class="commonPicsItem">
+							<img :src="detail.REPLY_IMG3" v-if="detail.REPLY_IMG3" class="contain" alt="" />
+						</div>					
 					</div>
 					
 				</div>
 				<!--回复-->
-				<ul class="recommont">
-					<li>
+				<ul class="recommont" v-if="detail.REPLY_CONTENT || detail.REVIEW_AGAIN_CONTENT">
+					<li v-if="detail.REPLY_CONTENT">
 						<div class="flex cm_name">
 							<p class="f1 ">我的回复:</p>
 							<p class="t_r">{{detail.REVIEW_TIME}}</p>
@@ -120,8 +131,8 @@
 						{{detail.REPLY_CONTENT}}
 					</li>
 
-					<li>
-						<div class="flex cm_name">
+					<li v-if="detail.REVIEW_AGAIN_CONTENT">
+						<div class="flex cm_name" >
 							<p class="f1">{{detail.MEMBER_NIKENAME}}:</p>
 							<p class="t_r">{{detail.REVIEW_AGAIN_TIME}}</p>
 						</div>
@@ -192,9 +203,8 @@
 										if(result.Success) {
 											plus.nativeUI.toast('回复成功')
 											
-											if(plus.webview.getWebviewById('common_detail')){
-												plus.webview.getWebviewById('common_detail').evalJS('refresh()')
-											}
+											if(plus.webview.getWebviewById('product_common'))
+											plus.webview.getWebviewById('product_common').evalJS('refresh()') 
 											
 											mui.back()
 										} else {
@@ -203,7 +213,8 @@
 										}
 									}
 								});
-						}
+						},
+						
 					}
 				})
 			})

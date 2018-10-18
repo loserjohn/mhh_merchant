@@ -9,18 +9,18 @@
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/loading.css" />
-		
+		<link rel="stylesheet" href="../../../css/animate.css" />
+
 		<style>
 			.personMsg {
-				background: rgba(21, 21, 21, 1);
-				padding:10px 0;
+				background: #fff;
+				padding: 10px 0;
 			}
 			
-			.personMsg .avatar {
-				width: 60px;
-				height: 60px;
-				border: 2px solid #fff;
-				border-radius: 3px;
+			.personMsgList .useravatar {
+				width: 80px;
+				height: 80px;
+				border-radius: 0;
 			}
 			
 			.personMsg .personMsgTitle {
@@ -38,48 +38,89 @@
 			.personMsgList .mui-ellipsis {
 				text-align: right;
 			}
+			
+			.personMsgList .cellInputTxt {
+				width: 100%;
+				border: none;
+				outline: none;
+				margin: 0;
+				padding: 0;
+				text-align: right;
+				height: auto;
+				font-size: 14px;
+			}
+			.status{
+				text-align: center;
+				line-height: 44px;
+				color: #ccaa42;
+			}
+			.eletBox{
+				position: absolute;
+				left: 0;
+				top: 0;
+				bottom: 0;
+			}
 		</style>
 	</head>
 
 	<body>
 		<!--等待页面-->
-			<div class="loader" style="top:0" id="loader">
-				<ul>
-					<li id='a'></li>
-					<li id='b'></li>
-					<li id='c'></li>
-					<li id='d'></li>
-					<li id='e'></li>
-					<li id='f'></li>
-					<li id='g'></li>
-					<li id='h'></li>
-					<li id='i'></li>
-				</ul>
-			</div>
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			<!--简要信息-->
-			<div class="personMsg  " id="content">
-				<div class="flex container" style="">
-					<img :src="avatar?avatar:'../../../images/default_avatar.jpg'" alt="" class="avatar" />
-					<div class="f1 ">
-						<h3 class="cor_w t_r personMsgTitle">{{personMsg?personMsg.ACCOUNT_PETNAME:''}}</h3>
-						<p class="cor_w t_r" @tap="changeAvatar">更换头像<i class="iconfont icon-arrowright"></i></p>
-					</div>
-				</div>
-			</div>
 			<!--资料项-->
 			<ul class="mui-table-view  personMsgList">
+				<li class="mui-table-view-cell flex">
+					<div class="f1  ">头像</div>
+					<div class="useravatar " @tap="changeAvatar">
+						<img :src="avatar?avatar:'../../../images/default_avatar.jpg'" alt="" class="contain" />
+					</div>
+				</li>
+				<li class="mui-table-view-cell flex">
+					<div class="f1 cellName">昵称</div>
+					<div class="f1">
+						<input type="text" class="cellInputTxt t_r " v-model="nickname" placeholder="请输入你的昵称" @change="_uploadMsg()" />
+					</div>
+					<!--<h3 class=" t_r personMsgTitle">{{personMsg?personMsg.ACCOUNT_PETNAME:''}}</h3>-->
+				</li>
+				<li class="mui-table-view-cell flex" @tap="_updatedNum">
+					<!--<i class="iconfont icon-geren  mui-pull-left cor_y"></i>-->
+					<div>修改绑定手机号</div>
+					<div class="f1 t_r">
+						{{personMsg.ACCOUNT_MOBILE}}
+					</div>
+					<i class="iconfont icon-xiayibu "></i>
+				</li>
+				<li class="mui-table-view-cell flex" @tap="_toggle">
+					<!--<i class="iconfont icon-geren  mui-pull-left cor_y"></i>-->
+					<div>服务时间段</div>
+					<div class="f1 t_r">
+											{{personMsg.SETTING_TIME_LIMIT}}
+					</div>
+					<i class="iconfont icon-xiayibu "></i>
+				</li>
 				<!--等级-->
 				<li class="mui-table-view-cell flex">
 					<i class="iconfont icon-vip mui-pull-left cor_y "></i>
-					<div class="f1 t_r">
+					<div class="f1 t_r cor_g">
 						等级 : {{personMsg?personMsg.SHOP.SHOP_STAR:''}}
 					</div>
 				</li>
 				<li class="mui-table-view-cell ">
 					<!--<a class="mui-navigate-right">-->
 					<i class="iconfont icon-geren  mui-pull-left cor_y"></i>
-					<div class="f1 t_r">
+					<div class="f1 t_r cor_g">
 						{{personMsg?personMsg.ACCOUNT_SEX:''}}
 					</div>
 					<!--</a>-->
@@ -88,21 +129,15 @@
 				<!--身份证-->
 				<li class="mui-table-view-cell ">
 					<i class="iconfont icon-wxbzhanghu mui-pull-left cor_y"></i>
-					<div class="f1 t_r">
+					<div class="f1 t_r cor_g">
 						{{personMsg?personMsg.CARD_NUM:''}}
 					</div>
 				</li>
-				<!--联系方式-->
-				<li class="mui-table-view-cell ">
-					<i class="iconfont icon-phone  mui-pull-left cor_y"></i>
-					<div class="f1 t_r">
-						{{personMsg?personMsg.ACCOUNT_MOBILE:''}}
-					</div>
-				</li>
+
 				<!--满意度-->
 				<li class="mui-table-view-cell ">
 					<i class="iconfont icon-shoucang1  mui-pull-left cor_y"></i>
-					<div class="f1 t_r">
+					<div class="f1 t_r cor_g">
 						关注度 : {{personMsg?personMsg.SHOP.SHOP_CONCERN:''}}
 					</div>
 				</li>
@@ -110,7 +145,7 @@
 				<li class="mui-table-view-cell ">
 					<!--<a class="mui-navigate-right">-->
 					<i class="iconfont icon-rfq  mui-pull-left cor_y"></i>
-					<div class="f1 t_r">
+					<div class="f1 t_r cor_g">
 						小草值 {{personMsg?personMsg.SHOP.INTEGRAL:''}}
 					</div>
 					<!--</a>-->
@@ -153,7 +188,41 @@
 					退出账户
 				</div>
 			</div>
+			<!--时间选择框-->
+			<div class="cm_mask_bot" v-if="show" @tap.self="_toggle()">
+				<div class="cm_modal_top  animated slideInDown">
+					<h3 class="cm_title t_c ">每日服务时间段选择</h3>
 
+					<div class=" container  status">
+						当前服务时间段：<span class="fs20 ">{{personMsg.SETTING_TIME_LIMIT}}</span>
+					</div>
+					<div class=" container  ">
+						<ul class="mui-table-view  personMsgList">
+							<li class="mui-table-view-cell flex" style="position: relative;">
+								<div class="f1 cellName">开始时间:</div>
+								<div class="f1 t_r" >
+									<div class="f cellName t_r">{{startTime?startTime:c_sTime}}</div>
+									
+								</div>
+								<select v-model="startTime" class=" t_r  reset eletBox " style="opacity: 0;" >
+										<option v-for="item in time" :value="item" :key="item.Value">{{item}}</option>
+								</select>
+							</li>
+							<li class="mui-table-view-cell flex" style="position: relative;">
+								<div class="f1 cellName">结束时间:</div>
+								<div class="f1 t_r">
+									<div class="f cellName t_r">{{endTime?endTime:c_eTime}}</div>
+									
+								</div>	
+								<select v-model="endTime" class=" t_r  reset eletBox" style="opacity: 0;" >
+										<option v-for="item in time" :value="item" :key="item.Value">{{item}}</option>
+									</select>
+							</li>
+						</ul>
+						<div class="cm_btn" @tap = "_setWorkTime">确认时间段</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<script src="../../../js/mui.min.js"></script>
 		<script src="../../../js/util.js"></script>
@@ -173,16 +242,173 @@
 				APP = new Vue({
 					el: '#app',
 					data: {
+						c_sTime:'',
+						c_eTime:'',
+						startTime:'',
+						endTime:'',
+						show:false,
 						personMsg: '',
-						avatar: ''
+						avatar: '',
+						nickname: '',
+						time:[
+							'00:00',
+							'00:30',
+							'01:00',
+							'01:30',
+							'02:00',
+							'02:30',
+							'03:00',
+							'03:30',
+							'04:00',
+							'04:30',
+							'05:00',
+							'05:30',
+							'06:00',
+							'06:30',
+							'07:00',
+							'07:30',
+							'08:00',
+							'08:30',
+							'09:00',
+							'09:30',
+							'10:00',
+							'10:30',
+							'11:00',
+							'11:30',
+							'12:00',
+							'12:30',
+							'13:00',
+							'13:30',
+							'14:00',
+							'14:30',
+							'15:00',
+							'15:30',
+							'16:00',
+							'16:30',
+							'17:00',
+							'17:30',
+							'18:00',
+							'18:30',
+							'19:00',
+							'19:30',
+							'20:00',
+							'20:30',
+							'21:00',
+							'21:30',
+							'22:00',
+							'22:30',
+							'23:00',
+							'23:30',
+							'24:00',
+							'24:30',
+						]
 					},
-					created: function() {
-					},
+					created: function() {},
 					mounted: function() {
 
 						this._getData()
 					},
 					methods: {
+						_toggle(){
+							this.show = !this.show
+						},
+						//							设置服务时间
+						_setWorkTime(k) {
+//							对比开始时间和结束时间排错
+							var s = this.time.indexOf(this.startTime) 
+							var e = this.time.indexOf(this.endTime);
+							if(s>=e){
+								plus.nativeUI.toast('请选择正确的时间段');
+								return
+							}
+							var _this = this
+//							alert(_this.startTime+'-'+this.endTime)
+							plus.nativeUI.showWaiting()
+							_this._toggle()
+							app.ajax(app.baseUrl + '/api/BusiAccount/UpdateAccountInfo', {
+								data: {SETTING_TIME_LIMIT:_this.startTime+'-'+_this.endTime},
+								type: 'post', //HTTP请求类型
+								success: function(result) {
+									if(result.Success) {
+										plus.nativeUI.closeWaiting()
+										plus.nativeUI.toast('修改成功');
+										_this._getData()
+										
+
+									} else {
+										plus.nativeUI.closeWaiting()
+										plus.nativeUI.toast(result.Msg)
+									}
+								}
+							});
+							
+						},
+						//						修改信息
+						_uploadMsg(callback) {
+							var _this = this
+							var option = {
+								SHOP_NAME: this.nickname
+							}
+							plus.nativeUI.showWaiting()
+							app.ajax(app.baseUrl + '/api/BusiShop/UpdateShop', {
+								data: option,
+								type: 'post', //HTTP请求类型
+								success: function(result) {
+									if(result.Success) {
+										//	alert('更新成功')
+										plus.nativeUI.closeWaiting()
+										_this._getData()
+										if(callback) callback();
+										plus.webview.getWebviewById('home').evalJS('refresh()')
+
+									} else {
+										plus.nativeUI.closeWaiting()
+										plus.nativeUI.toast(result.Msg)
+
+									}
+								}
+							});
+						},
+						_updatedNum() {
+							var _this = this
+							mui.openWindow({
+								url: './updatedNum.html',
+								id: 'updatedNum',
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
+								},
+								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: {
+									phone: _this.phone
+								},
+								waiting: {
+									autoShow: false, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+						},
 						/*跳转页面*/
 						_navigateTo(dstUrl, dstId, extras) {
 							mui.openWindow({
@@ -215,10 +441,14 @@
 								type: 'get', //HTTP请求类型
 								success: function(result) {
 									/*登陆成功*/
-									document.getElementById('loader').style.display='none'
+									document.getElementById('loader').style.display = 'none'
 									if(result.Success) {
 										_this.personMsg = result.Data
 										_this.avatar = result.Data.SHOP.SHOP_LOGO
+										_this.nickname = result.Data.SHOP.SHOP_NAME
+										_this.phone = result.Data.ACCOUNT_MOBILE
+										_this.c_sTime =  result.Data.SETTING_TIME_LIMIT.split('-')[0]
+										_this.c_eTime =  result.Data.SETTING_TIME_LIMIT.split('-')[1]
 										if(callback) callback();
 									} else {
 										/*验证失败*/
@@ -235,12 +465,10 @@
 									//										alert(1)
 									plus.storage.clear();
 									plus.webview.getWebviewById('home').close();
-									if(plus.webview.getWebviewById('chat')){
+									if(plus.webview.getWebviewById('chat')) {
 										plus.webview.getWebviewById('chat').close();
 									}
-									
-									
-									
+
 									mui.openWindow({
 										url: '../../../index.html',
 										id: 'index',
@@ -325,11 +553,11 @@
 						_chooseAvatar(res) {
 							var _this = this
 							if(!res) return;
-							
+
 							this._upload({
-								SHOP_LOGO: res.src
+								SHOP_LOGO: res
 							}, () => {
-								_this.avatar = res.src
+								_this.avatar = res
 							})
 						},
 						//							修改资料
@@ -366,8 +594,12 @@
 			});
 
 			function choosePic(res) {
-				res = JSON.parse(res)
+//				res = JSON.parse(res)
 				APP._chooseAvatar(res)
+			}
+
+			function refresh() {
+				APP._getData()
 			}
 		</script>
 	</body>

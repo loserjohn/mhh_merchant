@@ -308,17 +308,16 @@
 				height: 44px;
 				line-height: 44px;
 			}
+	
 		</style>
 
 	</head>
 
 	<body>
 		<div  id="app">
-			<header class="mui-bar mui-bar-nav "  id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">个人中心</h1>
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px" ></a>
-			</header>
+			<header class="mui-bar mui-bar-nav" style="background-color: rgba(21, 21, 21, 1)"  id="header">
+			<h1 class="mui-title">剪裁</h1>
+		</header>
 
 			<div class="page-body uni-content-info">
 				<div class='cropper-content'>
@@ -336,7 +335,7 @@
 									<div class="uni-cropper-point point-t" data-drag="top" @touchstart.stop="dragStart" @touchmove.stop="dragMove"></div>
 									<div class="uni-cropper-point point-tr" data-drag="topTight"></div>
 									<div class="uni-cropper-point point-r" data-drag="right" @touchstart.stop="dragStart" @touchmove.stop="dragMove"></div>
-									<!--<div class="uni-cropper-point point-rb" data-drag="rightBottom" @touchstart.stop="dragStart" @touchmove.stop="dragMove"></div>-->
+									<div class="uni-cropper-point point-rb" data-drag="rightBottom" @touchstart.stop="dragStart" @touchmove.stop="dragMove"></div>
 									<div class="uni-cropper-point point-b" data-drag="bottom" @touchstart.stop="dragStart" @touchmove.stop="dragMove" @touchend.stop="dragEnd"></div>
 									<div class="uni-cropper-point point-bl" data-drag="bottomLeft"></div>
 									<div class="uni-cropper-point point-l" data-drag="left" @touchstart.stop="dragStart" @touchmove.stop="dragMove"></div>
@@ -346,7 +345,7 @@
 						</div>
 					</div>
 				</div>
-				<div class='cropper-config flex'>
+				<div class='cropper-config flex' style="margin-top: 15px;">
 					<div class="f1">
 						<!--<div><button type="warn" class="cm_btn" @tap="getImageInfo" > 剪裁图片 </button></div>-->
 						<div   class="cm_btn" @tap="_upload" > 确认提交</div>
@@ -391,8 +390,7 @@
 			DRAW_IMAGE_W = plus.screen.resolutionWidth // 设置生成的图片宽度
 		var img;
 		var pid;//上一级页面的id
-		var size;
-		var mark;
+		var size
 		var APP = new Vue({
 			el: '#app',
 			data() {
@@ -440,7 +438,6 @@
 				this.imageSrc = self.img
 				pid = self.pid
 				size = self.size
-				mark = self.mark || ''
 			},
 
 			/**
@@ -481,7 +478,8 @@
 							IMG_REAL_W = SCREEN_WIDTH * IMG_RATIO
 							IMG_REAL_H = SCREEN_WIDTH
 						}
-				
+//						console.log(IMG_REAL_W,IMG_REAL_H)
+						
 						
 						let minRange = IMG_REAL_W > IMG_REAL_H ? IMG_REAL_W : IMG_REAL_H
 //						alert(minRange)
@@ -574,7 +572,9 @@
 					})
 
 					PAGE_X = e.touches[0].pageX
-					PAGE_Y = e.touches[0].pageY
+					PAGE_Y = e.touches[0].pageY;
+//					console.log(111)
+//					this.getImageInfo
 				},
 
 				contentTouchEnd() {
@@ -586,57 +586,60 @@
 					
 					plus.nativeUI.showWaiting()
 					var _this = this;
-//					var canvas=document.getElementById('myCanvas');
-					var canvas=this.$refs.myCanvas;
+
 					var realCanvas = this.$refs.realCanvas
-//					alert( this.clipW*this.rRadio)
-					realCanvas.width = this.clipW*this.rRadio
-					realCanvas.height = this.clipW*this.rRadio
-					var ctx=canvas.getContext("2d") 
+
+					realCanvas.width = 1000
+					realCanvas.height = 1000
+					
+
 					var rctx=realCanvas.getContext("2d") 		
 					
 					var x = this.cutL*this.rRadio;
-					var y = this.cutT*this.rRadio;
+					var y = this.cutT*this.rRadio;	
 					
-
-					ctx.drawImage(img, x, y,this.clipW*this.rRadio, this.clipW*this.rRadio,0,0,300,150); 
-					rctx.drawImage(img, x, y,this.clipW*this.rRadio, this.clipW*this.rRadio,0,0,this.clipW*this.rRadio,this.clipW*this.rRadio); 
+					var wl =  this.cropperW - this.cutR - this.cutL
+//					console.log(wl)
+					rctx.drawImage(img, x, y,wl*this.rRadio, wl*this.rRadio,0,0,1000,1000); 
 					
-					mui.later(()=>{
-						if(callback)callback()
-					},1500)
-					_this.convertCanvasToImage(realCanvas)  
+					
+					_this.convertCanvasToImage(realCanvas, callback)
 				},
+				
 //				存为图片
-				convertCanvasToImage(canvas) {
+				convertCanvasToImage(canvas,callback) {
 						var image = new Image();
-						image.src = canvas.toDataURL("image/png");
+						image.src = canvas.toDataURL("image/jpg");
 						
 						var src = image.src;
 						src= src.substr(22);
 						this.curSrc = 	src
-//						return image;
+					if(callback) callback()
 				},
 				// 设置大小的时候触发的touchStart事件
 				dragStart(e) {
-//					T_PAGE_X = e.touches[0].pageX
-//					T_PAGE_Y = e.touches[0].pageY
-//					CUT_L = this.cutL
-//					CUT_R = this.cutR
-//					CUT_B = this.cutB
-//					CUT_T = this.cutT
+					T_PAGE_X = e.touches[0].pageX
+					T_PAGE_Y = e.touches[0].pageY
+					CUT_L = this.cutL
+					CUT_R = this.cutR
+					CUT_B = this.cutB
+					CUT_T = this.cutT
 				},
 
 				// 设置大小的时候触发的touchMove事件
 				dragMove(e) {
-//					var _this = this
-//					var dragType = e.target.dataset.drag
-//					switch(dragType) {
+					var _this = this
+					var dragType = e.target.dataset.drag
+					switch(dragType) {
 //						case 'right':
 //							var dragLength = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
+//							var dragLength2 = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
 //							if(CUT_R + dragLength < 0) dragLength = -CUT_R
+//							if(CUT_B + dragLength2 < 0) dragLength2 = -CUT_B	
+//							
 //							this.setData({
-//								cutR: CUT_R + dragLength
+//								cutR: CUT_R + dragLength,
+//								cutB: CUT_B + dragLength2
 //							})
 //							break;
 //						case 'left':
@@ -662,47 +665,42 @@
 //								cutB: CUT_B + dragLength
 //							})
 //							break;
-//						case 'rightBottom':
-//							var dragLengthX = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
-//							var dragLengthY = (T_PAGE_Y - e.touches[0].pageY) * DRAFG_MOVE_RATIO
-//
-//							if(CUT_B + dragLengthY < 0) dragLengthY = -CUT_B
-//							if(CUT_R + dragLengthX < 0) dragLengthX = -CUT_R
-//							let cutB = CUT_B + dragLengthY;
-//							let cutR = CUT_R + dragLengthX;
-//
-//							this.setData({
-//								cutB: cutB,
-//								cutR: cutR
-//							})
-//							break;
-//						default:
-//							break;
-//					}
+						case 'rightBottom':
+							var dragLengthX = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
+							var dragLengthY = (T_PAGE_X - e.touches[0].pageX) * DRAFG_MOVE_RATIO
+
+							if(CUT_B + dragLengthY < 0) dragLengthY = -CUT_B
+							if(CUT_R + dragLengthX < 0) dragLengthX = -CUT_R
+							let cutB = CUT_B + dragLengthY;
+							let cutR = CUT_R + dragLengthX;
+
+							this.setData({
+								cutB: cutB,
+								cutR: cutR
+							})
+							break;
+						default:
+							break;
+					}
 			},
 			_upload(){
-//				plus.nativeUI.showWaiting();
-		this.getImageInfo(()=>{
-				if(!this.curSrc ){
-					plus.nativeUI.toast('请先剪裁图片');
-					plus.nativeUI.closeWaiting()
-					return false
-				}else{
-					Clip.unpload64(this.curSrc,size,(res)=>{
-						
-						var data = {
-							src:res,
-							mark:mark
-						}
-						
-						var parent = plus.webview.getWebviewById(pid);
-//						console.log(JSON.stringify(data))
-						parent.evalJS("choosePic('"+JSON.stringify(data)+"')")
+				this.getImageInfo(()=>{
+					
+					if(!this.curSrc ){
+						plus.nativeUI.toast('请先剪裁图片');
 						plus.nativeUI.closeWaiting()
-						mui.back()
-					})
-				}
-			})			
+						return false
+					}else{
+						Clip.unpload64(this.curSrc,size,(res)=>{
+							var parent = plus.webview.getWebviewById(pid);
+							parent.evalJS('choosePic("'+res+'")')
+							plus.nativeUI.closeWaiting()	
+							mui.back()
+						})
+					}			
+				})
+//				plus.nativeUI.showWaiting();
+					
 						
 //				plus.nativeUI.closeWaiting()
 

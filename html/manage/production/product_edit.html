@@ -3,11 +3,12 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>发布新作品</title>
+		<title>编辑作品</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/loading.css"/>
 		<style>
 			.btns {
 				margin-top: 15px;
@@ -185,15 +186,21 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">{{title}}</h1>
-				<a class=" mui-pull-right cor_y fs16" style="line-height: 45px">
-					须知
-				</a>
-			</header>
-
 			<!--新卡信息-->
 			<div class="newCardMsg" id="content">
 				<div class="msgBox">
@@ -257,7 +264,7 @@
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">消耗时段
-								<p>(一时段15分钟)</p>
+								<p>(一时段30分钟)</p>
 							</div>
 							<div class="f1 flex">
 								<i class="iconfont icon-minus subTime" @tap="_updatedMsg(10)"></i>
@@ -358,7 +365,6 @@
 					},
 					mounted: function() {
 						var _this = this
-						app.initHeader();
 						var self = plus.webview.currentWebview()
 
 						if(self.product) {
@@ -366,11 +372,9 @@
 							this.title = "编辑项目"
 							this.btn = "提交修改"
 							this._initMsg()
+						}else{
+							document.getElementById('loader').style.display = 'none'
 						}
-						mui.later(() => {
-							plus.nativeUI.closeWaiting()
-							mui.currentWebview.show('pop-in', 300, function() {}, {});
-						}, 1500)
 						/*初始化项目类别*/
 						app.ajax(app.baseUrl + '/api/ProjectType/GetListPorjectType', {
 							// dataType:'json',//服务器返回json格式数据
@@ -446,8 +450,7 @@
 							this.time = this.dstProduct.BOOKING_COUNT;
 							/*计算时段*/
 							this.proList = this.dstProduct.PROJECT_IMGS;
-							console.log(this.proList.lenght)
-
+							document.getElementById('loader').style.display = 'none'
 							this.produtDetail = this.dstProduct.PROJECT_DETAILS; //项目详情
 							//							this.produtExplain=this.dstProduct.PROJECT_STATE //项目说明
 
@@ -508,8 +511,8 @@
 									break;
 								case 5:
 									/*计算时段*/
-									_this.mintime = Math.ceil(_this.consuming / 15) //记录最小时段
-									_this.time = Math.ceil(_this.consuming / 15)
+									_this.mintime = Math.ceil(_this.consuming / 30)+1 //记录最小时段
+									_this.time = Math.ceil(_this.consuming / 30)
 									break;
 								case 10:
 									/*添加时段*/
@@ -619,15 +622,8 @@
 
 							} else {
 								data.PROJECT_CODE = this.dstProduct.PROJECT_CODE;
-
-								data.PROJECT_IMG1 = this.PROJECT_IMG1 ? this.PROJECT_IMG1 : '_'
-
-								data.PROJECT_IMG2 = this.PROJECT_IMG2 ? this.PROJECT_IMG2 : '_'
-
-								data.PROJECT_IMG3 = this.PROJECT_IMG3 ? this.PROJECT_IMG3 : '_'
-
 							}
-							console.log(JSON.stringify(data))
+//							console.log(JSON.stringify(data))
 							app.ajax(app.baseUrl + url, {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
@@ -655,7 +651,7 @@
 							});
 						},
 						_chooseAvatar(res) {
-							this.proList.push(res.src)
+							this.proList.push(res)
 							plus.nativeUI.closeWaiting()
 						
 						}
@@ -666,7 +662,7 @@
 
 			function choosePic(res) {
 
-				res = JSON.parse(res)
+//				res = JSON.parse(res)
 				APP._chooseAvatar(res)
 			}
 		</script>
