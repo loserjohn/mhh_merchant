@@ -40,6 +40,12 @@
 		"Share":{},"OAuth":{},"Push":{}
 	},
 	"plus": {
+		"safearea": {
+			"background": "#151515",
+			"bottom": {
+			"offset": "auto"
+			}
+		},
 		"statusbar": {
 			"immersed": "supportedDevice",
 			"style": "light"
