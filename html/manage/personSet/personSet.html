@@ -555,9 +555,9 @@
 							if(!res) return;
 
 							this._upload({
-								SHOP_LOGO: res.src
+								SHOP_LOGO: res
 							}, () => {
-								_this.avatar = res.src
+								_this.avatar = res
 							})
 						},
 						//							修改资料
@@ -594,7 +594,7 @@
 			});
 
 			function choosePic(res) {
-				res = JSON.parse(res)
+//				res = JSON.parse(res)
 				APP._chooseAvatar(res)
 			}
 

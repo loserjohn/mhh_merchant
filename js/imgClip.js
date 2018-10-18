@@ -163,7 +163,7 @@
 				'Content-Type': 'application/json'
 			},
 			success: function(result) {
-
+//				console.log(result.Data)
 				if(callback) callback(result.Data);
 
 				mui.later(function() {
@@ -172,6 +172,7 @@
 			},
 			error: function(xhr, type, errorThrown) {
 				plus.nativeUI.closeWaiting()
+				plus.nativeUI.toast('网络不稳定，请重新上传')
 			}
 		})
 	}

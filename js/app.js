@@ -966,7 +966,6 @@
 						'Content-Type': 'application/json'
 					},
 					success: function(result) {
-						//					console.log(result.Data)
 						if(callback) callback(result.Data);
 						mui.later(function() {
 							plus.nativeUI.closeWaiting();

@@ -651,7 +651,7 @@
 							});
 						},
 						_chooseAvatar(res) {
-							this.proList.push(res.src)
+							this.proList.push(res)
 							plus.nativeUI.closeWaiting()
 						
 						}
@@ -662,7 +662,7 @@
 
 			function choosePic(res) {
 
-				res = JSON.parse(res)
+//				res = JSON.parse(res)
 				APP._chooseAvatar(res)
 			}
 		</script>

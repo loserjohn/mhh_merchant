@@ -652,7 +652,7 @@
 						_chooseAvatar(res) {
 							var _this = this
 							if(!res) return;
-							_this.avatar = res.src
+							_this.avatar = res
 						},
 						//	更新城市选项
 						_updatedTown(t) {
@@ -713,7 +713,7 @@
 			})
 			
 			function choosePic(res) {
-				res = JSON.parse(res)
+//				res = JSON.parse(res)
 				APP._chooseAvatar(res)
 			}
 		</script>
