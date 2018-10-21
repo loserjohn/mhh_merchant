@@ -1,4 +1,4 @@
-#block_list {
+/*#block_list {
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -19,7 +19,7 @@
 	overflow: hidden;
 	display: none;
 	z-index: 100;
-}
+}*/
 
 
 /*最近联系人列表*/
