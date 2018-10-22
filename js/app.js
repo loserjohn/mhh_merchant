@@ -947,7 +947,6 @@
 				var r = owner.getBase64Image(img)
 				var dstsrc = r.url
 				var ext = r.ext
-				
 
 				var Info = {
 					image_base64: dstsrc,
@@ -981,21 +980,21 @@
 
 	}
 	//	压缩图片
-	owner.zipPic= function(src,callback){
-		console.log('ZIP--'+src)
+	owner.zipPic = function(src, callback) {
+		console.log('ZIP--' + src)
 		plus.zip.compressImage({
-				src: src,
-				dst: '_doc/zip_' + src.substr(src.lastIndexOf('/') + 1),
-				overwrite: true,
-				quality: 100,
-				format:'jpg'
-			}, function(zip) {
-				plus.nativeUI.closeWaiting();
-				if(callback)(callback(zip.target))
-			}, function() {
-				plus.nativeUI.closeWaiting();
-				mui.toast('压缩失败！');
-			})
+			src: src,
+			dst: '_doc/zip_' + src.substr(src.lastIndexOf('/') + 1),
+			overwrite: true,
+			quality: 100,
+			format: 'jpg'
+		}, function(zip) {
+			plus.nativeUI.closeWaiting();
+			if(callback)(callback(zip.target))
+		}, function() {
+			plus.nativeUI.closeWaiting();
+			mui.toast('压缩失败！');
+		})
 	}
 	/*base64*/
 	owner.getBase64Image = function(img) {
@@ -1103,5 +1102,41 @@
 		});
 		return encrypted.ciphertext.toString();
 	}
-
+	//	倒计时
+	owner.resttime = function(time) {
+		//2018/12/1
+		time = new Date(time)
+		var leftTime = time.getTime() - new Date().getTime(); //计算剩余的毫秒数 
+		var date, h, m, s
+		if(leftTime > 0) {
+			var days = parseInt(leftTime / 1000 / 60 / 60 / 24, 10); //计算剩余的天数 
+			var hours = parseInt(leftTime / 1000 / 60 / 60 % 24, 10); //计算剩余的小时 
+			var minutes = parseInt(leftTime / 1000 / 60 % 60, 10); //计算剩余的分钟 
+			var seconds = parseInt(leftTime / 1000 % 60, 10); //计算剩余的秒数 
+			// console.log(leftTime,days,hours)
+			date = checkTime(days);
+			h = checkTime(hours);
+			m = checkTime(minutes);
+			s = checkTime(seconds);
+		} else {
+			date = '--';
+			h = '--';
+			m = '--';
+			s = '--';
+		}
+		var html = '<span class="cor_w">报名倒计时:</span><aside  class="flex"><div class="rest">'+date+'</div></aside><span class="cor_w">天</span><span class="cor_w">:</span><aside class="flex"><div class="rest">'+ h +'</div></aside><span class="cor_w">时</span><span class="cor_w">:</span><aside class="flex"><div class="rest">' + m + '</div></aside><span class="cor_w">分</span><span class="cor_w">:</span><aside class="flex"><div class="rest">' + s + '</div></aside><span class="cor_w">秒</span>'
+//		return {
+//			date: date,
+//			h: h,
+//			m: m,
+//			s: s
+//		}
+		return html
+	}
+	var checkTime = function(i) { //将0-9的数字前面加上0，例1变为01 
+		if(i < 10) {
+			i = "0" + i;
+		}
+		return i.toString();
+	}
 }(window.app = {}));

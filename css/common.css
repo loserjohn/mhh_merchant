@@ -606,7 +606,23 @@ margin-bottom: 0!important;
 	bottom: 0;
 	background: #fff;
 	z-index: 1000;
-	display: none;
+}
+.versionLoad{
+	position: absolute;
+	left: 50%;
+	top: 40%;
+	margin-left: -30px;
+	animation: rotation 3s linear infinite;
+	/*animation: bound 1s linear infinite;*/
+}
+.versionTxt{
+	position: absolute;
+	top: 52%;
+	text-align: center;
+	width: 100%;
+}
+.cm_version.show{
+	display: block;
 }
 
 .cm_btn_blank{

@@ -34,6 +34,7 @@
 				case 4:
 					plus.nativeUI.closeWaiting();
 					if(xhr.status == 200) {
+//						console.log(xhr.responseText)
 						owner.versionMsg = JSON.parse(xhr.responseText).Data;
 						if(!JSON.parse(xhr.responseText).Success){
 //							没有最新版本
@@ -44,7 +45,6 @@
 							// 有更新包
 							owner.checkSystem(callback)
 						}
-						
 					} else {}
 					break;
 				default:
@@ -75,7 +75,8 @@
 					}
 				},'马嘿嘿提醒你');
 			} else {
-				owner.downWgt();
+				plus.navigator.closeSplashscreen();
+				owner.downWgt(1);
 			}
 		} else {
 			if(owner.versionMsg.iOS == 1) {
@@ -90,7 +91,8 @@
 					}
 				},'马嘿嘿提醒你');
 			} else {
-				owner.downWgt();
+				plus.navigator.closeSplashscreen();
+				owner.downWgt(2);
 			}
 		}
 	}
@@ -113,26 +115,32 @@
 	}
 
 	//	下载差量升级包		
-	owner.downWgt = function() {
+	owner.downWgt = function(key) {
 		// 下载wgt文件
-		var wgtUrl = owner.versionMsg.wgtURL;
-
-		var mask = document.getElementById('mask');
-		var pro = document.getElementById('downProcess');
- 
-		owner.mask.style.display = "block";
-		owner.pro.innerText = '开始下载';
-
+		var wgtUrl ;
+		switch (key){
+			case 1:
+			 wgtUrl = owner.versionMsg.apkURL;
+				break;
+			case 2:
+			 wgtUrl = owner.versionMsg.ipaURL;
+				break;
+			default:
+				break;
+		}
+		
+		
+		
+//		alert(wgtUrl)
 		var tasks = plus.downloader.createDownload(wgtUrl, {
 			filename: "_doc/update/"
 		}, function(d, status) {
 			//			console.log(status)
 			if(status == 200) {
-
-				//plus.nativeUI.closeWaiting();
-
+				owner.mask.style.display = "none";
 			} else {
 				plus.nativeUI.alert("下载升级文件失败！");
+				owner.mask.style.display = "none";
 			}
 		});
 
@@ -140,6 +148,8 @@
 			switch(download.state) {
 				case 2:
 					owner.pro.innerText = "已连接到服务器";
+					owner.mask.style.display = "block";
+					plus.nativeUI.toast("系统更新中,请稍后...");
 					break;
 				case 3:
 					var percent = download.downloadedSize / download.totalSize * 100;
@@ -147,12 +157,15 @@
 
 					break;
 				case 4:
-					owner.pro.innerText = "下载完成";
-					owner.mask.style.display = "none";
+					owner.pro.innerText = "下载完成";			
 					if(plus.os.name == 'Android') {
 						owner.installWgt(plus.io.convertLocalFileSystemURL(download.filename))
 					} else {
-						owner.installWgt(download.filename);
+//						alert(download.filename)
+//						mui.later(function(){
+								owner.installWgt(download.filename);
+//						},5000)
+					
 					}
 					// 安装wgt包
 					break;
@@ -163,18 +176,18 @@
 
 	//		安装差量升级包
 	owner.installWgt = function(path) {
-		//		alert('安装')
 		plus.nativeUI.showWaiting("安装升级文件文件...");
 		plus.runtime.install(path, {}, function() {
 			plus.nativeUI.closeWaiting();
 			//				console.log("安装升级文件文件成功！");
-			plus.nativeUI.alert("应用资源更新完成！", function() {
+			plus.nativeUI.alert("应用资源更新完成！", function() {			
 				plus.runtime.restart();
 			});
 		}, function(e) {
 			plus.nativeUI.closeWaiting();
 			//				console.log("安装wgt文件失败[" + e.code + "]：" + e.message);
 			plus.nativeUI.alert("安装wgt文件失败[" + e.code + "]：" + e.message);
+			owner.mask.style.display = "none";
 		});
 	}
 
