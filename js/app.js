@@ -260,7 +260,6 @@
 					password: owner._Encrypt(rPass),
 					type: 3
 				}
-				//				console.log(JSON.stringify(data))
 				/* 账号登陆 */
 				owner.zhlogin(data, function(status, msg) {
 					plus.nativeUI.closeWaiting();
@@ -327,8 +326,6 @@
 		Info.username = loginInfo.username || '';
 		Info.password = loginInfo.password || '';
 		Info.type = loginInfo.type || '';
-		//		console.log('4########################')
-		//		console.log(JSON.stringify(Info))
 		mui.ajax(app.baseUrl + '/api/Authorize/Token', {
 			data: Info,
 			// dataType:'json',//服务器返回json格式数据
@@ -338,8 +335,6 @@
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			success: function(result) {
-				//				console.log('5########################')
-				//				console.log(JSON.stringify(result))
 				/*登陆成功*/
 				if(result.Success) {
 					// 储存本地 记录登陆时间
@@ -355,10 +350,10 @@
 						/*验证码登陆,返回密码存储*/
 						plus.storage.setItem('userPass', result.Data);
 					}
-					if(result.DataExt) {
-						/*储存token过期的时间*/
-						plus.storage.setItem('tokenLife', result.DataExt);
-					}
+//					if(result.DataExt) {
+//						/*储存token过期的时间*/
+//						plus.storage.setItem('tokenLife', result.DataExt);
+//					}
 
 					lastLoginTime = plus.storage.getItem('lastLoginTime');
 
@@ -441,10 +436,10 @@
 					plus.storage.setItem('lastLoginTime', t.toString());
 					/* 储存有效token */
 					plus.storage.setItem('token', result.Msg);
-					if(result.DataExt) {
-						/*储存token过期的时间*/
-						plus.storage.setItem('tokenLife', result.DataExt);
-					}
+//					if(result.DataExt) {
+//						/*储存token过期的时间*/
+//						plus.storage.setItem('tokenLife', result.DataExt);
+//					}
 
 					opId = plus.storage.getItem('opId');
 
@@ -1013,47 +1008,11 @@
 		};
 	}
 
-	//	重新登陆
-	owner.reLogin = function() {
-		lastLoginWay = plus.storage.getItem('lastLoginWay')
-		switch(lastLoginWay) {
-			/* 最后的登陆方式               1 为账号登陆 */
-			case '1':
-				//	判断是否过期
-				if(!userName || !userPass) return;
-				var data = {
-					rpass: userPass,
-					username: userName,
-					password: owner._Encrypt(userPass),
-					type: 3
-				}
-				owner.zhlogin(data, function() {
-					mui.ajax(url, option)
-				})
-				break;
-			case '2':
-				/* 2为微信登陆
-				判断是否过期 */
-				opId = plus.storage.getItem('opId')
-				if(!opId) return;
-				var data = {
-					opid: opId,
-					aseopid: owner._Encrypt(opId),
-					type: 2
-				}
-				owner.wxlogin(data, function() {
-					mui.ajax(url, option)
-				});
-				break;
-			default:
-				break;
-		}
-	}
 
 	/*封装mui.ajax*/
 	owner.ajax = function(url, option) {
 		var curTime = new Date().getTime();
-		var tokenLife = plus.storage.getItem('tokenLife');
+//		var tokenLife = plus.storage.getItem('tokenLife');
 		option.timeout = 10000;
 		option.headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
@@ -1067,7 +1026,7 @@
 				plus.nativeUI.toast('网络超时！请稍后重试')
 			} else if(errorThrown == 'Unauthorized') {
 				/*	自动重新登陆*/
-				owner.reLogin()
+				owner.autoLogin()
 			} else {
 				plus.nativeUI.toast('未知错误')
 			}
@@ -1082,7 +1041,7 @@
 			plus.nativeUI.toast('网络不佳');
 		} else if(errorThrown == 'Unauthorized') {
 			/*	自动重新登陆*/
-			owner.reLogin()
+			owner.autoLogin()
 		} else {
 			plus.nativeUI.toast('未知错误');
 		}
