@@ -124,7 +124,7 @@
 			"splashscreen": {
 				"ios": {
 					"iphone": {
-						"default": "","iphonex":"F:/work/马嘿嘿/客户端/马嘿嘿启动页/启动页/ix.png","retina40":"F:/work/马嘿嘿/客户端/马嘿嘿启动页/启动页/i5.png","retina47":"F:/work/马嘿嘿/客户端/马嘿嘿启动页/启动页/i6.png","retina55":"F:/work/马嘿嘿/客户端/马嘿嘿启动页/启动页/i6p.png","retina35":"F:/work/马嘿嘿/客户端/马嘿嘿启动页/启动页/i4.png"
+						"default": "","iphonex":"F:/OneDrive/马嘿嘿/马嘿嘿启动页/启动页/ix.png","retina40":"F:/OneDrive/马嘿嘿/马嘿嘿启动页/启动页/i5.png","retina47":"F:/OneDrive/马嘿嘿/马嘿嘿启动页/启动页/i6.png","retina55":"F:/OneDrive/马嘿嘿/马嘿嘿启动页/启动页/i6p.png","retina35":"F:/OneDrive/马嘿嘿/马嘿嘿启动页/启动页/i4.png"
 					},
 					"ipad": {
 						"portrait": "", /*iPad竖屏启动图片，分辨率：768x1004*/
@@ -139,7 +139,7 @@
 				},
 				"android": {
 					"mdpi": "", /*普通屏启动图片，分辨率：240x282*/
-					"ldpi": "","hdpi":"F:/work/马嘿嘿/客户端/马嘿嘿启动页/启动页/a480.png","xhdpi":"F:/work/马嘿嘿/客户端/马嘿嘿启动页/启动页/a720.png","xxhdpi":"F:/work/马嘿嘿/客户端/马嘿嘿启动页/启动页/a1080.png"
+					"ldpi": "","hdpi":"F:/OneDrive/马嘿嘿/马嘿嘿启动页/启动页/a480.png","xhdpi":"F:/OneDrive/马嘿嘿/马嘿嘿启动页/启动页/a720.png","xxhdpi":"F:/OneDrive/马嘿嘿/马嘿嘿启动页/启动页/a1080.png"
 				}
 			},
 			"debug": false

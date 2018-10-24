@@ -71,8 +71,9 @@
 			.msgBox .cellInputArea {
 				border: none;
 				outline: none;
-				padding: 0;
-				min-height: 100px;
+				padding:10px 0;
+				font-size: 14px;
+				border-bottom: 1px dotted #d3d3d3;
 			}
 			
 			.msgBox .cellInputTxt select {
@@ -281,7 +282,7 @@
 							<div class="f1 cellName ">项目图片</div>
 							<div class="flex detailPic">
 								<ul class="flex">
-									<li v-for="(item,index)  in proList" @tap="_delectPic(index)" class=" detailPicItem">
+									<li v-for="(item,index)  in proList" @tap="_delectPic(1,index)" class=" detailPicItem">
 										<div class="pics">
 											<img :src="item" alt="" class="contain" />
 										</div>
@@ -299,9 +300,27 @@
 							</div>
 						</li>
 
-						<li class="mui-table-view-cell">
-							<!--<div class="f1 cellName ">用卡说明</div>-->
+						<li class="detailPicBox">
+							<div class="f1 cellName ">项目详情</div>		
 							<textarea name="" rows="" cols="" class="cellInputArea" v-model="produtDetail" placeholder="项目详情"></textarea>
+							<div class="flex detailPic">
+								<ul class="flex">
+									<li v-for="(item,index)  in proDetailList" @tap="_delectPic(2,index)" class=" detailPicItem">
+										<div class="pics">
+											<img :src="item" alt="" class="contain" />
+										</div>
+										<div class="delectBtn">
+											<i class="mui-icon mui-icon-closeempty cor_w"></i>
+										</div>
+									</li>
+									<li class="detailPicItem " @tap="_proDetailPict">
+										<div class="pics">
+											<img src="../../../images/blank.png" class="cover" />
+										</div>
+									</li>
+								</ul>
+
+							</div>
 						</li>
 
 					</ul>
@@ -353,12 +372,12 @@
 						holdDay: '', //维持时间
 						time: 0,
 						/*计算时段*/
-						productImg1: '', //项目图片
-						productImg2: '',
-						productImg3: '',
+
 						produtDetail: '', //项目详情
 						proList: [],  //图片的数组
-						mintime: 0
+						mintime: 0,
+						
+						proDetailList:[]  //项目图片
 					},
 					created: function() {
 
@@ -395,8 +414,26 @@
 					},
 					methods: {
 //						删除项目图片
-						_delectPic(index){
-							this.proList.splice(index, 1); 
+						_delectPic(key,index){
+							switch (key){
+								case 1:
+								this.proList.splice(index, 1); 
+									break;
+								case 2:
+								this.proDetailList.splice(index, 1); 
+									break;
+								default:
+									break;
+							}
+							
+							
+						},
+//						项目图片
+						_proDetailPict(){
+							var _this = this
+							app.getIMG('项目图片', (src) => {
+								this.proDetailList.push(src)
+							})
 						},
 //						获取项目图片
 						_getPic() {
