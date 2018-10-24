@@ -213,6 +213,11 @@
 							作品详情
 						</div>
 						<div v-html="detail.PROJECT_DETAILS"></div>
+						<ul>
+							<li class="" v-for="item in detail.DETAILS_IMGS">
+								<img :src="item" alt=""  class="contain" />
+							</li>
+						</ul>
 					</div>
 					<!--项目说明-->
 					<div class="detail panel " style="padding-bottom: 0;">

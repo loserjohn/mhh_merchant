@@ -432,7 +432,14 @@
 						_proDetailPict(){
 							var _this = this
 							app.getIMG('项目图片', (src) => {
-								this.proDetailList.push(src)
+//								console.log(src)
+								var img = new Image();
+								img.src = src;
+								img.onload=function(){
+									
+									_this.proDetailList.push(src)
+								}
+								
 							})
 						},
 //						获取项目图片
@@ -489,6 +496,7 @@
 							this.proList = this.dstProduct.PROJECT_IMGS;
 							document.getElementById('loader').style.display = 'none'
 							this.produtDetail = this.dstProduct.PROJECT_DETAILS; //项目详情
+							this.proDetailList = this.dstProduct.DETAILS_IMGS;
 							//							this.produtExplain=this.dstProduct.PROJECT_STATE //项目说明
 
 						},
@@ -649,7 +657,8 @@
 								LIFETIME_COUNT: _this.consuming,
 								BOOKING_COUNT: _this.time,
 								KEEP_COUNT: _this.holdDay,
-								PROJECT_IMGS:_this.proList.join(',')
+								PROJECT_IMGS:_this.proList.join(','),
+								PROJECT_DETAILS_IMGS:_this.proDetailList.join(',') //详情图片
 							}
 							var url = '/api/BusiProject/UpdateProject'
 

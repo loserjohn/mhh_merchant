@@ -884,54 +884,6 @@
 		});
 	}
 	/*图片上传*/
-	//	owner.uploadIMG = function(src, callback) {
-	//		//		压缩图片
-	//		plus.zip.compressImage({
-	//				src: src,
-	//				dst: src,
-	//				quality: 50,
-	//				width: "50%",
-	//				overwrite: true
-	//			},
-	//			function(event) {
-	//				dstSRC = event.target;
-	//				var img = new Image();
-	//				img.src = dstSRC;
-	//
-	//				plus.nativeUI.showWaiting();
-	//				var url = app.baseUrl + '/api/Upload/UploadImage';
-	//				var task = plus.uploader.createUpload(url, {
-	//						method: "POST"
-	//					},
-	//					function(t, status) { //上传完成
-	//						//		        	alert(t)
-	//						if(status == 200) {
-	//							var res = JSON.parse(t.responseText)
-	//							if(callback) callback(res.Data);
-	//							mui.later(function() {
-	//								plus.nativeUI.closeWaiting();
-	//							}, 1500)
-	//
-	//						} else {
-	//							plus.nativeUI.closeWaiting();
-	//							console.log("上传失败：" + status);
-	//						}
-	//					}
-	//				);
-	//				var foldName = plus.storage.getItem('userName')
-	//				//添加其他参数
-	//				task.addData("foldName", foldName);
-	//				task.addFile(src, {
-	//					key: src
-	//				});
-	//				task.start();
-	//			},
-	//			function(error) {
-	//				alert("压缩失败 error!");
-	//				//				console.log(JSON.stringify(error))
-	//			})
-	//	}
-	/*图片上传*/
 	owner.uploadIMG64 = function(src, callback) {
 		plus.nativeUI.showWaiting();
 		var img = new Image();
@@ -963,7 +915,7 @@
 						if(callback) callback(result.Data);
 						mui.later(function() {
 							plus.nativeUI.closeWaiting();
-						}, 1500)
+						}, 2500)
 					},
 					error: function(xhr, type, errorThrown) {
 						plus.nativeUI.closeWaiting();
@@ -995,7 +947,7 @@
 	owner.getBase64Image = function(img) {
 		var canvas = document.createElement("canvas"); //创建canvas DOM元素，并设置其宽高和图片一样
 		var radio = img.width / img.height
-		canvas.width = 1200;
+		canvas.width = 1000;
 		canvas.height = canvas.width / radio;
 
 		var ctx = canvas.getContext("2d");
