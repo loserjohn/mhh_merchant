@@ -15,10 +15,11 @@
 			.account {
 				width: 100%;
 				/*height:250px;*/
-				border-radius: 0 0 20px 20px;
+				/*border-radius: 0 0 20px 20px;*/
 				background: linear-gradient(#303030, #000000);
 				box-sizing: border-box;
 				padding-top: 80px;
+				padding-bottom: 20px;
 				position: relative;
 			}
 			
@@ -48,23 +49,21 @@
 			.notice {
 				box-sizing: border-box;
 				padding-top: 20px;
-				/*margin-bottom:20px;*/
-				padding-bottom: 20px;
 			}
 			
 			.txtBox {
 				position: relative;
-				border: 1px solid #404040;
+				border: 1px solid #d3d3d3;
 				border-radius: 10px;
-				background: #212121;
+				/*background: #212121;*/
 				overflow: hidden;
 			}
 			
 			.noticeText {
 				border: none;
 				outline: none;
-				background: #212121;
-				color: #c8c7c7;
+				/*background: #212121;*/
+				color: #4;
 				font-size: 12px;
 				margin-bottom: 30px;
 			}
@@ -233,37 +232,40 @@
 
 							</div>
 						</div>
-						<!--店铺公告-->
-						<div class="notice ">
-							<div class="txtBox">
-								<textarea name="noticeText" placeholder="店铺公告！" ref="GGtext" rows="" cols="" class="noticeText cover" v-model="shopNotice"></textarea>
-								<div class="reset cor_g" id="reset" @touchstart="_reset">清空</div>
-								<div class="issue" id="issue" @touchstart="_issue">确认发布</div>
-							</div>
-						</div>
 
 					</div>
-					<!--快捷按钮-->
-					<div class="quickBtns flex panel">
-						<div class="f1" @click="_jumpMenus('time')">
-							<img src="../../images/demo3.png" alt="" class="menusIcon" />
-							<p class="menuTxt">时间管理</p>
-						</div>
-						<div class="f1" @click="_NWnavigateTo('production')">
-							<img src="../../images/demo3.png" alt="" class="menusIcon" />
-							<p class="menuTxt">作品管理</p>
-						</div>
-						<div class="f1" @click="_NWnavigateTo('orders')">
-							<img src="../../images/demo3.png" alt="" class="menusIcon" />
-							<p class="menuTxt">订单管理</p>
-						</div>
-						<div class="f1" @click="_jumpMenus('activity')">
-							<img src="../../images/demo3.png" alt="" class="menusIcon" />
-							<p class="menuTxt">活动</p>
+
+				</div>
+
+				<!--快捷按钮-->
+				<div class="quickBtns flex panel">
+					<div class="f1" @click="_jumpMenus('time')">
+						<img src="../../images/demo3.png" alt="" class="menusIcon" />
+						<p class="menuTxt">时间管理</p>
+					</div>
+					<div class="f1" @click="_NWnavigateTo('production')">
+						<img src="../../images/demo3.png" alt="" class="menusIcon" />
+						<p class="menuTxt">作品管理</p>
+					</div>
+					<div class="f1" @click="_NWnavigateTo('orders')">
+						<img src="../../images/demo3.png" alt="" class="menusIcon" />
+						<p class="menuTxt">订单管理</p>
+					</div>
+					<div class="f1" @click="_jumpMenus('activity')">
+						<img src="../../images/demo3.png" alt="" class="menusIcon" />
+						<p class="menuTxt">活动</p>
+					</div>
+				</div>
+				<!--店铺公告-->
+				<div class="panel">
+					<div class="notice ">
+						<div class="txtBox">
+							<textarea name="noticeText" placeholder="店铺公告！" ref="GGtext" rows="" cols="" class="noticeText cover" v-model="shopNotice"></textarea>
+							<div class="reset cor_g" id="reset" @touchstart="_reset">清空</div>
+							<div class="issue" id="issue" @touchstart="_issue">确认发布</div>
 						</div>
 					</div>
 				</div>
-
 				<!--商圈编辑-->
 				<div class="business panel ">
 					<div id='' class="cm_btn fs16" @click="_toEditBusinessArea">编辑商圈</div>
@@ -569,11 +571,26 @@
 									top: '0px', //新页面顶部位置
 									bottom: '0px', //新页面底部位置
 									scrollIndicator: "none",
-									plusrequire: 'ahead'
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
 								},
 								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 								show: {
-									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
 									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 								},
 								extras: {
@@ -620,7 +637,7 @@
 						_jumpMenus: function(key) {
 							//							alert(1)
 							var url = '../manage/' + key + '/' + key + '.html';
-	
+
 							mui.openWindow({
 								url: url,
 								id: key,

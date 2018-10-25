@@ -301,7 +301,7 @@
 									plusrequire: 'ahead'
 								},
 								show: {
-									autoShow: false, //页面loaded事件发生后自动显示，默认为true
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
 									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 								},
 								extras: {},
@@ -350,10 +350,10 @@
 						/*验证码登陆,返回密码存储*/
 						plus.storage.setItem('userPass', result.Data);
 					}
-//					if(result.DataExt) {
-//						/*储存token过期的时间*/
-//						plus.storage.setItem('tokenLife', result.DataExt);
-//					}
+					//					if(result.DataExt) {
+					//						/*储存token过期的时间*/
+					//						plus.storage.setItem('tokenLife', result.DataExt);
+					//					}
 
 					lastLoginTime = plus.storage.getItem('lastLoginTime');
 
@@ -436,10 +436,10 @@
 					plus.storage.setItem('lastLoginTime', t.toString());
 					/* 储存有效token */
 					plus.storage.setItem('token', result.Msg);
-//					if(result.DataExt) {
-//						/*储存token过期的时间*/
-//						plus.storage.setItem('tokenLife', result.DataExt);
-//					}
+					//					if(result.DataExt) {
+					//						/*储存token过期的时间*/
+					//						plus.storage.setItem('tokenLife', result.DataExt);
+					//					}
 
 					opId = plus.storage.getItem('opId');
 
@@ -960,11 +960,10 @@
 		};
 	}
 
-
 	/*封装mui.ajax*/
 	owner.ajax = function(url, option) {
 		var curTime = new Date().getTime();
-//		var tokenLife = plus.storage.getItem('tokenLife');
+		//		var tokenLife = plus.storage.getItem('tokenLife');
 		option.timeout = 10000;
 		option.headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
@@ -1035,13 +1034,13 @@
 			m = '--';
 			s = '--';
 		}
-		var html = '<span class="cor_w">报名倒计时:</span><aside  class="flex"><div class="rest">'+date+'</div></aside><span class="cor_w">天</span><span class="cor_w">:</span><aside class="flex"><div class="rest">'+ h +'</div></aside><span class="cor_w">时</span><span class="cor_w">:</span><aside class="flex"><div class="rest">' + m + '</div></aside><span class="cor_w">分</span><span class="cor_w">:</span><aside class="flex"><div class="rest">' + s + '</div></aside><span class="cor_w">秒</span>'
-//		return {
-//			date: date,
-//			h: h,
-//			m: m,
-//			s: s
-//		}
+		var html = '<span class="cor_w">报名倒计时:</span><aside  class="flex"><div class="rest">' + date + '</div></aside><span class="cor_w">天</span><span class="cor_w">:</span><aside class="flex"><div class="rest">' + h + '</div></aside><span class="cor_w">时</span><span class="cor_w">:</span><aside class="flex"><div class="rest">' + m + '</div></aside><span class="cor_w">分</span><span class="cor_w">:</span><aside class="flex"><div class="rest">' + s + '</div></aside><span class="cor_w">秒</span>'
+		//		return {
+		//			date: date,
+		//			h: h,
+		//			m: m,
+		//			s: s
+		//		}
 		return html
 	}
 	var checkTime = function(i) { //将0-9的数字前面加上0，例1变为01 
@@ -1050,4 +1049,35 @@
 		}
 		return i.toString();
 	}
+
+//	owner.navigater = function(dstUrl, dstId, extras,option) {
+//		extras = extras || {};
+//		default = {
+//			showTitle:false,
+//			autoShow:true,
+//			autoWaiting:true
+//			
+//		}
+//
+//		mui.openWindow({
+//			url: dstUrl,
+//			id: dstId,
+//			styles: {
+//				top: '0px', //新页面顶部位置
+//				bottom: '0px', //新页面底部位置
+//				scrollIndicator: "none",
+//				plusrequire: 'ahead'
+//			},
+//			createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+//			show: {
+//				autoShow: false, //页面loaded事件发生后自动显示，默认为true
+//				duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+//			},
+//			extras: extras,
+//			waiting: {
+//				autoShow: true, //自动显示等待框，默认为true
+//				title: '正在加载...', //等待对话框上显示的提示内容
+//			}
+//		})
+//	}
 }(window.app = {}));

@@ -1,0 +1,432 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>编辑优惠券</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+		
+		<style>
+			.btns {
+				margin-top: 15px;
+			}
+			
+			.btns .cm_btn {
+				height: auto;
+			}
+			
+			.msgBox {
+				/*background: red;*/
+				width: 100%;
+			}
+			
+			.msgBox .avatar {
+				width: 56px;
+				height: 56px;
+				border-radius: 0;
+				margin-right: 10px;
+			}
+			
+			.msgBox .mui-table-view-cell {
+				/*height: 78px;*/
+			}
+			
+			.msgBox .iconfont,
+			.msgBox .cellName {
+				/*line-height: 50px;*/
+				font-size: 16px;
+				margin-right: 10px;
+			}
+			
+			.msgBox .cellInputTxt {
+				width: 50%;
+				border: none;
+				outline: none;
+				/*line-height: 56px;*/
+				margin: 0;
+				padding: 0;
+				text-align: right;
+				height: auto;
+			}
+			
+			.msgBox .seletBox {
+				width: 50%;
+				border: none;
+				outline: none;
+				/*line-height: 56px;*/
+				margin: 0;
+				padding: 0;
+				text-align: right;
+				height: auto;
+				position: absolute;
+				top: 0;
+				right: 0;
+				height: 100%;
+				opacity: 0;
+			}
+			
+			.msgBox .cellInputArea {
+				border: none;
+				outline: none;
+				padding: 0;
+				min-height:60px;
+			}
+			
+			.msgBox .cellInputTxt select {
+				background: green;
+				text-align: right;
+			}
+			
+			.msgBox .checkitem {
+				padding: 15px 20px;
+			}
+			
+			.msgBox .mui-input-group .checks {
+				top: 11px;
+			}
+			
+			.msgBox .mui-input-group {
+				margin: 0;
+			}
+			
+			.msgBox .picPreBox {
+				justify-content: space-around;
+				box-sizing: border-box;
+				padding: 10px;
+			}
+			
+			.msgBox .picPreBox .picPre {
+				box-sizing: border-box;
+				/*padding: 10px;*/
+				width: 46%;
+				overflow: hidden;
+			}
+			
+			.tabView {
+				min-height: 85%;
+				/*background: red;*/
+			}
+			
+			.mui-checkbox.mui-left label,
+			.mui-radio.mui-left label {
+				padding-right: 15px;
+				padding-left: 40px;
+			}
+			
+			.mui-checkbox.mui-left input[type=checkbox],
+			.mui-radio.mui-left input[type=radio] {
+				left: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
+		<div id="app">
+		
+			<!--新卡信息-->
+			<div class="newCardMsg" id="content">
+				<div class="msgBox">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell flex">
+							<div class="f1 cellName">优惠券名称：</div>
+							<input type="text" class="cellInputTxt" placeholder="请输入优惠券名称" v-model="couponsName" />
+						</li>
+						<li class="  mui-table-view-cell">
+							<div class="f1 cellName ">优惠券类型</div>
+							<div class="flex reset ">
+								<div class="f1 mui-input-row mui-radio mui-left reset ">
+									<label>正常时限优惠</label>
+									<input name="radio" type="radio" v-model="couponsType" :value="1" >
+								</div>
+								<div class="f1 mui-input-row mui-radio mui-left reset ">
+									<label>领取后时限优惠</label>
+									<input name="radio" type="radio" v-model="couponsType" :value="2">
+								</div>
+							</div>
+						</li>
+						<li class="mui-table-view-cell flex" @tap="_setStartTime">
+							<div class="f1 cellName">开始时间</div>
+							<div class=" cellName">{{startTime}}</div>
+							<i class="iconfont icon-xiayibu "></i>
+						</li>
+						<li class="mui-table-view-cell flex" @tap="_setEndTime">
+							<div class="f1 cellName">结束时间</div>
+							<div class=" cellName">{{endTime}}</div>
+							<i class="iconfont icon-xiayibu "></i>
+						</li>
+						<li class="mui-table-view-cell flex" v-show="couponsType==2">
+							<div class="f1 cellName">有效期</div>
+							<input type="number" class="cellInputTxt" placeholder="天" v-model="couponsValidity" />
+						</li>
+						<li class="mui-table-view-cell flex">
+							<div class="f1 cellName">优惠券面额</div>
+							<input type="number" class="cellInputTxt" placeholder="元" v-model="couponsAmount" />
+						</li>
+						<li class="mui-table-view-cell flex">
+							<div class="f1 cellName">门槛金额</div>
+							<input type="number" class="cellInputTxt" placeholder="元" v-model="couponsSill" />
+						</li>
+						<li class="mui-table-view-cell flex">
+							<div class="f1 cellName">是否启用</div>
+							<div class="mui-switch" :class="{'mui-active': couponsEnabled}" @tap="_updatedMsg(3)">
+								<div class="mui-switch-handle"></div>
+							</div>
+						</li>
+						<li class=" flex mui-table-view-cell">
+							<div class="f1 cellName ">重复领取</div>
+							<div class="flex">
+								<div class="f1 mui-input-row mui-radio mui-left">
+									<label>是</label>
+									<input name="radio2" type="radio" v-model="couponsRepet " :value="1">
+								</div>
+								<div class="f1 mui-input-row mui-radio mui-left">
+									<label>否</label>
+									<input name="radio2" type="radio" v-model="couponsRepet" :value="0">
+								</div>
+							</div>
+						</li>
+						<!--<li class="mui-table-view-cell flex">
+							<div class="f1 cellName ">类型 </div>
+							<select v-model="type" class=" t_r red reset seletBox">
+								<option disabled value="">请选择</option>
+								<option>A</option>
+								<option>B</option>
+								<option>C</option>
+							</select>
+
+							<div class=" cellName">{{type}}</div>
+							<i class="iconfont icon-xiayibu "></i>
+
+						</li>-->
+						<li class="mui-table-view-cell">
+							<!--<div class="f1 cellName ">优惠券限制</div>-->
+							<textarea name="" rows="" cols="" v-model="couponsDetail" class="cellInputArea" placeholder="优惠券详情">		            		
+				            	</textarea>
+
+						</li>
+						<!--<li class="mui-table-view-cell">
+							<textarea name="" rows="" cols="" v-model="couponsEXplain" class="cellInputArea" placeholder="优惠券说明"></textarea>
+						</li>
+						<li class="mui-table-view-cell">
+							<textarea name="" rows="" cols="" v-model="couponsRemark" class="cellInputArea" placeholder="备注"></textarea>
+						</li>-->
+					</ul>
+				</div>
+			</div>
+
+			<div class="btns container flex">
+				<div class="f1">
+					<div class="cm_btn" @tap="_submit">
+						提交修改
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/bscroll.min.js"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			})
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						couponsName: '', //名称
+						startTime: '', //开始时间
+						couponsType: 1, //类型
+						endTime: '', //结束时间
+
+						couponsValidity: '', //有效期
+						couponsAmount: '', //面额
+						couponsSill: '', //门槛金额
+						couponsEnabled: false, //是否启用
+
+						couponsDetail: '', //券细节
+//						couponsEXplain: '', //券说明
+						couponsRepet: 0, //重复领取
+						couponsCode:'',
+					},
+					created: function() {
+						//							alert(1)
+
+					},
+					mounted: function() {
+						var _this = this
+						this._initDetail()
+					},
+					methods: {
+						_initDetail(){
+							var self = plus.webview.currentWebview();
+							if(self.coupon){
+								/*初始化赋值卡片*/
+								this.couponsName = self.coupon.DISCOUNT_NAME;
+								this.startTime = self.coupon.DISCOUNT_LIFE_START;
+								this.endTime = self.coupon.DISCOUNT_LIFE_END;
+								this.couponsType = self.coupon.DISCOUNT_TYPE;
+								this.couponsValidity = self.coupon.DISCOUNT_LIFE;
+								this.couponsAmount = self.coupon.DISCOUNT_AMOUNT;	
+								this.couponsSill = parseInt(self.coupon.DISCOUNT_LIMIT) 
+								this.couponsEnabled = self.coupon.DISCOUNT_STATUS==0?false:true
+								this.couponsDetail = self.coupon.DISCOUNT_DETAILS
+								this.couponsRepet = self.coupon.IS_REPEAT
+								this.couponsCode = self.coupon.DISCOUNT_CODE
+								document.getElementById('loader').style.display='none'
+							}
+													
+						},
+						//						选择起始时间
+						_setStartTime() {
+							var d = new Date();
+							var _this = this;
+
+							var option = {
+								title: '请选择起始时间',
+								minDate: d
+							}
+							if(this.endTime) {
+								var date = this.endTime.replace(/-/g, '/');
+								var x = new Date(date);
+								option.maxDate = x
+							}
+							plus.nativeUI.pickDate(function(e) {
+								var d = e.date;
+								_this.startTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+							}, function(e) {
+								//								console.log("未选择日期：" + e.message);
+
+							}, option);
+						},
+						//			选择结束时间
+						_setEndTime() {
+							var d = new Date();
+							var _this = this;
+
+							var option = {
+								title: '请选择起始时间',
+								minDate: d
+							}
+							if(this.startTime) {
+								var date = this.startTime.replace(/-/g, '/');
+								var m = new Date(date);
+								option.minDate = m
+							}
+
+							plus.nativeUI.pickDate(function(e) {
+								var d = e.date;
+								_this.endTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+							}, function(e) {
+								//								console.log("未选择日期：" + e.message);
+
+							}, option);
+						},
+
+						/*更新信息*/
+						_updatedMsg(key) {
+							switch(key) {
+								case 3:
+									this.couponsEnabled = !this.couponsEnabled
+									break;
+								default:
+									break;
+							}
+
+						},
+						/*提交添加*/
+						_submit() {
+							if(!this.couponsName || !this.startTime || !this.endTime || !this.couponsAmount || !this.couponsSill || !this.couponsDetail) {
+								plus.nativeUI.alert("请完善优惠券资料信息", function() {}, "马嘿嘿提醒您", "ok");
+								return;
+							}
+							var _this =this;
+							var data ={
+								DISCOUNT_NAME:this.couponsName,
+								DISCOUNT_AMOUNT:this.couponsAmount,
+								DISCOUNT_LIMIT:this.couponsSill,
+								DISCOUNT_LIFE_START:this.startTime,
+								DISCOUNT_LIFE_END:this.endTime,
+								DISCOUNT_DETAILS:this.couponsDetail,
+								DISCOUNT_TYPE:this.couponsType,
+								IS_REPEAT:this.couponsRepet,
+								DISCOUNT_CODE:this.couponsCode
+							}
+							
+							/*若为类型二则有效期为必填*/
+							if(this.couponsType==2){
+								if(!this.couponsValidity ){
+									plus.nativeUI.alert("请完填写有效天数", function() {}, "马嘿嘿提醒您", "ok");
+									return;								
+								}
+								data.RECHARGE_LIFE = this.couponsValidity
+							}
+							
+							/*判断是否启用*/
+							if(this.couponsEnabled==1){
+								data.DISCOUNT_STATUS = 2
+							}else{
+								data.DISCOUNT_STATUS = 0
+							}
+//							console.log(JSON.stringify(data))							
+							
+							plus.nativeUI.showWaiting('提交中...')
+							app.ajax(app.baseUrl + '/api/BusiDiscount/UpdateDiscount', {
+								// dataType:'json',//服务器返回json格式数据
+								data: data,
+								type: 'post', //HTTP请求类型
+								success: function(result) {
+						
+									
+									if(result.Success) {
+										
+										var msg = "修改成功";
+										mui.later(()=>{
+											plus.nativeUI.closeWaiting()
+											plus.webview.getWebviewById('coupons').evalJS('refresh()')
+											plus.nativeUI.alert(msg, function() {																					
+												mui.back()
+											}, "马嘿嘿提醒您", "ok");
+										},1500)
+										
+										/*还原数据*/										
+									} else {
+										plus.nativeUI.closeWaiting()
+										plus.nativeUI.toast(result.Msg)
+//										console.log(result.Msg)
+									}
+
+								}
+							});
+							
+						}
+
+					}
+				})
+			})
+		</script>
+	</body>
+
+	</html

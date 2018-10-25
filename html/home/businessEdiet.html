@@ -104,7 +104,7 @@
 			.modal {
 				width: 250px;
 				bottom: 0;
-				background: #303030;
+				background: #fff;
 				position: absolute;
 				right: 0;
 			}
@@ -118,7 +118,7 @@
 			}
 			
 			.btnBox {
-				background:  #404040;
+				/*background:  #404040;*/
 				padding: 1px 15px;
 				box-sizing: border-box;
 				border-bottom: 1px solid #d3d3d3;
@@ -136,7 +136,7 @@
 				position: absolute;
 				z-index: 50;
 				height: 132px;
-				background: #404040;
+				background: #fff;
 				width: 100%;
 				margin: 0;
 			}
@@ -153,17 +153,21 @@
 				line-height: 44px;
 				box-sizing: border-box;
 				position: relative;
-				/*background: pink;*/
+				
+			}
+			.mui-table-view-cell{
+				background: #f2f2f2;
+				color: #404040;
 			}
 		</style>
 	</head>
 
 	<body>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav " id="header">
+			<!--<header class="mui-bar mui-bar-nav " id="header">
 				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
 				<h1 class="mui-title">商圈编辑</h1>
-			</header>
+			</header>-->
 
 			<!--商圈编辑框-->
 
@@ -294,7 +298,7 @@
 
 					},
 					created: function() {
-						app.initHeader();
+//						app.initHeader();
 						var self = plus.webview.currentWebview();
 
 					},
@@ -302,8 +306,8 @@
 						var _this = this;
 						var scroll = this.$refs.scroll;
 						var wrapper = this.$refs.wrapper;
-						this.scrollTop = document.getElementById('header').offsetHeight +44 + 'px';
-						this.modalTop = document.getElementById('header').offsetHeight + 'px';
+						this.scrollTop = 44 + 'px';
+						this.modalTop = 0+ 'px';
 						this.$nextTick(function() {
 							//							初始化scrool
 							if(!_this.scroll) {
