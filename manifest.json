@@ -7,7 +7,7 @@
 	"id": "mhhMerchant",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "马嘿嘿商家版",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.1.6",/*应用版本名称*/
+		"name": "1.1.8",/*应用版本名称*/
 		"code": "83"
 	},
 	"description": "",/*应用描述信息*/
@@ -57,7 +57,7 @@
 		"runmode": "normal",/*应用的首次启动运行模式，可取liberate或normal，liberate模式在第一次启动时将解压应用资源（Android平台File API才可正常访问_www目录）*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
 		"distribute": {
-			"plugins": {"push":{"igexin":{"appid":"xNF4pRnZDyAGqwr9FaoFC9","appkey":"wW3oq1zcbT6sDZApYXWJE1","appsecret":"4M7PXC7sMu6I34IfgRizL6"}},"share":{"weixin":{"appid":"wxff6e37b792f69fb2","appsecret":"b194a63a9c50841b765f0394f94931d6","description":"可选，微信分享"}},"oauth":{"weixin":{"appid":"wxff6e37b792f69fb2","appsecret":"b194a63a9c50841b765f0394f94931d6"}},
+			"plugins": {"maps":{"amap":{"appkey_ios":"9398a1140d3cc1d4efd4379f74170088","appkey_android":"98ee26cd7f9af3b10b25ced551a8bba4","description":""}},"push":{"igexin":{"appid":"xNF4pRnZDyAGqwr9FaoFC9","appkey":"wW3oq1zcbT6sDZApYXWJE1","appsecret":"4M7PXC7sMu6I34IfgRizL6"}},"share":{"weixin":{"appid":"wxff6e37b792f69fb2","appsecret":"b194a63a9c50841b765f0394f94931d6","description":"可选，微信分享"}},"oauth":{"weixin":{"appid":"wxff6e37b792f69fb2","appsecret":"b194a63a9c50841b765f0394f94931d6"}},
 				"payment": {
 					
 				}

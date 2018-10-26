@@ -16,7 +16,8 @@
 	var auths = {} /* 授权登陆通道对象 */ //仅仅针对微信
 	var home; //存放主页面
 	var authBtns = ['weixin'];
-
+	owner.isIPhoneX = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 3 && window.screen.width === 375 && window.screen.height === 812;
+	
 	mui.plusReady(function() {
 		plus.navigator.setStatusBarStyle('light');
 		plus.runtime.setBadgeNumber(0);
@@ -48,11 +49,24 @@
 		var StatusbarHeight = plus.navigator.getStatusbarHeight();
 
 		var headerH = document.getElementById('header').offsetHeight;
-		document.getElementById('header').style.height = headerH + StatusbarHeight + 'px';
-		document.getElementById('header').style.paddingTop = StatusbarHeight + 'px';
-		if(document.getElementById('content')) {
-			document.getElementById('content').style.paddingTop = headerH + StatusbarHeight + 'px';
+		
+//		alert(isIPhoneX)
+		
+		if(owner.isIPhoneX) {
+			document.getElementById('header').style.height = headerH + 44 + 'px';
+			document.getElementById('header').style.paddingTop = 44 + 'px';
+			if(document.getElementById('content')) {
+				document.getElementById('content').style.paddingTop = headerH + 44 + 'px';
+			}
+		} else {
+			document.getElementById('header').style.height = headerH + StatusbarHeight + 'px';
+			document.getElementById('header').style.paddingTop = StatusbarHeight + 'px';
+			if(document.getElementById('content')) {
+				document.getElementById('content').style.paddingTop = headerH + StatusbarHeight + 'px';
+			}
 		}
+
+		
 
 	}
 	//***************用户登陆身份操作部分***************	
@@ -116,8 +130,7 @@
 					plusrequire: 'ahead'
 				},
 				show: {
-					aniShow: 'none',
-					autoShow: false, //页面loaded事件发生后自动显示，默认为true
+					autoShow: true, //页面loaded事件发生后自动显示，默认为true
 					duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 				},
 				extras: {},
@@ -1050,34 +1063,34 @@
 		return i.toString();
 	}
 
-//	owner.navigater = function(dstUrl, dstId, extras,option) {
-//		extras = extras || {};
-//		default = {
-//			showTitle:false,
-//			autoShow:true,
-//			autoWaiting:true
-//			
-//		}
-//
-//		mui.openWindow({
-//			url: dstUrl,
-//			id: dstId,
-//			styles: {
-//				top: '0px', //新页面顶部位置
-//				bottom: '0px', //新页面底部位置
-//				scrollIndicator: "none",
-//				plusrequire: 'ahead'
-//			},
-//			createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-//			show: {
-//				autoShow: false, //页面loaded事件发生后自动显示，默认为true
-//				duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-//			},
-//			extras: extras,
-//			waiting: {
-//				autoShow: true, //自动显示等待框，默认为true
-//				title: '正在加载...', //等待对话框上显示的提示内容
-//			}
-//		})
-//	}
+	//	owner.navigater = function(dstUrl, dstId, extras,option) {
+	//		extras = extras || {};
+	//		default = {
+	//			showTitle:false,
+	//			autoShow:true,
+	//			autoWaiting:true
+	//			
+	//		}
+	//
+	//		mui.openWindow({
+	//			url: dstUrl,
+	//			id: dstId,
+	//			styles: {
+	//				top: '0px', //新页面顶部位置
+	//				bottom: '0px', //新页面底部位置
+	//				scrollIndicator: "none",
+	//				plusrequire: 'ahead'
+	//			},
+	//			createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+	//			show: {
+	//				autoShow: false, //页面loaded事件发生后自动显示，默认为true
+	//				duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+	//			},
+	//			extras: extras,
+	//			waiting: {
+	//				autoShow: true, //自动显示等待框，默认为true
+	//				title: '正在加载...', //等待对话框上显示的提示内容
+	//			}
+	//		})
+	//	}
 }(window.app = {}));

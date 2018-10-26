@@ -185,8 +185,11 @@ li {
 
 .header {
 	background: #212121;
+	
 }
-
+#header{
+	top: constant(safe-area-inset-top)!important;
+}
 .mui-bar-nav {
 	box-shadow: none;
 	-webkit-box-shadow: none;

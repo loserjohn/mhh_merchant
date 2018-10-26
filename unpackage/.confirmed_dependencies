@@ -1,1 +1,22 @@
-null
+{
+  "index.html": {
+    "refer": [
+      "html/home/home.html"
+    ]
+  },
+  "html/home/home.html": {
+    "resources": [
+      "html/community/community.html"
+    ],
+    "refer": [
+      "html/community/community.html",
+      "html/manage/manage.html",
+      "html/information/information.html"
+    ]
+  },
+  "html/information/information.html": {
+    "refer": [
+      "html/information/chat.html"
+    ]
+  }
+}
