@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>退款详情</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/common.css" />
+		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/animate.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
+		<style>
+			/*购买项目*/
+			
+			.block2 .proPic {
+				width: 60px;
+				height: 60px;
+				overflow: hidden;
+				margin-right: 15px;
+			}
+			
+			.reasonArea {
+				border: 0;
+				font-size: 14px;
+			}
+			
+			.picBox {
+				height: 120px;
+			}
+			
+			.picBox .problemItem {
+				background: #fff;
+				max-width: 80px;
+				max-height: 80px;
+				text-align: center;
+				margin: 5px;
+			}
+			
+			.picBox .problemItem .pics {
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+			
+			.btn {
+				line-height: 40px;
+				border: 1px solid #404040;
+				text-align: center;
+				margin-bottom: 10px;
+			}
+			
+			.btn.yes {
+				background: #404040;
+				color: #fff;
+			}
+			.textInput{
+				border: none;
+				color: #404040;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--等待页面-->
+			<div class="loader" style="top:0" id="loader">
+					<ul>
+						<li id='a'></li>
+						<li id='b'></li>
+						<li id='c'></li>
+						<li id='d'></li>
+						<li id='e'></li>
+						<li id='f'></li>
+						<li id='g'></li>
+						<li id='h'></li>
+						<li id='i'></li>
+					</ul>
+			</div>
+		<div id="app">
+			<div class="panel2">
+				<p>订单编号: <span class="fr">{{detail.ORDER_CODE}}</span></p>
+			</div>
+			<!--订单内容-->
+			<div id="content">
+				<!--项目-->
+				<div class=" block2 panel2">
+					<div class="pro flex">
+						<div class="proPic">
+							<img :src="detail.PROJECT_IMG1" alt="" class="cover" />
+						</div>
+						<div class="f1">
+							<div class="fs16 ">{{detail.PROJECT_NAME}} </div>
+
+							<div>
+								退款金额：<span class="cor_r  lh30 fr" style="font-weight: 600;font-size: 18px;">￥{{detail.ORDER_TOTAL_AMOUNT}} </span>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+				<!--备注-->
+				<div class=" reset panel2 red">
+					<div> 细节图片：</div>
+					<!--问题图片-->
+					<div class="picBox ">
+						<ul class="flex">
+							<li v-for="item  in picList" class=" problemItem">
+								<div class="pics" @tap="_preview(item)">
+									<img :src="item" alt="" class="contain" />
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<div class="">
+						<div> 退款原因：</div>
+						<p class="lh24">{{remark}}</p>
+					</div>
+				</div>
+			</div>
+
+			<!--底部菜单-->
+			<div class=" panel2">
+				<div class="btn yes" @tap="_yesRefund">
+					同意退款
+				</div>
+
+				<div class="btn" @tap="_toggle">
+					不同意
+				</div>
+			</div>
+			
+			<!--拒绝原因框-->
+			<div class="cm_mask_bot" v-if="show" @tap.self="_toggle">
+				<div class="cm_modal_top  animated slideInDown">
+					<h3 class="cm_title t_c cor_r">请填写拒绝原因</h3>
+
+					<div class=" container  ">
+						<textarea class="textInput" v-model="reason" placeholder="请输入文字信息"></textarea>
+						<div class="cm_btn" @tap = "_noRefund">确认</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../../js/mui.min.js"></script>
+		<script src="../../../js/app.js"></script>
+		<script src="../../../js/vue.js"></script>
+		<script src="../../../js/bscroll.min.js"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true
+			});
+			var APP;
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				//				app.initHeader();
+				APP = new Vue({
+					el: '#app',
+					data: {
+						isLoading: false,
+
+						orderCode: '',
+
+						/*表单需要提交*/
+						product: '',
+						order: '',
+						/*退款订单详情*/
+						detail: '',
+						remark:'',
+						reason: 0,
+						picList: [],
+						show:false,
+						reason:''
+					},
+					created: function() {
+
+						var self = plus.webview.currentWebview();
+						this.detail = self.order;
+						this.orderCode = self.order.ORDER_CODE
+					},
+					mounted: function() {
+						var _this = this;
+
+						var scroll = this.$refs.scroll
+						//						var wraper = this.$refs.wraper
+						//							初始化scroll的屏幕位置
+						this.appHeight = 0;
+						/*初始化数据*/
+						this._getData(() => {})
+					},
+					methods: {
+						_toggle(){
+							this.show = !this.show 
+							this.reason = ''
+						},
+						/*选择原因*/
+						_preview(url) {
+							url = url.replace('_small', '_nomal')
+							plus.nativeUI.previewImage(url, {});
+						},
+						/*获取数据*/
+						_getData(callback) {
+							var _this = this
+							/*获取订单详情*/
+							app.ajax(app.baseUrl + '/api/BusiOrder/ViewRefundOrder', {
+								type: 'post', //HTTP请求类型
+								data: {
+									ORDER_CODE: _this.orderCode
+								},
+								success: function(result) {
+									document.getElementById('loader').style.display = 'none'
+									if(result.Success) {
+										_this.order = result.Data;
+										_this.picList = result.Data.REFUND_LIST_IMG
+										_this.remark = result.Data.REFUND_DETAILS
+										if(callback) callback()
+									} else {
+										/*验证失败*/
+										plus.nativeUI.toast(result.Msg)
+										if(callback) callback()
+									}
+								}
+							});
+
+						},
+
+						/*同意退款*/
+						_yesRefund() {
+							plus.nativeUI.confirm('确定同意该笔退款？', (event) => {
+								var k = event.index
+								//								alert(k)
+								if(k == 0) {
+										plus.nativeUI.showWaiting()
+									var _this = this
+									/*获取订单详情*/
+									app.ajax(app.baseUrl + '/api/BusiOrder/RefundOrder', {
+										type: 'post', //HTTP请求类型
+										data: {
+											ORDER_CODE: _this.orderCode
+										},
+										success: function(result) {
+											plus.nativeUI.closeWaiting()
+											if(result.Success) {
+												
+												plus.nativeUI.toast('您已同意该笔退款')
+												plus.webview.getWebviewById('orders').evalJS('refresh()')
+												mui.later(()=>{
+														mui.back()
+												},500)
+											
+											} else {
+												/*验证失败*/
+												plus.nativeUI.toast(result.Msg)
+												if(callback) callback()
+											}
+										}
+									});
+							
+								} else {
+									return false
+								}
+
+							})
+							
+							
+						},
+						/*不同意退款*/
+						_noRefund() {
+							if(!this.reason){
+								plus.nativeUI.alert("请输入拒绝原因", function(){},'马嘿嘿提醒您');
+								return ;
+							}
+							
+							plus.nativeUI.confirm('确定拒绝该笔退款？', (event) => {
+								var k = event.index
+								//								alert(k)
+								if(k == 0) {
+									plus.nativeUI.showWaiting()
+									var _this = this
+									/*获取订单详情*/
+									app.ajax(app.baseUrl + '/api/BusiOrder/RefundFailOrder', {
+										type: 'post', //HTTP请求类型
+										data: {
+											ORDER_CODE: _this.orderCode
+										},
+										success: function(result) {
+											plus.nativeUI.closeWaiting()
+											if(result.Success) {
+												plus.nativeUI.toast('您已成功拒绝该笔退款');
+												plus.webview.getWebviewById('orders').evalJS('refresh()')
+												mui.later(()=>{
+														mui.back()
+												},500)
+											} else {
+												/*验证失败*/
+												plus.nativeUI.toast(result.Msg)
+												if(callback) callback()
+											}
+										}
+									});
+							
+								} else {
+									return false
+								}
+
+							})
+						}
+					}
+				})
+
+			});
+
+			function hasTime(date) {
+				//				alert(new Date(date) )
+				let time = new Date(date)
+				//				alert(date+time)
+				if(date) {
+					/*如果有回传选择的日期*/
+					//					alert(666)
+					APP._orderTime(time)
+				}
+				var self = plus.webview.currentWebview();
+				self.setStyle({
+					mask: 'none'
+				});
+			}
+		</script>
+	</body>
+
+</html>

@@ -8,6 +8,7 @@
 		<link href="../../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../../css/loading.css" />
 		<style>
 			/*底部菜单*/
 			
@@ -34,7 +35,7 @@
 			.mainMsg{
 				background:#fff;
 				position: relative;
-				margin-top: 15px;
+				padding-top: 15px;
 				padding-bottom: 15px;
 				border-bottom: 1px dotted #d3d3d3;
 			}
@@ -95,12 +96,22 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+			<div class="loader" style="top:0" id="loader">
+					<ul>
+						<li id='a'></li>
+						<li id='b'></li>
+						<li id='c'></li>
+						<li id='d'></li>
+						<li id='e'></li>
+						<li id='f'></li>
+						<li id='g'></li>
+						<li id='h'></li>
+						<li id='i'></li>
+					</ul>
+			</div>
 		<div id="app">
-			<header class="mui-bar mui-bar-nav "  id="header">
-				<button class="mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left cor_w"><span class="mui-icon mui-icon-left-nav "></span>返回</button>
-				<h1 class="mui-title">订单详情</h1>
-			</header>
-			<!--分类作品-->
+			
 			<div class="" >
 				<!--服务地址-->
 				<div class="mainMsg container" id="content">
@@ -198,17 +209,34 @@
 		</div>
 		
 		<script src="../../../js/mui.min.js"></script>
-				<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../../js/app.js"></script>
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
 		<script type="text/javascript">
-			(function() {
 				mui.init({
 					swipeBack: true
 				});
+				
 				mui.plusReady(function() {
-						app.WXinit(CryptoJS)
+					app.WXinit(CryptoJS)
+					var wv = plus.webview.currentWebview();
+						wv.setStyle({
+							titleNView: {
+								autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+								titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+								titleSize: "14px", // 字体大小,默认17px
+								backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+								progress: { // 标题栏控件的进度条样式
+									color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+									height: "2px" // 进度条高度,默认值为"2px"         
+								},
+								splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+									color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+									height: "1px" // 分割线高度,默认值为"2px"
+								}
+							}
+						});
 					var APP = new Vue({
 						el: '#app',
 						data: {
@@ -217,13 +245,11 @@
 							serverNum:''//服务码
 						},
 						created: function() {
-							app.initHeader();
+//							app.initHeader();
 						},
 						mounted: function() {
 											
 							this._initData(()=>{
-								plus.nativeUI.closeWaiting()
-								mui.currentWebview.show('pop-in', 300, function () {}, {});
 							})
 							
 						},
@@ -305,6 +331,7 @@
 									type: 'get', //HTTP请求类型
 
 									success: function(result) {
+										document.getElementById('loader').style.display = 'none'
 										/*登陆成功*/
 										if(result.Success) {
 											_this.detail  = result.Data.data
@@ -424,7 +451,9 @@
 											if(result.Success) {
 												plus.nativeUI.toast('校验成功,开始服务');
 												_this._beginServer(false) 
-												_this._initData()
+												_this._initData();
+												
+												plus.webview.getWebviewById('orders').evalJS('refresh()')
 											} else {
 												/*验证失败*/
 												plus.nativeUI.toast(result.Msg)
@@ -439,7 +468,7 @@
 					})
 
 				});
-			})();
+
 		</script>
 	</body>
 

@@ -67,7 +67,7 @@
 				if(callback) callback(true) //可以调用自动登陆
 				return false;
 			} else if(owner.versionMsg.Android == 2) {
-				plus.nativeUI.confirm("发现新版本,立即升级", function(e){
+				plus.nativeUI.confirm("发现新版本,是否后台更新升级", function(e){
 					if(e.index == 0){
 						owner.createDownload();	
 					}else{
@@ -83,7 +83,7 @@
 				if(callback) callback(true) //可以调用自动登陆   
 				return false;
 			} else if(owner.versionMsg.iOS == 2) {
-				plus.nativeUI.confirm("发现新版本,立即前往AppStore", function(e){
+				plus.nativeUI.confirm("发现新版本,是否立即前往AppStore", function(e){
 					if(e.index == 0){
 						plus.runtime.openURL(owner.versionMsg.ipaURL);
 					}else{

@@ -664,3 +664,16 @@ margin-bottom: 0!important;
 	top: 0;
 	z-index: 51;
 }
+
+.cm_level {
+	width: 16px;
+	height: 16px;
+	margin-right: 5px;
+}
+.panelPad {
+	box-sizing: border-box;
+	padding: 10px;
+	background: #fff;
+	margin-bottom: 10px;
+	box-shadow: 0 4px 2px #eee;
+}

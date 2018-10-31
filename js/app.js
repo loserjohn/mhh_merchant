@@ -17,7 +17,7 @@
 	var home; //存放主页面
 	var authBtns = ['weixin'];
 	owner.isIPhoneX = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 3 && window.screen.width === 375 && window.screen.height === 812;
-	
+
 	mui.plusReady(function() {
 		plus.navigator.setStatusBarStyle('light');
 		plus.runtime.setBadgeNumber(0);
@@ -49,9 +49,9 @@
 		var StatusbarHeight = plus.navigator.getStatusbarHeight();
 
 		var headerH = document.getElementById('header').offsetHeight;
-		
-//		alert(isIPhoneX)
-		
+
+		//		alert(isIPhoneX)
+
 		if(owner.isIPhoneX) {
 			document.getElementById('header').style.height = headerH + 44 + 'px';
 			document.getElementById('header').style.paddingTop = 44 + 'px';
@@ -65,8 +65,6 @@
 				document.getElementById('content').style.paddingTop = headerH + StatusbarHeight + 'px';
 			}
 		}
-
-		
 
 	}
 	//***************用户登陆身份操作部分***************	
@@ -311,7 +309,22 @@
 									top: '0px', //新页面顶部位置
 									bottom: '0px', //新页面底部位置
 									scrollIndicator: "none",
-									plusrequire: 'ahead'
+									plusrequire: 'ahead',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
 								},
 								show: {
 									autoShow: true, //页面loaded事件发生后自动显示，默认为true
@@ -395,7 +408,7 @@
 						case 2:
 							/*认证中 -- 跳转至审核中页面*/
 							plus.nativeUI.closeWaiting();
-							owner.jumpPage('auditing')
+							owner.jumpAuding('auditing')
 							break;
 						case 3:
 							/*认证失败   提示认证是白 重新填写信息*/
@@ -480,7 +493,7 @@
 						case 2:
 							/*认证中 -- 跳转至审核中页面*/
 							plus.nativeUI.closeWaiting();
-							owner.jumpPage('auditing')
+							owner.jumpAuding('auditing')
 							break;
 						case 3:
 							/*认证失败   提示认证是白 重新填写信息*/
@@ -699,6 +712,31 @@
 		}
 	}
 
+	owner.jumpAuding = function() {
+		mui.openWindow({
+			url: './' + id + '.html',
+			id: id,
+			styles: {
+				top: '0px', //新页面顶部位置
+				bottom: '0px', //新页面底部位置
+				scrollIndicator: "none",
+				plusrequire: 'ahead',
+
+			},
+			show: {
+				autoShow: true, //页面loaded事件发生后自动显示，默认为true
+				duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+			},
+			extras: {
+				//自定义扩展参数，可以用来处理页面间传值  
+			},
+			waiting: {
+				autoShow: false, //自动显示等待框，默认为true
+				title: '正在加载...', //等待对话框上显示的提示内容
+			}
+		})
+	}
+
 	/*页面跳转*/
 	owner.jumpPage = function(id) {
 		mui.openWindow({
@@ -708,7 +746,22 @@
 				top: '0px', //新页面顶部位置
 				bottom: '0px', //新页面底部位置
 				scrollIndicator: "none",
-				plusrequire: 'ahead'
+				plusrequire: 'ahead',
+				// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+				titleNView: { // 窗口的标题栏控件
+					autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+					titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+					titleSize: "14px", // 字体大小,默认17px
+					backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+					progress: { // 标题栏控件的进度条样式
+						color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+						height: "2px" // 进度条高度,默认值为"2px"         
+					},
+					splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+						color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+						height: "1px" // 分割线高度,默认值为"2px"
+					}
+				}
 			},
 			show: {
 				autoShow: true, //页面loaded事件发生后自动显示，默认为true

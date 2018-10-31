@@ -11,12 +11,31 @@
     "refer": [
       "html/community/community.html",
       "html/manage/manage.html",
-      "html/information/information.html"
+      "html/information/information.html",
+      "html/manage/orders/orders.html"
     ]
   },
   "html/information/information.html": {
     "refer": [
-      "html/information/chat.html"
+      "html/information/chat.html",
+      "html/information/sysMessage.html"
+    ]
+  },
+  "html/manage/manage.html": {
+    "refer": [
+      "html/manage/orders/orders.html",
+      "html/manage/production/production.html",
+      "html/manage/time/time.html",
+      "html/manage/kefu.html",
+      "html/manage/activity/activity.html",
+      "html/manage/comment/comment.html",
+      "html/manage/personSet/personSet.html"
+    ]
+  },
+  "html/manage/orders/orders.html": {
+    "refer": [
+      "html/manage/orders/order_detail.html",
+      "html/manage/orders/refund.html"
     ]
   }
 }

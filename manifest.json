@@ -7,7 +7,7 @@
 	"id": "mhhMerchant",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "马嘿嘿商家版",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.1.8",/*应用版本名称*/
+		"name": "1.2.1",/*应用版本名称*/
 		"code": "83"
 	},
 	"description": "",/*应用描述信息*/
@@ -192,7 +192,8 @@
 					"html/manage/coupons/coupons.html",
 					"html/manage/share/share.html",
 					"html/manage/kefu.html",
-					"html/manage/banks/banks.html"
+					"html/manage/banks/banks.html",
+					"html/manage/activity/activity.html"
 				],
 				"priority": 0
 			},
@@ -208,7 +209,8 @@
 			"html/manage/orders/orders.html": {
 				"resources": [],
 				"refer": [
-					"html/manage/orders/order_detail.html"
+					"html/manage/orders/order_detail.html",
+					"html/manage/orders/refund.html"
 				],
 				"priority": 0
 			},

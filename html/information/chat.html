@@ -287,10 +287,9 @@
 
 			var pageIndex = 1;
 			var pageSize = 30
-			var linking;
+			var linking = false;
 			var isHome=true  //判断是否在前台
-			
-			
+	
 			targetId = null;
 			onChatPage = true;
 			
@@ -326,6 +325,7 @@
 				})
 			mui.plusReady(function() {
 				app.initHeader();
+				
 				//				客服初始化	
 				IMtoken = plus.storage.getItem('IMtoken')
 					
@@ -349,6 +349,7 @@
 								 var callback = {
 							        onSuccess: function(userId) {
 							            console.log("Reconnect successfully." + userId);
+							              linking = true
 							        },
 							        onTokenIncorrect: function() {
 							            console.log('token无效');
@@ -378,11 +379,11 @@
 							case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
 								console.log('网络不可用');
 								linking = false;
-								linking = false;
 								//				试探重连
 								 var callback = {
 							        onSuccess: function(userId) {
 							            console.log("Reconnect successfully." + userId);
+							            linking = true
 							        },
 							        onTokenIncorrect: function() {
 							            console.log('token无效');
@@ -490,7 +491,7 @@
 				document.addEventListener("resume", function(){
 					isHome = true
 					if(!linking){
-//						ImInit()
+						connect()
 					}else{}					
 				}, false);
 				
@@ -505,8 +506,14 @@
 				myNickName = plus.storage.getItem('userNickName')
 				myId = plus.storage.getItem('myId')
 				self = plus.webview.currentWebview();
-
+	
+				
+				//		启用页面事件绑定
+				eventInit()
+				connect()
+			}
 			
+			function connect(){
 				//	链接服务器
 				RongIMClient.connect(IMtoken, {
 					onSuccess: function(userId) {
@@ -536,10 +543,6 @@
 						console.log(errorCode);
 					}
 				});
-				
-				//		启用页面事件绑定
-				eventInit()
-
 			}
 
 			//	页面事件监听

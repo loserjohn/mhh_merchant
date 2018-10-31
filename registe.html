@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>注册</title>
@@ -8,14 +9,14 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
-			.yzm{
+			.yzm {
 				width: 150px;
 				margin-top: 15px;
 			}
-			.btns {
-			    margin-top: 15px;
-			}
 			
+			.btns {
+				margin-top: 15px;
+			}
 		</style>
 	</head>
 
@@ -27,53 +28,47 @@
 				</a>
 				<h1 class="mui-title" >注册账户</h1>
 			</header>-->
-			
-			<div class="container " id = "content">
+
+			<div class="container " id="content">
 				<div class="container">
 					<div class="cm_input_groups flex">
 						<div class="cm_groups_title">
 							手机号
-						</div>	
+						</div>
 						<input class="f1 cm_groups_input" v-model.number="mobile" type="number" placeholder="请输入您的手机号码" value="" />
 					</div>
 					<div class=" flex">
 						<div class="cm_input_groups flex">
 							<div class="cm_groups_title">
 								验证码
-							</div>	
+							</div>
 							<input class="f1 cm_groups_input" v-model="validate" type="text" placeholder="验证码" value="" />
 						</div>
 						<div class="yzm cm_btn_half" @click="_getYZM">
-								{{enables?ctime:'获取验证码'}}	
+							{{enables?ctime:'获取验证码'}}
 						</div>
 					</div>
 					<div class="cm_input_groups flex mui-input-row">
 						<div class="cm_groups_title">
 							密码
-						</div>	
-						<input class="f1 cm_groups_input" :type="toggleType?'password':'text'"  v-model="password" placeholder="密码由6~16位数字和字母组成" value="" />
+						</div>
+						<input class="f1 cm_groups_input" :type="toggleType?'password':'text'" v-model="password" placeholder="密码由6~16位数字和字母组成" value="" />
 						<i class="iconfont icon-kanguo fs16" @click="_toggleType" :class="{cor_y:toggleType?true:false}"></i>
-					</div>					
+					</div>
 				</div>
 				<div class="btns">
-					<div class="cm_btn" @click = "_toregiste">
+					<div class="cm_btn" @click="_toregiste">
 						注册
 					</div>
 					<div class="flex">
-						<div class="f1 t_l" >
-							<input
-							  type="checkbox"
-							  v-model="agree"
-							  true-value="yes"
-							  false-value="no"
-							  id ="agree"
-							>
+						<div class="f1 t_l">
+							<input type="checkbox" v-model="agree" true-value="yes" false-value="no" id="agree">
 							<label for="agree">同意<span class="cor_y">《马嘿嘿用户协议》</span></label>
 						</div>
 					</div>
 				</div>
 				<img src="images/logo2.png" alt="" class="logo_bg" />
-				
+
 			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
@@ -86,182 +81,204 @@
 				swipeBack: false
 			})
 			app.WXinit(CryptoJS);
-			mui.plusReady(function(){
+			mui.plusReady(function() {
 				var APP = new Vue({
-						el: '#app',
-						data: {
-							opId:'',						
-							pic_head:'',/* 用户头像 */							
-							petname:'',/* 用户昵称 */							
-							mobile:'',/* 电话 */
-							validate:'', /* 验证码 */
-							password:'', /* 密码 */
-							type:2, /* 注册类型 */
-							agree:'yes',
-							toggleType:true,
-							enables:false,
-							time:90
-						},
-						created() {
-//							app.initHeader();
-						},
-						computed:{
-							ctime(){
-								return '('+this.time+'s)'
-								
-							}
-						},
-						mounted(){					
-							this.opId = plus.storage.getItem('opId');
-							this.pic_head = plus.storage.getItem('pic_head');
-							this.petname = plus.storage.getItem('petname');
-							
-							 plus.nativeUI.closeWaiting()
-								 mui.currentWebview.show('pop-in', 300, function () {}, {});
-							if(mui.os.android){
-								var originalHeight=document.documentElement.clientHeight || document.body.clientHeight;
-							
-								window.onresize=function(){
-								
-								    //软键盘弹起与隐藏  都会引起窗口的高度发生变化
-								    var  resizeHeight=document.documentElement.clientHeight || document.body.clientHeight;
-								
-								    if(resizeHeight*1<originalHeight*1){ //resizeHeight<originalHeight证明窗口被挤压了
-								
-								            plus.webview.currentWebview().setStyle({
-								                height:originalHeight
-								            });
-								
-								      }
-								}
-							}
-						},
-						methods: {
-							_toregiste(){
-								/*号码验证*/
-								if(!this.mobile){
-									plus.nativeUI.alert("请输入手机号", function(){},'马嘿嘿提醒您');
-									return;
-								}else if(!app.checkPhone(this.mobile)){
-									plus.nativeUI.alert("手机号码不正确", function(){},'马嘿嘿提醒您');
-									return;
-								}else if(!this.validate){
-									plus.nativeUI.alert("请输入验证码", function(){},'马嘿嘿提醒您');
-									return;
-								}else if(!this.password){
-									plus.nativeUI.alert("请输入密码", function(){},'马嘿嘿提醒您');
-									return;
-								}else if(this.agree!=='yes'){
-									plus.nativeUI.alert("请您务必同意马嘿嘿用户协议", function(){},'马嘿嘿提醒您');
-									return;
-								}else if(!this.enables ){
-									plus.nativeUI.alert("验证码失效", function(){
-										return false; 
-									},'马嘿嘿提醒您');
-									return;
-								}		
-								
-								var waiting = plus.nativeUI.showWaiting();
-								/*调用注册接口*/
-								var data ={
-//									mobile:this.mobile,
-									password:this.password,
-									aespassword:this._Encrypt(this.password),
-									validate:this.validate,
-									parent:12,
-									type:2,
-									pic_head:this.pic_head,
-									petname:this.petname,
-									openid:this.opId,
-									aesopenid: this._Encrypt(this.opId) ,
-									mobile:this.mobile,								
-								}
-								app.registe(data,function(status, msg){
-									waiting.close();
-									if (status) {
-										plus.nativeUI.toast('注册成功，请完善信息')
-										mui.openWindow({
-											url: './msg.html',
-											id: 'msg',
-											styles: {
-												scrollIndicator: "none",
-												plusrequire: 'ahead'
-											},
-											show: {
-												autoShow: false, //页面loaded事件发生后自动显示，默认为true
-												duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-											},
-											extras: {
-												//自定义扩展参数，可以用来处理页面间传值  
-											},
-											waiting: {
-												autoShow: true, //自动显示等待框，默认为true
-												title: '正在加载...', //等待对话框上显示的提示内容
-											}
-										})
-									} else {
-										plus.nativeUI.toast(msg)
-									}
-								},'wx')
+					el: '#app',
+					data: {
+						opId: '',
+						pic_head: '',
+						/* 用户头像 */
+						petname: '',
+						/* 用户昵称 */
+						mobile: '',
+						/* 电话 */
+						validate: '',
+						/* 验证码 */
+						password: '',
+						/* 密码 */
+						type: 2,
+						/* 注册类型 */
+						agree: 'yes',
+						toggleType: true,
+						enables: false,
+						time: 90
+					},
+					created() {
+						//							app.initHeader();
+					},
+					computed: {
+						ctime() {
+							return '(' + this.time + 's)'
 
-								
-							},
-							/* 获取验证码 */
-							_getYZM(){	
-								if(this.enables)return;
-								// alert(app.checkPhone(this.mobile))
-								if(!this.mobile || !app.checkPhone(this.mobile)){
-									plus.nativeUI.alert("手机号码不正确", function(){
-										return false; 
-									},'马嘿嘿提醒您');
-									return;
+						}
+					},
+					mounted() {
+						this.opId = plus.storage.getItem('opId');
+						this.pic_head = plus.storage.getItem('pic_head');
+						this.petname = plus.storage.getItem('petname');
+
+						plus.nativeUI.closeWaiting()
+						mui.currentWebview.show('pop-in', 300, function() {}, {});
+						if(mui.os.android) {
+							var originalHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+							window.onresize = function() {
+
+								//软键盘弹起与隐藏  都会引起窗口的高度发生变化
+								var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+								if(resizeHeight * 1 < originalHeight * 1) { //resizeHeight<originalHeight证明窗口被挤压了
+
+									plus.webview.currentWebview().setStyle({
+										height: originalHeight
+									});
+
 								}
-							
-								var waiting = plus.nativeUI.showWaiting();
-								app.getValidate(this.mobile,1,(status,Msg)=>{
-									waiting.close()
-									if(status){
-										/*开始倒计时*/
-										this._timeMove()
-										plus.nativeUI.toast("发送成功");
-									}else{
-										plus.nativeUI.toast(Msg);
-									}
-								})
-							},
-//							加密
-							_Encrypt(str) {
-								str = str + '|.|' + new Date().getTime()
-								var key = CryptoJS.enc.Utf8.parse(app._KEY);
-								var iv = CryptoJS.enc.Utf8.parse(app._IV);
-								var encrypted = '';
-								var srcs = CryptoJS.enc.Utf8.parse(str);
-								encrypted = CryptoJS.AES.encrypt(srcs, key, {
-									iv: iv,
-									mode: CryptoJS.mode.CBC,
-									padding: CryptoJS.pad.Pkcs7
-								});
-								return encrypted.ciphertext.toString();
-							},
-//							切换密码框
-							_toggleType(){
-								this.toggleType =!this.toggleType
-							},
-							/*倒计时*/
-							_timeMove(){
-								this.enables = true;
-								var time=setInterval(()=>{
-									this.time -=1;
-									if(this.time==0){
-										this.enables = false;
-										clearInterval(time);
-										this.time = 90
-									}
-								},1000)
 							}
 						}
+					},
+					methods: {
+						_toregiste() {
+							/*号码验证*/
+							if(!this.mobile) {
+								plus.nativeUI.alert("请输入手机号", function() {}, '马嘿嘿提醒您');
+								return;
+							} else if(!app.checkPhone(this.mobile)) {
+								plus.nativeUI.alert("手机号码不正确", function() {}, '马嘿嘿提醒您');
+								return;
+							} else if(!this.validate) {
+								plus.nativeUI.alert("请输入验证码", function() {}, '马嘿嘿提醒您');
+								return;
+							} else if(!this.password) {
+								plus.nativeUI.alert("请输入密码", function() {}, '马嘿嘿提醒您');
+								return;
+							} else if(this.agree !== 'yes') {
+								plus.nativeUI.alert("请您务必同意马嘿嘿用户协议", function() {}, '马嘿嘿提醒您');
+								return;
+							} else if(!this.enables) {
+								plus.nativeUI.alert("验证码失效", function() {
+									return false;
+								}, '马嘿嘿提醒您');
+								return;
+							}
 
-					})
+							var waiting = plus.nativeUI.showWaiting();
+							/*调用注册接口*/
+							var data = {
+								//									mobile:this.mobile,
+								password: this.password,
+								aespassword: this._Encrypt(this.password),
+								validate: this.validate,
+								parent: 12,
+								type: 2,
+								pic_head: this.pic_head,
+								petname: this.petname,
+								openid: this.opId,
+								aesopenid: this._Encrypt(this.opId),
+								mobile: this.mobile,
+							}
+							app.registe(data, function(status, msg) {
+								waiting.close();
+								if(status) {
+									plus.nativeUI.toast('注册成功，请完善信息')
+									mui.openWindow({
+										url: './msg.html',
+										id: 'msg',
+										styles: {
+											top: '0px', //新页面顶部位置
+											bottom: '0px', //新页面底部位置
+											scrollIndicator: "none",
+											plusrequire: 'ahead',
+											// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+											titleNView: { // 窗口的标题栏控件
+												autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+												titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+												titleSize: "14px", // 字体大小,默认17px
+												backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+												progress: { // 标题栏控件的进度条样式
+													color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+													height: "2px" // 进度条高度,默认值为"2px"         
+												},
+												splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+													color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+													height: "1px" // 分割线高度,默认值为"2px"
+												}
+											}
+										},
+										show: {
+											autoShow: false, //页面loaded事件发生后自动显示，默认为true
+											duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+										},
+										extras: {
+											//自定义扩展参数，可以用来处理页面间传值  
+										},
+										waiting: {
+											autoShow: true, //自动显示等待框，默认为true
+											title: '正在加载...', //等待对话框上显示的提示内容
+										}
+									})
+								} else {
+									plus.nativeUI.toast(msg)
+								}
+							}, 'wx')
+
+						},
+						/* 获取验证码 */
+						_getYZM() {
+							if(this.enables) return;
+							// alert(app.checkPhone(this.mobile))
+							if(!this.mobile || !app.checkPhone(this.mobile)) {
+								plus.nativeUI.alert("手机号码不正确", function() {
+									return false;
+								}, '马嘿嘿提醒您');
+								return;
+							}
+
+							var waiting = plus.nativeUI.showWaiting();
+							app.getValidate(this.mobile, 1, (status, Msg) => {
+								waiting.close()
+								if(status) {
+									/*开始倒计时*/
+									this._timeMove()
+									plus.nativeUI.toast("发送成功");
+								} else {
+									plus.nativeUI.toast(Msg);
+								}
+							})
+						},
+						//							加密
+						_Encrypt(str) {
+							str = str + '|.|' + new Date().getTime()
+							var key = CryptoJS.enc.Utf8.parse(app._KEY);
+							var iv = CryptoJS.enc.Utf8.parse(app._IV);
+							var encrypted = '';
+							var srcs = CryptoJS.enc.Utf8.parse(str);
+							encrypted = CryptoJS.AES.encrypt(srcs, key, {
+								iv: iv,
+								mode: CryptoJS.mode.CBC,
+								padding: CryptoJS.pad.Pkcs7
+							});
+							return encrypted.ciphertext.toString();
+						},
+						//							切换密码框
+						_toggleType() {
+							this.toggleType = !this.toggleType
+						},
+						/*倒计时*/
+						_timeMove() {
+							this.enables = true;
+							var time = setInterval(() => {
+								this.time -= 1;
+								if(this.time == 0) {
+									this.enables = false;
+									clearInterval(time);
+									this.time = 90
+								}
+							}, 1000)
+						}
+					}
+
+				})
 			})
 		</script>
 	</body>
