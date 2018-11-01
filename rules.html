@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>帮助中心</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="./css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="./css/common.css" />
+		<link rel="stylesheet" href="./css/iconfont.css" />
+		<link rel="stylesheet" href="./css/animate.css" />
+		<style>
+			.tem_box {
+				box-sizing: border-box;
+				padding: 10px;
+				font-size: 14px;
+			}
+			
+			.tem_title {
+				text-indent: 15px;
+				line-height: 20px;
+				font-size: 16px;
+				position: relative;
+				margin: 10px auto;
+				background: #E7ECF2;
+			}
+			
+			.tem_sub {
+				font-size: 14px;
+				box-sizing: border-box;
+				padding: 10px;
+				color: #ccaa42;
+			}
+			
+			.tem_title::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				width: 4px;
+				height: 100%;
+				background: #ccaa42;
+				left: 0;
+				top: 0;
+			}
+			
+			.tem_con {
+				line-height: 1.5;
+				text-indent: 30px;
+				box-sizing: border-box;
+				padding: 10px;
+				color: #404040
+			}
+			
+			.tem_mark1 {
+				color: red;
+			}
+			
+			.tem_mark2 {
+				color: #aaa
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+
+			<!--帮助中心-->
+			<div class="tem_box" v-show="showType == 0">
+				<div class="tem_sub">
+					入驻马嘿嘿美匠人
+				</div>
+
+				<div class="tem_title">
+					1. 如何报名美匠人
+				</div>
+				<p class="tem_con">
+					亲爱的，您在马嘿嘿的APP页面点击下方“我的”，然后点击屏幕右下方有个“美匠人招募”点击进去填写相关入驻的信息，选择提交就可以了，申请入驻后，如果有合作意向，会有招商工作人员在7个工作日内与您联系。
+				</p>
+				<div class="tem_title">
+					2.招募哪些类目的美匠人
+				</div>
+				<p class="tem_con">
+					目前马嘿嘿招募：美甲，美睫，美容类目的美匠人，需要从事经验1年以上。 建议您下载马嘿嘿APP—进行登录—点击“我的”---美匠人招募---填写资料报名，请一定认真详细填写喔，如果符合条件，招商人员会在7个工作日与您联系。
+				</p>
+
+				<div class="tem_title">
+					3. 是否提供培训
+				</div>
+				<p class="tem_con">
+					如果入驻成功之后，是需要上岗前培训哒。
+				</p>
+
+				<div class="tem_title">
+					4. 是否招募实体店
+				</div>
+				<p class="tem_con">
+					目前没有招募实体店
+				</p>
+
+				<div class="tem_title">
+					5. 其他入驻问题咨询
+				</div>
+				<p class="tem_con">
+					入驻成功后，会有招商人员与您联系，经过相应的考核之后，会教您如何在APP上进行创建店铺以及接单技巧，考核之后会有相应的等级与星级判定喔。 新人入驻成功，会有相应的新人价格~超级优惠喔。
+				</p>
+
+				<div class="tem_title">
+					6.美匠人入驻流程
+				</div>
+				<p class="tem_con">
+					亲亲，一般成为马嘿嘿家美匠人会有经过以下的步骤：APP报名—试手—培训—采购—星级匹配—接单，暂时不招募0经验美匠人喔~~
+
+				</p>
+
+				<div class="tem_title">
+					7.什么是匠星
+				</div>
+				<p class="tem_con">
+					亲亲，匠星对美匠人来说，真正意义上是对美匠人的价值体现 ，便是建立在匠星体系上的，在马嘿嘿家的星级制度中，一星意味着“合格”，二星意味着“出色”，三星意味着“优秀”，四星意味着“卓越”，五星意味着“顶级”和“梦幻”
+				</p>
+
+				<div class="tem_title">
+					8.关于入驻押金
+				</div>
+				<p class="tem_con">
+					亲爱的，您提交报名资料后，招商人员会与您对接，您可以详细咨询。
+				</p>
+			</div>
+
+		</div>
+		<script src="./js/mui.min.js"></script>
+		<script src="./js/vue.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true,
+			});
+			var APP
+			mui.plusReady(function() {
+
+				APP = new Vue({
+					el: '#app',
+					data: {
+						showType: 0
+					},
+					created: function() {
+						var self = plus.webview.currentWebview()
+
+					},
+
+					mounted: function() {
+
+					},
+					methods: {
+
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

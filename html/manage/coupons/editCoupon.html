@@ -162,6 +162,12 @@
 								</div>
 							</div>
 						</li>
+						<li class="mui-table-view-cell flex">
+							<div class="f1 cellName ">适用类型</div>
+							
+							<div class=" cellName">{{couponsClass}}</div>
+							<i class="iconfont icon-xiayibu "></i>
+						</li>
 						<li class="mui-table-view-cell flex" @tap="_setStartTime">
 							<div class="f1 cellName">开始时间</div>
 							<div class=" cellName">{{startTime}}</div>
@@ -270,6 +276,7 @@
 //						couponsEXplain: '', //券说明
 						couponsRepet: 0, //重复领取
 						couponsCode:'',
+						couponsClass:'',
 					},
 					created: function() {
 						//							alert(1)
@@ -295,6 +302,8 @@
 								this.couponsDetail = self.coupon.DISCOUNT_DETAILS
 								this.couponsRepet = self.coupon.IS_REPEAT
 								this.couponsCode = self.coupon.DISCOUNT_CODE
+								this.couponsClass = self.coupon.DISCOUNT_PROJECT_TYPE
+								
 								document.getElementById('loader').style.display='none'
 							}
 													

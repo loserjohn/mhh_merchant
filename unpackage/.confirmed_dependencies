@@ -1,41 +1,48 @@
 {
-  "index.html": {
-    "refer": [
-      "html/home/home.html"
-    ]
-  },
-  "html/home/home.html": {
-    "resources": [
-      "html/community/community.html"
-    ],
-    "refer": [
-      "html/community/community.html",
-      "html/manage/manage.html",
-      "html/information/information.html",
-      "html/manage/orders/orders.html"
-    ]
-  },
-  "html/information/information.html": {
-    "refer": [
-      "html/information/chat.html",
-      "html/information/sysMessage.html"
-    ]
-  },
-  "html/manage/manage.html": {
-    "refer": [
-      "html/manage/orders/orders.html",
-      "html/manage/production/production.html",
-      "html/manage/time/time.html",
-      "html/manage/kefu.html",
-      "html/manage/activity/activity.html",
-      "html/manage/comment/comment.html",
-      "html/manage/personSet/personSet.html"
-    ]
-  },
-  "html/manage/orders/orders.html": {
-    "refer": [
-      "html/manage/orders/order_detail.html",
-      "html/manage/orders/refund.html"
-    ]
-  }
+	"index.html": {
+		"refer": [
+			"html/home/home.html",
+			"login.html"
+		]
+	},
+	"html/home/home.html": {
+		"resources": [
+			"html/community/community.html"
+		],
+		"refer": [
+			"html/community/community.html",
+			"html/manage/manage.html",
+			"html/information/information.html",
+			"html/manage/orders/orders.html"
+		]
+	},
+	"html/information/information.html": {
+		"refer": [
+			"html/information/chat.html",
+			"html/information/sysMessage.html"
+		]
+	},
+	"html/manage/manage.html": {
+		"refer": [
+			"html/manage/orders/orders.html",
+			"html/manage/production/production.html",
+			"html/manage/time/time.html",
+			"html/manage/kefu.html",
+			"html/manage/activity/activity.html",
+			"html/manage/comment/comment.html",
+			"html/manage/personSet/personSet.html",
+			"html/manage/coupons/coupons.html"
+		]
+	},
+	"html/manage/orders/orders.html": {
+		"refer": [
+			"html/manage/orders/order_detail.html",
+			"html/manage/orders/refund.html"
+		]
+	},
+	"login.html": {
+		"refer": [
+			"html/home/home.html"
+		]
+	}
 }

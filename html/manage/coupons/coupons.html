@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/animate.css" />
 		<link rel="stylesheet" href="../../../css/loading.css" />
-		
+
 		<style>
 			/*充值卡管理*/
 			
@@ -34,18 +34,22 @@
 				background: #ccaa42;
 				text-align: center;
 			}
-			.cardList i{
+			
+			.cardList i {
 				font-size: 18px;
 				margin-right: 10px;
 				line-height: 2;
 				/*color: #d3d3d3;*/
 			}
-			.cards .mui-table-view-cell{
+			
+			.cards .mui-table-view-cell {
 				margin-bottom: 15px!important;
 			}
-			.cards .mui-table-view-cell:after{
+			
+			.cards .mui-table-view-cell:after {
 				background: none;
 			}
+			
 			.cardPic>img {
 				width: 80px;
 				display: block;
@@ -84,7 +88,8 @@
 			.note {
 				padding-bottom: 20px;
 			}
-			.lh26{
+			
+			.lh26 {
 				line-height: 28px;
 			}
 		</style>
@@ -106,10 +111,10 @@
 			</ul>
 		</div>
 		<div id="app">
-		
+
 			<!--卡片-->
-			<div class="cards scrollBox "   :style="{top:scrollTop}" id="scroll" ref="scroll">
-				<div class="reset" style="min-height: 101%;"> 	
+			<div class="cards scrollBox " :style="{top:scrollTop}" id="scroll" ref="scroll">
+				<div class="reset" style="min-height: 101%;">
 					<!--刷新提示框-->
 					<div class="refresh">
 						<p class="t_c cor_y  refresh_txt">有种你放开我</p>
@@ -130,7 +135,7 @@
 									</div>
 									<div class="cardMsg f1">
 										<h3 class="cm_name">{{item.DISCOUNT_NAME}}</h3>
-	
+
 										<p class="time">有效期起始：{{item.DISCOUNT_LIFE_START}}</p>
 										<p class="time">有效期结束：{{item.DISCOUNT_LIFE_END}}</p>
 									</div>
@@ -138,8 +143,8 @@
 								</div>
 							</div>
 						</li>
-						
-						<li v-if="couponsList.length==0" class="t_c cm_noItem" >
+
+						<li v-if="couponsList.length==0" class="t_c cm_noItem">
 							<img src="../../../images/no3.png" alt="" />
 							<div class="t_c">--您还没有优惠券--</div>
 						</li>
@@ -154,16 +159,17 @@
 						添加新券
 					</h3>
 			</div>
-			
+
 			<!--模态框显示优惠券信息信息-->
-			<div class="cm_mask" v-if="show" >
+			<div class="cm_mask" v-if="show">
 				<div class="cm_modal animated slideInUp">
 					<h3 class="cm_title t_c">优惠券详情</h3>
 					<h3 class="cm_name">{{detailPre.DISCOUNT_NAME}}</h3>
 					<div> {{detailPre.DISCOUNT_LIMIT}}元可用</div>
 					<div class="prize">￥{{detailPre.DISCOUNT_AMOUNT}}</div>
-					<div>优惠券类型:{{detailPre.DISCOUNT_TYPE==1?'正常时限优惠券':'领取后时限优惠券'}}</div>
-					
+					<div>优惠券类型:{{detailPre.DISCOUNT_PROJECT_TYPE}}</div>
+					<div>领取类型:{{detailPre.DISCOUNT_TYPE==1?'正常时限优惠券':'领取后时限优惠券'}}</div>
+
 					<p class="lh26">开始时间： {{detailPre.DISCOUNT_LIFE_START}}</p>
 					<p class="lh26">结束时间： {{detailPre.DISCOUNT_LIFE_END}}</p>
 					<p class="lh26">有效期： {{detailPre.DISCOUNT_LIFE}}天</p>
@@ -180,33 +186,35 @@
 		<script src="../../../js/app.js"></script>
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
-				<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			mui.init({
-							swipeBack: true
-						})
-			var APP 
+				swipeBack: true
+			})
+			var APP
 			mui.plusReady(function() {
 				app.WXinit(CryptoJS)
-				 APP = new Vue({
+				
+				APP = new Vue({
 					el: '#app',
 					data: {
 						scrollTop: '',
-						scroll:'',
-						show:false,
-						couponsList:'',
-						detailPre:{}
+						scroll: '',
+						show: false,
+						couponsList: '',
+						detailPre: {}
 					},
 					created: function() {
+
 					},
 					mounted: function() {
-						
+
 						var _this = this
-						var scroll =  this.$refs.scroll
+						var scroll = this.$refs.scroll
 						this.scrollTop = 0 + 'px'
-							/*首次加载数据*/
+						/*首次加载数据*/
 						this._getData()
-					
+
 						this.$nextTick(function() {
 							//							初始化scrool
 							if(!_this.scroll) {
@@ -216,28 +224,28 @@
 									probeType: 3,
 									bounceTime: 200,
 									pullDownRefresh: {
-											  threshold: 50,
-											  stop: 0
-											}
+										threshold: 50,
+										stop: 0
+									}
 								})
 							} else {
 								_this.scroll.refresh();
 							};
 							/*下拉刷新*/
 							_this.scroll.on('pullingDown', function(e) {
-								
-									plus.nativeUI.showWaiting()
-									_this._getData(()=>{
-										plus.nativeUI.closeWaiting();
-										_this.scroll.finishPullDown()
-									})
-									
+
+								plus.nativeUI.showWaiting()
+								_this._getData(() => {
+									plus.nativeUI.closeWaiting();
+									_this.scroll.finishPullDown()
+								})
+
 							})
 						})
 					},
 					filters: {
 						getStatus(k) {
-//							优惠券状态0-未启用，1-启用中,2-审核中
+							//							优惠券状态0-未启用，1-启用中,2-审核中
 							switch(k) {
 								case '0':
 									return '未启用'
@@ -266,7 +274,7 @@
 									plusrequire: 'ahead',
 									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
 									titleNView: { // 窗口的标题栏控件
-										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
 										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
 										titleSize: "14px", // 字体大小,默认17px
 										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
@@ -296,22 +304,22 @@
 						},
 						/*查看详情*/
 						_checkDetail(item) {
-							if(item){
-								this.detailPre = item	
+							if(item) {
+								this.detailPre = item
 							}
-						
-						this.show = !this.show;
-							if(this.show ){
-//								this.scroll.disable();
-							}else{
-//								this.scroll.enable()
-							}							
+
+							this.show = !this.show;
+							if(this.show) {
+								//								this.scroll.disable();
+							} else {
+								//								this.scroll.enable()
+							}
 						},
 						/*编辑修改*/
-						_edite(item){
+						_edite(item) {
 							var li = document.getElementById(item.DISCOUNT_CODE)
-										//							console.log(li)
-								mui.swipeoutClose(li)
+							//							console.log(li)
+							mui.swipeoutClose(li)
 							mui.openWindow({
 								url: './editCoupon.html',
 								id: 'editCoupon',
@@ -322,7 +330,7 @@
 									plusrequire: 'ahead',
 									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
 									titleNView: { // 窗口的标题栏控件
-										autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
 										titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
 										titleSize: "14px", // 字体大小,默认17px
 										backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
@@ -342,7 +350,7 @@
 									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 								},
 								extras: {
-									coupon:item
+									coupon: item
 								},
 								waiting: {
 									autoShow: false, //自动显示等待框，默认为true
@@ -351,107 +359,107 @@
 							})
 						},
 						/*删除操作*/
-						_delect(code){
-								var li = document.getElementById(code)
-								mui.swipeoutClose(li)
-								var _this = this 
-								var data={
-									DISCOUNT_CODE:code,
-								}
-//
-								plus.nativeUI.showWaiting('删除中...')
-								app.ajax(app.baseUrl + '/api/BusiDiscount/DeleteDiscount', {
-									// dataType:'json',//服务器返回json格式数据
-									data: data,
-									type: 'post', //HTTP请求类型
-									success: function(result) {											
-										if(result.Success) {
-											
-											var msg = "删除成功";
-											mui.later(()=>{
-												plus.nativeUI.closeWaiting()
-												plus.nativeUI.toast(msg)
-												_this._getData()
-											},1500)
-											
-											/*还原数据*/										
-										} else {
+						_delect(code) {
+							var li = document.getElementById(code)
+							mui.swipeoutClose(li)
+							var _this = this
+							var data = {
+								DISCOUNT_CODE: code,
+							}
+							//
+							plus.nativeUI.showWaiting('删除中...')
+							app.ajax(app.baseUrl + '/api/BusiDiscount/DeleteDiscount', {
+								// dataType:'json',//服务器返回json格式数据
+								data: data,
+								type: 'post', //HTTP请求类型
+								success: function(result) {
+									if(result.Success) {
+
+										var msg = "删除成功";
+										mui.later(() => {
 											plus.nativeUI.closeWaiting()
-											plus.nativeUI.toast(result.Msg)
-											console.log(result.Msg)
-										}
-	
+											plus.nativeUI.toast(msg)
+											_this._getData()
+										}, 1500)
+
+										/*还原数据*/
+									} else {
+										plus.nativeUI.closeWaiting()
+										plus.nativeUI.toast(result.Msg)
+										console.log(result.Msg)
 									}
-								});	
+
+								}
+							});
 						},
 						/*启用  禁用操作*/
-						_handle(code,t){
-								var li = document.getElementById(code)
-										//							console.log(li)
-								mui.swipeoutClose(li)
-								var _this = this 
-								var data={
-									DISCOUNT_CODE:code,
-									DISCOUNT_STATUS:t
-								}
-//								console.log(JSON.stringify(data))
-								plus.nativeUI.showWaiting('修改中...')
-								app.ajax(app.baseUrl + '/api/BusiDiscount/UpdateDiscount', {
-									// dataType:'json',//服务器返回json格式数据
-									data: data,
-									type: 'post', //HTTP请求类型
-									success: function(result) {
-										
-												
-										if(result.Success) {
-											
-											var msg = "修改成功";
-											mui.later(()=>{
-												plus.nativeUI.closeWaiting()
-												plus.nativeUI.toast(msg)
-												_this._getData()
-											},1500)
-											
-											/*还原数据*/										
-										} else {
+						_handle(code, t) {
+							var li = document.getElementById(code)
+							//							console.log(li)
+							mui.swipeoutClose(li)
+							var _this = this
+							var data = {
+								DISCOUNT_CODE: code,
+								DISCOUNT_STATUS: t
+							}
+							//								console.log(JSON.stringify(data))
+							plus.nativeUI.showWaiting('修改中...')
+							app.ajax(app.baseUrl + '/api/BusiDiscount/UpdateDiscount', {
+								// dataType:'json',//服务器返回json格式数据
+								data: data,
+								type: 'post', //HTTP请求类型
+								success: function(result) {
+
+									if(result.Success) {
+
+										var msg = "修改成功";
+										mui.later(() => {
 											plus.nativeUI.closeWaiting()
-											plus.nativeUI.toast(result.Msg)
-											console.log(result.Msg)
-										}
-	
+											plus.nativeUI.toast(msg)
+											_this._getData()
+										}, 1500)
+
+										/*还原数据*/
+									} else {
+										plus.nativeUI.closeWaiting()
+										plus.nativeUI.toast(result.Msg)
+										console.log(result.Msg)
 									}
-								});	
+
+								}
+							});
 						},
 						/*获取数据*/
-						_getData(callback){
+						_getData(callback) {
 							var _this = this
 							app.ajax(app.baseUrl + '/api/BusiDiscount/GetDiscountList', {
 								//									data: data,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
 								success: function(result) {
-									mui.later(()=>{
-										document.getElementById('loader').style.display='none'
+									mui.later(() => {
+										document.getElementById('loader').style.display = 'none'
 										if(result.Success) {
 											_this.couponsList = result.Data.ListInfo
-											 
-												 	_this.scroll.refresh();
-												 	if(callback) callback();
-											
+
+											_this.scroll.refresh();
+											if(callback) callback();
+
 										} else {
 											/*验证失败*/
 											plus.nativeUI.toast(result.Msg)
-	
+
 										}
-									},500)
+									}, 500)
 								}
 							});
 						}
 					}
 				})
 			})
-			function refresh(){
-//				alert(1)
+
+			function refresh() {
+				//				alert(1)
 				APP._getData()
 			}
 		</script>

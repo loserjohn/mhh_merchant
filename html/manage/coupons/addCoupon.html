@@ -150,7 +150,7 @@
 							<input type="text" class="cellInputTxt" placeholder="请输入优惠券名称" v-model="couponsName" />
 						</li>
 						<li class="  mui-table-view-cell">
-							<div class="f1 cellName ">优惠券类型</div>
+							<div class="f1 cellName ">领取类型</div>
 							<div class="flex reset ">
 								<div class="f1 mui-input-row mui-radio mui-left reset ">
 									<label>正常时限优惠</label>
@@ -161,6 +161,16 @@
 									<input name="radio" type="radio" v-model="couponsType" :value="2">
 								</div>
 							</div>
+						</li>
+						<li class="mui-table-view-cell flex">
+							<div class="f1 cellName ">适用类型</div>
+							<select v-model="couponsClass" class=" t_r red reset seletBox" >
+								<option disabled value="">请选择</option>
+								<option v-for="item in typeList" :value="item.Text" :key="item.Value">{{item.Text}}</option>
+							</select>
+
+							<div class=" cellName">{{couponsClass}}</div>
+							<i class="iconfont icon-xiayibu "></i>
 						</li>
 						<li class="mui-table-view-cell flex" @tap="_setStartTime">
 							<div class="f1 cellName">开始时间</div>
@@ -273,16 +283,32 @@
 						couponsDetail: '', //券细节
 //						couponsEXplain: '', //券说明
 						couponsRepet: false, //重复领取
-//						couponsRemark: '' //备注
+						couponsClass:'',
+						typeList:[] //类型数组
 					},
 					created: function() {
 						//							alert(1)
 
 					},
 					mounted: function() {
-//						mui.later(()=>{
-							document.getElementById('loader').style.display='none'
-//						},2500)
+						document.getElementById('loader').style.display='none'
+						var _this = this
+						app.ajax(app.baseUrl + '/api/ProjectType/GetListPorjectType', {
+							// dataType:'json',//服务器返回json格式数据
+							type: 'get', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded',
+							},
+							success: function(result) {
+								/*赋值*/
+								_this.typeList = result;
+							},
+							error: function(xhr, type, errorThrown) {
+								//异常处理；
+								console.log(type);
+							}
+						});
 					},
 					methods: {
 						//						选择起始时间
@@ -358,6 +384,7 @@
 								DISCOUNT_DETAILS:this.couponsDetail,
 								DISCOUNT_TYPE:this.couponsType,
 								IS_REPEAT:this.couponsRepet?'1':'0',
+								DISCOUNT_PROJECT_TYPE:this.couponsClass
 							}
 //							console.log(JSON.stringify(data))
 							/*若为类型二则有效期为必填*/
