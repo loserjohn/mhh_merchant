@@ -79,8 +79,8 @@
 		var info = plus.push.getClientInfo();
 		//		透传消息监听
 		plus.push.addEventListener("receive", function(msg) {
+
 			//			新消息红点提示
-			//			alert('receive')
 			if(plus.os.name == "iOS") {
 				switch(msg.payload) {
 					case "LocalMSG":
@@ -110,35 +110,259 @@
 		}, false);
 		//		点击消息监听
 		plus.push.addEventListener("click", function(msg) {
-			switch(msg.payload) {
-				case "LocalMSG":
-					/*本地消息*/
-					break;
-				default:
+			//			alert(JSON.stringify(msg))
+			//			var MSG ;
+			//			if(typeof(msg)=="string"){
+			//				MSG = JSON.parse(msg)
+			//			}
+			MSG = msg;
 
-					break;
+			if(!MSG.payload) {
+				mui.openWindow({
+					url: '../information/sysMessage.html',
+					id: 'sysMessage',
+					styles: {
+						top: '0px', //新页面顶部位置
+						bottom: '0px', //新页面底部位置
+						scrollIndicator: "none",
+						plusrequire: 'ahead',
+						titleNView: {
+							autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+							titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+							titleSize: "14px", // 字体大小,默认17px
+							backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+							progress: { // 标题栏控件的进度条样式
+								color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"
+								height: "2px" // 进度条高度,默认值为"2px"         
+							},
+							splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+								color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+								height: "1px" // 分割线高度,默认值为"2px"
+							}
+						}
+					},
+					show: {
+						autoShow: true, //页面loaded事件发生后自动显示，默认为true
+						duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+					},
+					extras: {},
+					waiting: {
+						autoShow: true, //自动显示等待框，默认为true
+						title: '正在加载...', //等待对话框上显示的提示内容
+					}
+				})
+			} else {
+				owner._jump(MSG.payload)
+
 			}
-			mui.openWindow({
-				url: './html/information/sysMessage.html',
-				id: 'sysMessage',
-				styles: {
-					top: '0px', //新页面顶部位置
-					bottom: '0px', //新页面底部位置
-					scrollIndicator: "none",
-					plusrequire: 'ahead'
-				},
-				show: {
-					autoShow: true, //页面loaded事件发生后自动显示，默认为true
-					duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-				},
-				extras: {},
-				waiting: {
-					autoShow: true, //自动显示等待框，默认为true
-					title: '正在加载...', //等待对话框上显示的提示内容
-				}
-			})
+
 		}, false);　
 	}
+	owner._jump = function(str) {
+		var key = str.split('||')[0];
+		var code = str.split('||')[1];
+		if(!code) {
+			return
+		};
+		switch(key) {
+			case 'A':
+				//								活动								
+				mui.openWindow({
+					url: code,
+					id: 'activity' + new Date().getTime(),
+					styles: {
+						top: '0px', //新页面顶部位置
+						bottom: '0px', //新页面底部位置
+						scrollIndicator: "none",
+						plusrequire: 'ahead',
+						// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+						titleNView: { // 窗口的标题栏控件
+							autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+							titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+							titleSize: "14px", // 字体大小,默认17px
+							backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+							progress: { // 标题栏控件的进度条样式
+								color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+								height: "2px" // 进度条高度,默认值为"2px"         
+							},
+							splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+								color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+								height: "1px" // 分割线高度,默认值为"2px"
+							}
+						}
+					},
+					createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+					show: {
+						autoShow: true, //页面loaded事件发生后自动显示，默认为true
+						duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+					},
+					extras: {
+						//自定义扩展参数，可以用来处理页面间传值  
+						detail: data
+					},
+					waiting: {
+						autoShow: true, //自动显示等待框，默认为true
+						title: '正在加载...', //等待对话框上显示的提示内容
+					}
+				})
+
+				break;
+			case 'W':
+				//								外链
+				mui.openWindow({
+					url: code,
+					id: 'activity' + new Date().getTime(),
+					styles: {
+						top: '0px', //新页面顶部位置
+						bottom: '0px', //新页面底部位置
+						scrollIndicator: "none",
+						plusrequire: 'ahead',
+						// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+						titleNView: { // 窗口的标题栏控件
+							autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+							titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+							titleSize: "14px", // 字体大小,默认17px
+							backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+							progress: { // 标题栏控件的进度条样式
+								color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+								height: "2px" // 进度条高度,默认值为"2px"         
+							},
+							splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+								color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+								height: "1px" // 分割线高度,默认值为"2px"
+							}
+						}
+					},
+					createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+					show: {
+						autoShow: true, //页面loaded事件发生后自动显示，默认为true
+						duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+					},
+					extras: {
+						//自定义扩展参数，可以用来处理页面间传值  
+						detail: data
+					},
+					waiting: {
+						autoShow: true, //自动显示等待框，默认为true
+						title: '正在加载...', //等待对话框上显示的提示内容
+					}
+				})
+				break;
+			case 'B':
+				//								社区新闻
+				var data = {
+					infoCode: code
+				}
+				mui.openWindow({
+					url: '../community/community_detail.html',
+					id: 'community_detail',
+					styles: {
+						top: '0px', //新页面顶部位置
+						bottom: '0px', //新页面底部位置
+						scrollIndicator: "none",
+						plusrequire: 'ahead',
+						// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+						titleNView: { // 窗口的标题栏控件
+							autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+							titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+							titleSize: "14px", // 字体大小,默认17px
+							backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+							progress: { // 标题栏控件的进度条样式
+								color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+								height: "2px" // 进度条高度,默认值为"2px"         
+							},
+							splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+								color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+								height: "1px" // 分割线高度,默认值为"2px"
+							}
+						}
+					},
+					createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+					show: {
+						autoShow: true, //页面loaded事件发生后自动显示，默认为true
+						duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+					},
+					extras: {
+						//自定义扩展参数，可以用来处理页面间传值  
+						detail: data
+					},
+					waiting: {
+						autoShow: false, //自动显示等待框，默认为true
+						title: '正在加载...', //等待对话框上显示的提示内容
+					}
+				})
+
+				break;
+			case 'P':
+				//项目
+				mui.openWindow({
+					url: '../production/productBuy.html',
+					id: 'productBuy',
+					styles: {
+						top: '0px', //新页面顶部位置
+						bottom: '0px', //新页面底部位置
+						scrollIndicator: "none",
+						plusrequire: 'ahead'
+					},
+					createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+					show: {
+						autoShow: true, //页面loaded事件发生后自动显示，默认为true
+						duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+					},
+					extras: {
+						proKey: code
+					},
+					waiting: {
+						autoShow: true, //自动显示等待框，默认为true
+						title: '正在加载...', //等待对话框上显示的提示内容
+					}
+				})
+			case 'O':
+				//订单详情
+				mui.openWindow({
+					url: '../orders/order_detail.html',
+					id: 'order_detail',
+					styles: {
+						top: '0px', //新页面顶部位置
+						bottom: '0px', //新页面底部位置
+						scrollIndicator: "none",
+						plusrequire: 'ahead',
+						titleNView: {
+							autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+							titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+							titleSize: "14px", // 字体大小,默认17px
+							backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+							progress: { // 标题栏控件的进度条样式
+								color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"
+								height: "2px" // 进度条高度,默认值为"2px"         
+							},
+							splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+								color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+								height: "1px" // 分割线高度,默认值为"2px"
+							}
+						}
+					},
+					createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+					show: {
+						autoShow: true, //页面loaded事件发生后自动显示，默认为true
+						duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+					},
+					extras: {
+						//自定义扩展参数，可以用来处理页面间传值  
+						orderId: code
+					},
+					waiting: {
+						autoShow: true, //自动显示等待框，默认为true
+						title: '正在加载...', //等待对话框上显示的提示内容
+					}
+				})
+
+				break;
+			default:
+				break;
+		}
+	}
+
 	//	创建本地消息
 	owner.createLocalPushMsg = function(msg) {
 		//		alert('本地信息')
@@ -517,7 +741,7 @@
 	}
 	//	发送cid
 	owner.postDevice = function() {
-		//		alert(1)
+		//				alert(1)
 		var info = plus.push.getClientInfo();
 		//		console.log(info.clientid)
 		var cid = info.clientid;
@@ -539,7 +763,8 @@
 				'Authorization': owner.mark + plus.storage.getItem('token')
 			},
 			success: function(result) {
-				//				alert(cid)
+				//								alert(cid)
+				console.log(cid)
 			},
 			error: function(xhr, type, errorThrown) {
 				//				alert('GTerror')
@@ -706,7 +931,7 @@
 		});
 		home.onloaded = function() {
 			mui.later(function() {
-				owner.pushInit()
+
 				if(callback) callback(true)
 			}, 500)
 		}

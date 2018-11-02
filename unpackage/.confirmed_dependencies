@@ -44,5 +44,10 @@
 		"refer": [
 			"html/home/home.html"
 		]
+	},
+	"html/manage/personSet/personSet.html": {
+		"refer": [
+			"index.html"
+		]
 	}
 }

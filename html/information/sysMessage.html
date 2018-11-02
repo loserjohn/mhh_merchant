@@ -45,7 +45,6 @@
 				<button class="mui-btn  mui-btn-link mui-pull-right" id="postSelft"></button>
 			</header>-->
 			
-
 			<!--卡片-->
 			<div class="cards scrollBox " ref="scroll" :style="{top:scrollTop,bottom:0}" id="scroll">
 				<div class="cm_ul reset" style="min-height: 101%;">
@@ -134,6 +133,10 @@
 									pullUpLoad: {
 										threshold: -20 // 当上拉距离超过30px时触发 pullingUp 事件
 									},
+									pullDownRefresh: {
+										threshold: 50,
+										stop: 0
+									}
 								})
 							} else {
 								_this.scroll.refresh();
@@ -141,13 +144,27 @@
 							/*上拉加载*/
 							_this.scroll.on('pullingUp', function(e) {
 								_this._getData((b) => {
+									_this.scroll.finishPullDown()
 									if(b) {
 //										没有数据了
 									} else {
 										_this.scroll.finishPullUp()
 									}
 								})
+							});
+							/*下拉刷新*/
+							_this.scroll.on('pullingDown', function(e) {
+								_this.index = 1;
+								_this.messageList = [];
+								_this.norest = false
+								plus.nativeUI.showWaiting()
+								_this._getData(() => {
+									plus.nativeUI.closeWaiting();
+									_this.scroll.finishPullDown()
+								})
+
 							})
+							
 
 						})
 						/*首次加载数据*/
