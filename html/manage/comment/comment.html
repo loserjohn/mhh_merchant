@@ -510,29 +510,15 @@
 						},
 						/*跳转详情*/
 						_jumpDetail(item) {
-							//								console.log(JSON.stringify(item)) 
-							mui.openWindow({
-								url: './common_detail.html',
-								id: 'common_detail',
-								styles: {
-									top: '0px', //新页面顶部位置
-									bottom: '0px', //新页面底部位置
-									scrollIndicator: "none",
-									plusrequire: 'ahead'
-								},
-								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-								show: {
-									autoShow: true, //页面loaded事件发生后自动显示，默认为true
-									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-								},
-								extras: {
-									commonData: item
-								},
-								waiting: {
-									autoShow: true, //自动显示等待框，默认为true
-									title: '正在加载...', //等待对话框上显示的提示内容
-								}
-							})
+							let desturl = './common_detail.html'
+							let destid = 'common_detail'
+							let exa = {commonData: item}
+							let option = {
+								showTitle:true,
+								createNew: true,
+							}
+							app.navigater(desturl,destid,exa,option)
+					
 						},
 						//							刷新
 						_refresh() {
@@ -573,26 +559,13 @@
 						},
 						/*跳转页面*/
 						_navigateTo(desturl, destid, extras) {
-							mui.openWindow({
-								url: desturl,
-								id: destid,
-								styles: {
-									top: '0px', //新页面顶部位置
-									bottom: '0px', //新页面底部位置
-									scrollIndicator: "none",
-									plusrequire: 'ahead'
-								},
-								createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-								show: {
-									autoShow: false, //页面loaded事件发生后自动显示，默认为true
-									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-								},
-								extras: extras ? extras : {},
-								waiting: {
-									autoShow: true, //自动显示等待框，默认为true
-									title: '正在加载...', //等待对话框上显示的提示内容
-								}
-							})
+							let exa = extras
+							let option = {
+								showTitle:false,
+								autoShow: false
+							}
+							app.navigater(desturl,destid,exa,option)
+						
 						}
 
 					}
