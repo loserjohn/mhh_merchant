@@ -111,7 +111,7 @@
 		//		点击消息监听
 		plus.push.addEventListener("click", function(msg) {
 			MSG = msg;
-
+			alert(MSG.payload)
 			if(!MSG.payload) {
 				mui.openWindow({
 					url: '../information/sysMessage.html',

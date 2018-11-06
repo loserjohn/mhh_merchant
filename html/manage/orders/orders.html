@@ -131,13 +131,17 @@
 											</div>
 										</div>
 									</div>
-									<div class="itemFoot  cor_g">
+									<div class="itemFoot  cor_g t_c" v-if="item.ORDER_STATUS == 6"  >
+										<div class="fs16 black-btn" @tap="_refondDetail(item)">查看退款详情</div>
+									</div>
+									<div class="itemFoot  cor_g" v-else>
 										<p class=" ">预约时间: <span class="fr">{{item.BOOK_DATE?item.BOOK_DATE.replace('00:00:00',item.BOOK_PERIOD):'暂未预约时间'}}</span></p>
 										<p>
 											服务地点 : {{item.ORDER_ADDREASS}}
 										</p>
 
 									</div>
+									
 								</li>
 								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{orderList[0].norest?'没有数据了':'加载更多'}}</li>
 							</ul>
@@ -591,9 +595,10 @@
 													return;
 												}
 												_this.orderList[tabType].index += 1
-
-												_this.scroll.refresh();
-												if(callback) callback(false);
+												mui.later(() => {
+													_this.scroll.refresh();
+													if(callback) callback(false);
+												}, 300)
 
 											} else {
 												/*验证失败*/
@@ -606,6 +611,7 @@
 							},
 							/*刷新*/
 							_refreshData() {
+								var _this = this
 								this.orderList = [{ //全部
 										index: 1,
 										infoList: [],
@@ -642,10 +648,10 @@
 									if(b) {
 
 									} else {
-										this.scroll.finishPullUp()
+										_this.scroll.finishPullUp()
 
 									}
-									this.scroll.finishPullDown()
+									_this.scroll.finishPullDown()
 									plus.nativeUI.closeWaiting()
 								})
 							},
