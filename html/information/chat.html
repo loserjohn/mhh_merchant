@@ -1160,12 +1160,15 @@
 						switch(errorCode) {
 							case RongIMLib.ErrorCode.TIMEOUT:
 								info = '超时';
+								plus.nativeUI.toast('链接失败，请检查网络')
 								break;
 							case RongIMLib.ErrorCode.UNKNOWN_ERROR:
 								info = '未知错误';
+								plus.nativeUI.toast('链接失败，请检查网络')
 								break;
 							case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
 								info = '在黑名单中，无法向对方发送消息';
+								plus.nativeUI.toast('链接失败，请检查网络')
 								break;
 							case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
 								info = '不在讨论组中';
