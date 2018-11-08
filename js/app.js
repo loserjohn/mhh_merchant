@@ -79,17 +79,15 @@
 		var info = plus.push.getClientInfo();
 		//		透传消息监听
 		plus.push.addEventListener("receive", function(msg) {
-
+			alert(JSON.stringify(msg))
 			//			新消息红点提示
+// 			if(plus.webview.getWebviewById('information')) {
+// 				plus.webview.getWebviewById('information').evalJS('redSet(' + JSON.stringify(msg.content) + ')')
+// 			}
 			if(plus.os.name == "iOS") {
 				switch(msg.payload) {
 					case "LocalMSG":
 						/*本地消息*/
-
-						if(plus.webview.getWebviewById('information')) {
-							plus.webview.getWebviewById('information').evalJS('redSet(' + JSON.stringify(msg.content) + ')')
-						}
-
 						break;
 					default:
 						/*收到离线推送消息，则创建本地消息*/
@@ -101,17 +99,20 @@
 				}
 			} else {
 				//				plus.nativeUI.alert(msg.content);
-				if(plus.webview.getWebviewById('information')) {
-					plus.webview.getWebviewById('information').evalJS('redSet(' + JSON.stringify(msg.content) + ')')
-				}
+// 				if(plus.webview.getWebviewById('information')) {
+// 					plus.webview.getWebviewById('information').evalJS('redSet(' + JSON.stringify(msg.content) + ')')
+// 				}
 			}
 
 			//				plus.nativeUI.alert(msg.content);
 		}, false);
 		//		点击消息监听
 		plus.push.addEventListener("click", function(msg) {
+			// alert(JSON.stringify(msg))
 			MSG = msg;
-//			alert(MSG.payload)
+			alert(MSG.payload.payload)
+			
+
 			if(!MSG.payload) {
 				mui.openWindow({
 					url: '../information/sysMessage.html',
@@ -147,13 +148,16 @@
 					}
 				})
 			} else {
-				owner._jump(MSG.payload)
+				owner._jump(MSG.payload.payload)
 
 			}
 
 		}, false);　
 	}
 	owner._jump = function(str) {
+		if(!str) {
+			return
+		};
 		var key = str.split('||')[0];
 		var code = str.split('||')[1];
 		if(!code) {
@@ -291,7 +295,7 @@
 			case 'P':
 				//项目
 				mui.openWindow({
-					url: '../production/productBuy.html',
+					url: '../manage/production/productBuy.html',
 					id: 'productBuy',
 					styles: {
 						top: '0px', //新页面顶部位置
@@ -315,7 +319,7 @@
 			case 'O':
 				//订单详情
 				mui.openWindow({
-					url: '../orders/order_detail.html',
+					url: '../manage/orders/order_detail.html',
 					id: 'order_detail',
 					styles: {
 						top: '0px', //新页面顶部位置
@@ -364,7 +368,7 @@
 		var options = {
 			cover: false
 		};
-		plus.push.createMessage(msg.content, "LocalMSG", options);
+		plus.push.createMessage(msg.content.content, "LocalMSG", options);
 
 		//		if(plus.os.name == "iOS") {
 		//			alert('*如果无法创建消息，请到"设置"->"通知"中配置应用在通知中心显示!');
@@ -1349,8 +1353,7 @@
 			progress_color:option.progress_color?option.progress_color:"#ccaa42",
 			splitLine_color:option.splitLine_color?option.splitLine_color:"#404040"
 		}
-		
-		
+	
 		
 		var style ={
 			top: '0px', //新页面顶部位置

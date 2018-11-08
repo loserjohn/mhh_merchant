@@ -155,7 +155,7 @@
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
-			(function() {
+	
 				mui.init({
 					swipeBack: true
 				});
@@ -180,8 +180,7 @@
 							var self = plus.webview.currentWebview();
 							var td = new Date(self.date);
 							this.today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate()
-
-							//							构建48个
+							// alert(this.today )
 						},
 						mounted: function() {
 							/*初始化数据*/
@@ -273,7 +272,7 @@
 									this.selectList = []
 									return
 								}
-								
+								console.log( _this.today+_this.selectList.join(','))
 								plus.nativeUI.confirm('确定将选择时段置为' + msg + '？', () => {
 									plus.nativeUI.showWaiting()
 									app.ajax(app.baseUrl + '/api/BusiAccount/SetBookingTime', {
@@ -291,7 +290,7 @@
 												plus.nativeUI.toast('成功');
 												_this._getData()
 											} else {
-												alert(result.Msg)
+												plus.nativeUI.toast(result.Msg)
 											}
 										}
 									});
@@ -349,7 +348,6 @@
 									return
 								}
 								
-								
 								plus.nativeUI.confirm('确定'+msg+'全天休息？', (event) => {
 									if(event.index == 0) {
 										plus.nativeUI.showWaiting()
@@ -382,7 +380,7 @@
 					})
 
 				});
-			})();
+	
 		</script>
 	</body>
 
