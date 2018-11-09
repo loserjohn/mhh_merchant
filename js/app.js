@@ -79,24 +79,20 @@
 		var info = plus.push.getClientInfo();
 		//		透传消息监听
 		plus.push.addEventListener("receive", function(msg) {
-			alert(JSON.stringify(msg))
+//			alert(JSON.stringify(msg))
 			//			新消息红点提示
 // 			if(plus.webview.getWebviewById('information')) {
 // 				plus.webview.getWebviewById('information').evalJS('redSet(' + JSON.stringify(msg.content) + ')')
 // 			}
 			if(plus.os.name == "iOS") {
-				switch(msg.payload) {
-					case "LocalMSG":
-						/*本地消息*/
-						break;
-					default:
-						/*收到离线推送消息，则创建本地消息*/
-						owner.createLocalPushMsg(msg);
-						//						if(plus.webview.getWebviewById('information')){
-						//							plus.webview.getWebviewById('information').evalJS('redSet()')
-						//						}
-						break;
+				if(msg.payload.indexOf('LocalMSG')>=0){
+	//				收到的是本地消息
+					alert('本地消息'+msg.payload)
+					return 
+				}else{
+					owner.createLocalPushMsg(msg);
 				}
+			
 			} else {
 				//				plus.nativeUI.alert(msg.content);
 // 				if(plus.webview.getWebviewById('information')) {
@@ -108,12 +104,31 @@
 		}, false);
 		//		点击消息监听
 		plus.push.addEventListener("click", function(msg) {
-			// alert(JSON.stringify(msg))
-			MSG = msg;
-			alert(MSG.payload.payload)
+			alert(JSON.stringify(msg))
+						
+			if(msg.payload.indexOf('LocalMSG')>=0){
+//				收到的是本地消息
+				alert('本地消息'+msg.payload)
+				var pl = msg.payload.split('@')[1];
+				mui.later(function(){
+					owner._jump(pl)
+				},1000)
+
+				return 
+			}
+			var MSG;
+			
+//			直接进入消息中心的消息
+			if ( typeof(msg.payload)=="string" ) {
+				MSG = JSON.parse(msg.payload) 
+			}else{
+				MSG = msg.payload
+			}
+			 MSG = MSG.payload
+			alert(MSG)
 			
 
-			if(!MSG.payload) {
+			if(!MSG) {
 				mui.openWindow({
 					url: '../information/sysMessage.html',
 					id: 'sysMessage',
@@ -148,18 +163,21 @@
 					}
 				})
 			} else {
-				owner._jump(MSG.payload.payload)
-
+				mui.later(function(){
+					owner._jump(MSG)
+				},1000)
 			}
 
 		}, false);　
 	}
 	owner._jump = function(str) {
+//		alert(str)
 		if(!str) {
 			return
 		};
 		var key = str.split('||')[0];
 		var code = str.split('||')[1];
+//		alert(key)
 		if(!code) {
 			return
 		};
@@ -355,7 +373,7 @@
 						title: '正在加载...', //等待对话框上显示的提示内容
 					}
 				})
-
+//				alert('66')
 				break;
 			default:
 				break;
@@ -364,15 +382,14 @@
 
 	//	创建本地消息
 	owner.createLocalPushMsg = function(msg) {
-		//		alert('本地信息')
+//		alert(JSON.stringify(msg.content))
+		var c;
+
+//		alert(c.content)
 		var options = {
 			cover: false
 		};
-		plus.push.createMessage(msg.content.content, "LocalMSG", options);
-
-		//		if(plus.os.name == "iOS") {
-		//			alert('*如果无法创建消息，请到"设置"->"通知"中配置应用在通知中心显示!');
-		//		}
+		plus.push.createMessage(msg.content, "LocalMSG@"+msg.payload, options);
 	}
 
 	/**
@@ -743,6 +760,7 @@
 		//				alert(1)
 		var info = plus.push.getClientInfo();
 		//		console.log(info.clientid)
+		
 		var cid = info.clientid;
 		var device;
 		if(mui.os.ios) {

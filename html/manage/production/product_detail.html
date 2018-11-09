@@ -201,7 +201,7 @@
 							<div class="f1 cor_y t_r fs16">{{detail.PROJECT_STATUS | getStatus}}</div>
 						</div>
 						<div class="flex">
-							<h3 class="prize cur_prize">￥{{detail.PROJECT_DISCOUNT}}</h3>
+							<h3 class="prize cur_prize">￥{{detail.IS_ACTIVITY=='1'?detail.ACTIVITY_PRICE:detail.PROJECT_DISCOUNT}}</h3>
 						</div>
 						<div class="delec_prize cor_g">原价：￥{{detail.PROJECT_PRICE}}</div>
 						<div class="cm_title">{{detail.PROJECT_NAME}}</div>

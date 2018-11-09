@@ -200,7 +200,7 @@
 								</div>
 								<div class="itemFoot flex">
 									<div class="flex">
-										<h3 class="prize cur_prize">￥{{item.PROJECT_DISCOUNT}} </h3>
+										<h3 class="prize cur_prize">￥{{item.IS_ACTIVITY=='1'?item.ACTIVITY_PRICE:item.PROJECT_DISCOUNT}} </h3>
 										<p class="delec_prize ">￥{{item.PROJECT_PRICE}}</p>
 									</div>
 									<!--<div class="f1 flex btnsBox">

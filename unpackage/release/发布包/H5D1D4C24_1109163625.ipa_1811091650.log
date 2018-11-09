@@ -1,0 +1,71 @@
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Logging to file: F:\work\马嘿嘿\商户端\mhh_merchant\unpackage\release\发布包\H5D1D4C24_1109163625.ipa_1811091650.log
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Logging configured successfully.
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: iTMSTransporter : iTunes Store Transporter [1.9.8]
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: OS identifier: Windows 10 10.0 (amd64); jvm=25.171-b11; jre=1.8.0_171-b11
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Memory: [JVM] 94M free, 137M total, 1755M max [System] (Physical) 2995M free, 7891M total (Swap) 2339M free, 9811M total
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Upload mode selected.
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Examining the package at: C:\Users\12924\AppData\Local\Temp\au\itmsp\1441622014.itmsp
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Ensuring that package has well formed metadata file...
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Gathering the list of valid files from the package ...
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Finished gathering the list of valid files from the package.
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Verify progress: Analyzing metadata (Step 3/?)
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Performing authentication of package 1441622014.itmsp ...
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: Verify progress: Analyzing metadata (Step 4/2)
+[2018-11-09 16:50:25 CST] <Thread-18>  INFO: id = 20181109165025-273
+[2018-11-09 16:50:26 CST] <Thread-18>  INFO: id = 20181109165026-463
+[2018-11-09 16:50:27 CST] <Thread-18>  INFO: The list of files requested for upload by Apple is: [metadata.xml, 1441622014.ipa].  These are the files that will be uploaded.
+[2018-11-09 16:50:27 CST] <Thread-18>  INFO: Starting media analysis of assets
+[2018-11-09 16:50:28 CST] <Thread-18>  INFO: Verify progress: Adding asset to analyze: 1441622014.ipa (Step 5/3)
+[2018-11-09 16:50:28 CST] <Thread-18>  INFO: Asset media analysis has completed
+[2018-11-09 16:50:28 CST] <Thread-18>  INFO: id = 20181109165028-844
+[2018-11-09 16:50:44 CST] <Thread-18>  INFO: Verify progress: Validating assets (Step 6/3)
+[2018-11-09 16:50:44 CST] <Thread-18>  INFO: Verify progress: Validating assets (Step 7/3)
+[2018-11-09 16:50:44 CST] <Thread-18>  INFO: id = 20181109165044-139
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: The list of files requested for upload by Apple is: [metadata.xml, 1441622014.ipa].  These are the files that will be uploaded.
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: Done performing authentication.
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: The asset replacement verification check is disabled.
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: Checking the file size of the files: [1441622014.ipa]
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: Done checking the file sizes.
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: Checking the md5 checksum of the files: [1441622014.ipa]
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: Done checking the md5 checksum.
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: Preparing to upload package 1441622014.itmsp ...
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: Starting to upload the package's files (1441622014.itmsp) ...
+[2018-11-09 16:50:59 CST] <Thread-18>  INFO: Attempting to connect to Apple's webDAV...
+[2018-11-09 16:51:00 CST] <Thread-18>  INFO: Successfully connected to Apple's webDAV.
+[2018-11-09 16:51:00 CST] <Thread-18>  INFO: Attempting to create the package's folder on Apple's webDAV: /6/984AR6NR4D/uploading/1441622014-20181109005046-778.itmsp/
+[2018-11-09 16:51:00 CST] <Thread-18>  INFO: Successfully created/set the package's folder on Apple's webDAV.
+[2018-11-09 16:51:00 CST] <Thread-18>  INFO: Determining which files should be uploaded ...
+[2018-11-09 16:51:00 CST] <Thread-18>  INFO: Finished determining which files should be uploaded.
+[2018-11-09 16:51:00 CST] <Thread-18>  INFO: Computing total size of files to upload ...
+[2018-11-09 16:51:00 CST] <Thread-18>  INFO: Done computing total size of files to upload.
+[2018-11-09 16:51:01 CST] <Thread-18>  INFO: Starting upload of file: C:\Users\12924\AppData\Local\Temp\au\itmsp\1441622014.itmsp\1441622014.ipa ...
+[2018-11-09 16:51:04 CST] <Thread-18>  INFO:      File: 1441622014.ipa 10485760/12789573, 81% completed
+[2018-11-09 16:51:04 CST] <Thread-18>  INFO:      File: 1441622014.ipa 12789573/12789573, 100% completed
+[2018-11-09 16:51:04 CST] <Thread-18>  INFO:   Successfully uploaded file: C:\Users\12924\AppData\Local\Temp\au\itmsp\1441622014.itmsp\1441622014.ipa
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Package upload progress: 99% completed
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Finished upload of file: C:\Users\12924\AppData\Local\Temp\au\itmsp\1441622014.itmsp\1441622014.ipa.
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Starting upload of file: C:\Users\12924\AppData\Local\Temp\au\itmsp\1441622014.itmsp\metadata.xml ...
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO:      File: metadata.xml 523/523, 100% completed
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO:   Successfully uploaded file: C:\Users\12924\AppData\Local\Temp\au\itmsp\1441622014.itmsp\metadata.xml
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Package upload progress: 100% completed
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Finished upload of file: C:\Users\12924\AppData\Local\Temp\au\itmsp\1441622014.itmsp\metadata.xml.
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Gathering list of uploaded files from Apple's webDAV...
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Done gathering list of uploaded files from Apple's webDAV...
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Checking if any encryption/compression files are outdated locally ...
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Finished checking if any encryption/compression files are outdated locally.
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Confirming that the previously uploaded files were uploaded correctly ...
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Finished confirming that the previously uploaded files were uploaded correctly.
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Determining which files were not uploaded ...
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Finished determining which files were not uploaded.
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: Done performing upload.
+[2018-11-09 16:51:05 CST] <Thread-18>  INFO: id = 20181109165105-076
+[2018-11-09 16:51:08 CST] <Thread-18>  INFO: Done performing uploadDone notification to Apple.
+[2018-11-09 16:51:08 CST] <Thread-18>  INFO: The package: C:\Users\12924\AppData\Local\Temp\au\itmsp\1441622014.itmsp has been successfully uploaded.
+[2018-11-09 16:51:08 CST] <Thread-18>  INFO: Verify progress: Operation completed (Step 3/3)
+
+
+
+Package Summary:
+ 
+1 packages were uploaded successfully:
+	C:\Users\12924\AppData\Local\Temp\au\itmsp\1441622014.itmsp
