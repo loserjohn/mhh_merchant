@@ -79,53 +79,50 @@
 		var info = plus.push.getClientInfo();
 		//		透传消息监听
 		plus.push.addEventListener("receive", function(msg) {
-//			alert(JSON.stringify(msg))
-			//			新消息红点提示
-// 			if(plus.webview.getWebviewById('information')) {
-// 				plus.webview.getWebviewById('information').evalJS('redSet(' + JSON.stringify(msg.content) + ')')
-// 			}
+
 			if(plus.os.name == "iOS") {
 				if(msg.payload.indexOf('LocalMSG')>=0){
 	//				收到的是本地消息
-					alert('本地消息'+msg.payload)
+//					alert('本地消息'+msg.payload)
 					return 
 				}else{
 					owner.createLocalPushMsg(msg);
 				}
 			
 			} else {
-				//				plus.nativeUI.alert(msg.content);
-// 				if(plus.webview.getWebviewById('information')) {
-// 					plus.webview.getWebviewById('information').evalJS('redSet(' + JSON.stringify(msg.content) + ')')
-// 				}
+
 			}
 
 			//				plus.nativeUI.alert(msg.content);
 		}, false);
 		//		点击消息监听
 		plus.push.addEventListener("click", function(msg) {
-			alert(JSON.stringify(msg))
+//			alert(JSON.stringify(msg))
 						
-			if(msg.payload.indexOf('LocalMSG')>=0){
-//				收到的是本地消息
-				alert('本地消息'+msg.payload)
-				var pl = msg.payload.split('@')[1];
-				mui.later(function(){
-					owner._jump(pl)
-				},1000)
 
-				return 
-			}
 			var MSG;
 			
 //			直接进入消息中心的消息
 			if ( typeof(msg.payload)=="string" ) {
-				MSG = JSON.parse(msg.payload) 
+				
+				if(msg.payload.indexOf('LocalMSG')>=0){
+//				收到的是本地消息
+//					alert('本地消息'+msg.payload)
+					var pl = msg.payload.split('@')[1];
+					mui.later(function(){
+						owner._jump(pl)
+					},1000)
+	
+					return 
+				}else{
+					MSG =JSON.parse(msg.payload) 
+				}		
 			}else{
+//				alert(2)
 				MSG = msg.payload
 			}
 			 MSG = MSG.payload
-			alert(MSG)
+//			alert(MSG)
 			
 
 			if(!MSG) {
@@ -194,6 +191,7 @@
 						plusrequire: 'ahead',
 						// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
 						titleNView: { // 窗口的标题栏控件
+							type:'transparent',
 							autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
 							titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
 							titleSize: "14px", // 字体大小,默认17px
@@ -382,10 +380,7 @@
 
 	//	创建本地消息
 	owner.createLocalPushMsg = function(msg) {
-//		alert(JSON.stringify(msg.content))
-		var c;
 
-//		alert(c.content)
 		var options = {
 			cover: false
 		};
