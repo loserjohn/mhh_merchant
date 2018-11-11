@@ -81,16 +81,17 @@
 		plus.push.addEventListener("receive", function(msg) {
 
 			if(plus.os.name == "iOS") {
-				if(msg.payload.indexOf('LocalMSG')>=0){
-	//				收到的是本地消息
-//					alert('本地消息'+msg.payload)
-					return 
-				}else{
+				if(msg.payload.indexOf('LocalMSG') >= 0) {
+					//				收到的是本地消息
+					//					alert('本地消息'+msg.payload)
+					return
+				} else {
 					owner.createLocalPushMsg(msg);
 				}
-			
-			} else {
 
+			} else {
+				
+				//				owner.createLocalPushMsg(msg);
 			}
 
 			//				plus.nativeUI.alert(msg.content);
@@ -98,83 +99,87 @@
 		//		点击消息监听
 		plus.push.addEventListener("click", function(msg) {
 //			alert(JSON.stringify(msg))
-						
 
 			var MSG;
-			
-//			直接进入消息中心的消息
-			if ( typeof(msg.payload)=="string" ) {
-				
-				if(msg.payload.indexOf('LocalMSG')>=0){
-//				收到的是本地消息
-//					alert('本地消息'+msg.payload)
-					var pl = msg.payload.split('@')[1];
-					mui.later(function(){
-						owner._jump(pl)
-					},1000)
-	
-					return 
-				}else{
-					MSG =JSON.parse(msg.payload) 
-				}		
-			}else{
-//				alert(2)
-				MSG = msg.payload
-			}
-			 MSG = MSG.payload
-//			alert(MSG)
-			
+			if(plus.os.name == "iOS") {
+				//			直接进入消息中心的消息
+				if(typeof(msg.payload) == "string") {
 
-			if(!MSG) {
-				mui.openWindow({
-					url: '../information/sysMessage.html',
-					id: 'sysMessage',
-					styles: {
-						top: '0px', //新页面顶部位置
-						bottom: '0px', //新页面底部位置
-						scrollIndicator: "none",
-						plusrequire: 'ahead',
-						titleNView: {
-							autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
-							titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
-							titleSize: "14px", // 字体大小,默认17px
-							backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
-							progress: { // 标题栏控件的进度条样式
-								color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"
-								height: "2px" // 进度条高度,默认值为"2px"         
-							},
-							splitLine: { // 标题栏控件的底部分割线，类似borderBottom
-								color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
-								height: "1px" // 分割线高度,默认值为"2px"
-							}
-						}
-					},
-					show: {
-						autoShow: true, //页面loaded事件发生后自动显示，默认为true
-						duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-					},
-					extras: {},
-					waiting: {
-						autoShow: true, //自动显示等待框，默认为true
-						title: '正在加载...', //等待对话框上显示的提示内容
+					if(msg.payload.indexOf('LocalMSG') >= 0) {
+						//				收到的是本地消息
+						var pl = msg.payload.split('@')[1];
+						mui.later(function() {
+							owner._jump(pl)
+						}, 1000)
+
+						return
+					} else {
+						MSG = JSON.parse(msg.payload)
 					}
-				})
+				} else {
+					//				alert(2)
+					MSG = msg.payload
+				}
+				MSG = MSG.payload
+				//			alert(MSG)
+
+				if(!MSG) {
+					mui.openWindow({
+						url: '../information/sysMessage.html',
+						id: 'sysMessage',
+						styles: {
+							top: '0px', //新页面顶部位置
+							bottom: '0px', //新页面底部位置
+							scrollIndicator: "none",
+							plusrequire: 'ahead',
+							titleNView: {
+								autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+								titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+								titleSize: "14px", // 字体大小,默认17px
+								backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+								progress: { // 标题栏控件的进度条样式
+									color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"
+									height: "2px" // 进度条高度,默认值为"2px"         
+								},
+								splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+									color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+									height: "1px" // 分割线高度,默认值为"2px"
+								}
+							}
+						},
+						show: {
+							autoShow: true, //页面loaded事件发生后自动显示，默认为true
+							duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+						},
+						extras: {},
+						waiting: {
+							autoShow: true, //自动显示等待框，默认为true
+							title: '正在加载...', //等待对话框上显示的提示内容
+						}
+					})
+				} else {
+					mui.later(function() {
+						owner._jump(MSG)
+					}, 1000)
+				}
+
 			} else {
-				mui.later(function(){
-					owner._jump(MSG)
-				},1000)
+//				alert(msg.payload)
+				mui.later(function() {
+					owner._jump(msg.payload)
+				}, 1000)
 			}
 
 		}, false);　
 	}
 	owner._jump = function(str) {
-//		alert(str)
+		//		alert(str)
 		if(!str) {
 			return
 		};
 		var key = str.split('||')[0];
 		var code = str.split('||')[1];
-//		alert(key)
+		//		alert(key)
 		if(!code) {
 			return
 		};
@@ -191,7 +196,7 @@
 						plusrequire: 'ahead',
 						// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
 						titleNView: { // 窗口的标题栏控件
-							type:'transparent',
+							type: 'transparent',
 							autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
 							titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
 							titleSize: "14px", // 字体大小,默认17px
@@ -371,7 +376,7 @@
 						title: '正在加载...', //等待对话框上显示的提示内容
 					}
 				})
-//				alert('66')
+				//				alert('66')
 				break;
 			default:
 				break;
@@ -384,7 +389,7 @@
 		var options = {
 			cover: false
 		};
-		plus.push.createMessage(msg.content, "LocalMSG@"+msg.payload, options);
+		plus.push.createMessage(msg.content, "LocalMSG@" + msg.payload, options);
 	}
 
 	/**
@@ -755,7 +760,7 @@
 		//				alert(1)
 		var info = plus.push.getClientInfo();
 		//		console.log(info.clientid)
-		
+
 		var cid = info.clientid;
 		var device;
 		if(mui.os.ios) {
@@ -1357,26 +1362,25 @@
 		extras = extras || {};
 		//		跳转参数
 		var def = {
-			showTitle: option.showTitle?option.showTitle:false, //是否显示先生的导航栏
-			autoShow: option.autoShow?option.autoShow:true, //是否自动显示
-			autoWaiting: option.autoWaiting?option.autoWaiting:true, //是否显示菊花
-			createNew:option.createNew?option.createNew:false,
-			title_bacground: option.title_bacground?option.title_bacground:'#151515', //默认的导航背景色
-			title_color: option.title_color?option.title_color:"#fff",
-			progress_color:option.progress_color?option.progress_color:"#ccaa42",
-			splitLine_color:option.splitLine_color?option.splitLine_color:"#404040"
+			showTitle: option.showTitle ? option.showTitle : false, //是否显示先生的导航栏
+			autoShow: option.autoShow ? option.autoShow : true, //是否自动显示
+			autoWaiting: option.autoWaiting ? option.autoWaiting : true, //是否显示菊花
+			createNew: option.createNew ? option.createNew : false,
+			title_bacground: option.title_bacground ? option.title_bacground : '#151515', //默认的导航背景色
+			title_color: option.title_color ? option.title_color : "#fff",
+			progress_color: option.progress_color ? option.progress_color : "#ccaa42",
+			splitLine_color: option.splitLine_color ? option.splitLine_color : "#404040"
 		}
-	
-		
-		var style ={
+
+		var style = {
 			top: '0px', //新页面顶部位置
 			bottom: '0px', //新页面底部位置
 			scrollIndicator: "none",
 			plusrequire: 'ahead',
 		}
-		
-		if(def.showTitle){
-//			设置显示原生导航栏
+
+		if(def.showTitle) {
+			//			设置显示原生导航栏
 			style = {
 				top: '0px', //新页面顶部位置
 				bottom: '0px', //新页面底部位置
@@ -1399,7 +1403,7 @@
 				}
 			}
 		}
-//		console.log(JSON.stringify(style))
+		//		console.log(JSON.stringify(style))
 		mui.openWindow({
 			url: dstUrl,
 			id: dstId,
