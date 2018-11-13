@@ -8,7 +8,7 @@
 		<link href="../../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
-		<link rel="stylesheet" type="text/css" href="../../../css/loading.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/loading.css" />
 		<style>
 			.btns {
 				margin-top: 15px;
@@ -71,7 +71,7 @@
 			.msgBox .cellInputArea {
 				border: none;
 				outline: none;
-				padding:10px 0;
+				padding: 10px 0;
 				font-size: 14px;
 				border-bottom: 1px dotted #d3d3d3;
 			}
@@ -128,7 +128,8 @@
 				margin: 5px;
 				position: relative;
 			}
-			.detailPic .detailPicItem  .delectBtn{
+			
+			.detailPic .detailPicItem .delectBtn {
 				padding: 0;
 				position: absolute;
 				bottom: -10px;
@@ -142,7 +143,8 @@
 				line-height: 20px;
 				overflow: hidden;
 			}
-			.detailPic .detailPicItem  .delectBtn i{
+			
+			.detailPic .detailPicItem .delectBtn i {
 				margin: 0;
 				padding: 0;
 				font-size: 16px;
@@ -152,6 +154,7 @@
 				height: 100%;
 				line-height: 20px;
 			}
+			
 			.detailPic .detailPicItem .pics {
 				width: 100%;
 				height: 100%;
@@ -301,7 +304,7 @@
 						</li>
 
 						<li class="detailPicBox">
-							<div class="f1 cellName ">项目详情</div>		
+							<div class="f1 cellName ">项目详情</div>
 							<textarea name="" rows="" cols="" class="cellInputArea" v-model="produtDetail" placeholder="项目详情"></textarea>
 							<div class="flex detailPic">
 								<ul class="flex">
@@ -374,10 +377,10 @@
 						/*计算时段*/
 
 						produtDetail: '', //项目详情
-						proList: [],  //图片的数组
+						proList: [], //图片的数组
 						mintime: 0,
-						
-						proDetailList:[]  //项目图片
+
+						proDetailList: [] //项目图片
 					},
 					created: function() {
 
@@ -391,7 +394,7 @@
 							this.title = "编辑项目"
 							this.btn = "提交修改"
 							this._initMsg()
-						}else{
+						} else {
 							document.getElementById('loader').style.display = 'none'
 						}
 						/*初始化项目类别*/
@@ -413,38 +416,38 @@
 						});
 					},
 					methods: {
-//						删除项目图片
-						_delectPic(key,index){
-							switch (key){
+						//						删除项目图片
+						_delectPic(key, index) {
+							switch(key) {
 								case 1:
-								this.proList.splice(index, 1); 
+									this.proList.splice(index, 1);
 									break;
 								case 2:
-								this.proDetailList.splice(index, 1); 
+									this.proDetailList.splice(index, 1);
 									break;
 								default:
 									break;
 							}
-							
-							
+
 						},
-//						项目图片
-						_proDetailPict(){
+						//						项目图片
+						_proDetailPict() {
 							var _this = this
 							app.getIMG('项目图片', (src) => {
-//								console.log(src)
+								//								console.log(src)
+								plus.nativeUI.showWaiting()
 								var img = new Image();
 								img.src = src;
-								img.onload=function(){
-									
+								img.onload = function() {
+									plus.nativeUI.closeWaiting()
 									_this.proDetailList.push(src)
 								}
-								
+
 							})
 						},
-//						获取项目图片
+						//						获取项目图片
 						_getPic() {
-							if(this.proList.length>=3){
+							if(this.proList.length >= 3) {
 								plus.nativeUI.toast('问题图片不超过三张')
 								return;
 							}
@@ -556,7 +559,7 @@
 									break;
 								case 5:
 									/*计算时段*/
-									_this.mintime = Math.ceil(_this.consuming / 30)+1 //记录最小时段
+									_this.mintime = Math.ceil(_this.consuming / 30) + 1 //记录最小时段
 									_this.time = Math.ceil(_this.consuming / 30)
 									break;
 								case 10:
@@ -580,7 +583,7 @@
 										return
 									}
 									_this.time += 1
-									break;							
+									break;
 								default:
 									break;
 							}
@@ -593,7 +596,7 @@
 								plus.nativeUI.alert("请完善当项目资料信息", function() {}, "马嘿嘿提醒您", "ok");
 								return
 							}
-							if(this.proList.length<1) {
+							if(this.proList.length < 1) {
 								plus.nativeUI.alert("请完善上传项目图片", function() {}, "马嘿嘿提醒您", "ok");
 								return
 							}
@@ -657,8 +660,8 @@
 								LIFETIME_COUNT: _this.consuming,
 								BOOKING_COUNT: _this.time,
 								KEEP_COUNT: _this.holdDay,
-								PROJECT_IMGS:_this.proList.join(','),
-								PROJECT_DETAILS_IMGS:_this.proDetailList.join(',') //详情图片
+								PROJECT_IMGS: _this.proList.join(','),
+								PROJECT_DETAILS_IMGS: _this.proDetailList.join(',') //详情图片
 							}
 							var url = '/api/BusiProject/UpdateProject'
 
@@ -669,7 +672,7 @@
 							} else {
 								data.PROJECT_CODE = this.dstProduct.PROJECT_CODE;
 							}
-//							console.log(JSON.stringify(data))
+							//							console.log(JSON.stringify(data))
 							app.ajax(app.baseUrl + url, {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
@@ -699,7 +702,7 @@
 						_chooseAvatar(res) {
 							this.proList.push(res)
 							plus.nativeUI.closeWaiting()
-						
+
 						}
 					}
 
@@ -708,7 +711,7 @@
 
 			function choosePic(res) {
 
-//				res = JSON.parse(res)
+				//				res = JSON.parse(res)
 				APP._chooseAvatar(res)
 			}
 		</script>

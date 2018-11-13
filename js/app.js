@@ -831,7 +831,7 @@
 					}, {
 						"tag": "font",
 						"id": "homeText",
-						"text": "技师首页",
+						"text": "美匠人首页",
 						"position": {
 							"top": "23px",
 							"left": "0",
