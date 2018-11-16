@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -95,7 +96,7 @@
 				<div class="account flex" id="content">
 					<div class="f1">
 						<h3 class="cor_w container allmaney">￥{{account}}</h3>
-						<p class="cor_g container">小草值：{{score}}</p>
+						<p class="cor_g container">小草值：{{score}}  <span class="fr" @tap="_navigate()">查看积分明细<span class="mui-icon mui-icon-arrowright fs16"></span></span> </p>
 					</div>
 					<!--<img src="../../images/logo3.png" alt="" class="bg" />-->
 
@@ -204,7 +205,6 @@
 							</div>
 						</li>
 						<!--<li class="menus ">
-
 								<i class="iconfont icon-more menusIcon cor_g"></i>
 								<p class="t_c fs12">马嘿嘿努力中</p>
 						</li>-->
@@ -323,7 +323,6 @@
 									} else {
 										/*验证失败*/
 										if(callback) callback(false, result.Msg)
-
 									}
 								}
 							});
@@ -337,11 +336,20 @@
 									plus.nativeUI.closeWaiting()
 								}, 1500)
 							})
+						},
+						_navigate(){
+//							alert(1)
+							let desturl = './scores.html'
+							let destid = 'scores'
+							let exa = {}
+							let option = {
+								showTitle:true
+							}
+							app.navigater(desturl,destid,exa,option)	
 						}
 						
 					}
 				})
-
 			});
 			function initPage(){
 				APP._getData(()=>{})

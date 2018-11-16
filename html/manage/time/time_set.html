@@ -31,7 +31,7 @@
 			
 			.btn {
 				width: 60px;
-				height: 44px 
+				height: 44px
 			}
 			
 			.btn .cm_btn {
@@ -68,8 +68,6 @@
 				display: block;
 			}
 			
-			
-			
 			.dateBox .timeItem .itemBox.hasOrder {
 				color: #ccaa42;
 				position: relative;
@@ -91,30 +89,30 @@
 				background: rgba(21, 21, 21, 1)!important;
 				color: #ccaa42
 			}
-			.checks{
+			
+			.checks {
 				display: none;
 			}
 		</style>
 	</head>
 
 	<body>
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
-			
-			<!--等待页面-->
-			<div class="loader" style="top:0" v-if="loader">
-				<ul>
-					<li id='a'></li>
-					<li id='b'></li>
-					<li id='c'></li>
-					<li id='d'></li>
-					<li id='e'></li>
-					<li id='f'></li>
-					<li id='g'></li>
-					<li id='h'></li>
-					<li id='i'></li>
-				</ul>
-			</div>
-			
+
 			<!--操作菜单-->
 			<div class="setBox container flex" id="content" ref="starsBox">
 				<div class="flex allDatRest f1">
@@ -138,14 +136,14 @@
 			<div class="timeRest flex">
 				<ul class="dateBox flex">
 					<li class="timeItem " v-for="(item,index) in timeList">
-						<label :for="'item'+index" class="itemBox " :class="{canOrder:item.orderStatus == '2',hasOrder:item.orderStatus == '3',selectTime:_selectTime(item)}"  >{{item.time}}</label>
-						<input :id="'item'+index" name="checkbox"  :disabled="item.orderStatus==3" :value="item.value" type="checkbox" class="checks" v-model="selectList" >
+						<label :for="'item'+index" class="itemBox " :class="{canOrder:item.orderStatus == '2',hasOrder:item.orderStatus == '3',selectTime:_selectTime(item)}">{{item.time}}</label>
+						<input :id="'item'+index" name="checkbox" :disabled="item.orderStatus==3" :value="item.value" type="checkbox" class="checks" v-model="selectList">
 					</li>
 				</ul>
 			</div>
-			
+
 			<!--时间选择弹窗-->
-			
+
 		</div>
 
 		<script src="../../../js/mui.min.js"></script>
@@ -155,232 +153,226 @@
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
-	
-				mui.init({
-					swipeBack: true
-				});
-				mui.plusReady(function() {
-					app.WXinit(CryptoJS)
-					var APP = new Vue({
-						el: '#app',
-						data: {
-							loader:true,
-							today: '',
+			mui.init({
+				swipeBack: true
+			});
+			mui.plusReady(function() {
+				app.WXinit(CryptoJS)
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						loader: true,
+						today: '',
 
-							timeList:[],
-							selectList: [],
-							/*全天休息*/
-							allDayRest: false,
-							
-							enbled:true
+						timeList: [],
+						selectList: [],
+						/*全天休息*/
+						allDayRest: false,
 
+						enbled: true
+
+					},
+					created: function() {
+
+						var self = plus.webview.currentWebview();
+						var td = new Date(self.date);
+						this.today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate()
+						// alert(this.today )
+					},
+					mounted: function() {
+						/*初始化数据*/
+						//							alert(this.today)
+						var _this = this;
+						this._getData();
+					},
+					methods: {
+
+						/*选择效果*/
+						_selectTime(time) {
+
+							if(time.orderStatus == 3) return; // 被预约的不可选中
+
+							var r = this.selectList.indexOf(time.value);
+							if(r < 0) {
+								return false
+							} else {
+								return true
+							}
 						},
-						created: function() {
+						/*显示样式*/
+						_timeStyle(time) {
+							var r = this.orderList.indexOf(time)
 
-							var self = plus.webview.currentWebview();
-							var td = new Date(self.date);
-							this.today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate()
-							// alert(this.today )
-						},
-						mounted: function() {
-							/*初始化数据*/
-							//							alert(this.today)
-							var _this = this;
-							this._getData();
-						},
-						methods: {
-
-							/*选择效果*/
-							_selectTime(time) {
-								
-								if(time.orderStatus == 3)return; // 被预约的不可选中
-								
-
-								var r = this.selectList.indexOf(time.value);
-								if(r < 0) {
-									return false
-								} else {
-									return true
-								}
-							},
-							/*显示样式*/
-							_timeStyle(time) {
-								var r = this.orderList.indexOf(time)
-
-								if(r < 0) {
-									var re = this.workList.indexOf(time)
-									if(re < 0) {
-										/*休息状态*/
-										return {
-											selectTime: this._selectTime(time)
-										}
-									} else {
-										/*工作状态*/
-										return {
-											work: true,
-											selectTime: this._selectTime(time)
-										}
+							if(r < 0) {
+								var re = this.workList.indexOf(time)
+								if(re < 0) {
+									/*休息状态*/
+									return {
+										selectTime: this._selectTime(time)
 									}
 								} else {
-									/*已经预约不可改变*/
+									/*工作状态*/
 									return {
-										hasOrder: true,
+										work: true,
 										selectTime: this._selectTime(time)
 									}
 								}
-							},
-							/*提交保存*/
-							_save() {
-								var _this = this;
-								if(mui.os.plus) {
-									var a = [{
-										title: '设为休息'
-									}, {
-										title: '设为可预约'
-									}];
-									plus.nativeUI.actionSheet({
-										title: '状态设置',
-										cancel: '取消',
-										buttons: a
-									}, function(b) {
-										switch(b.index) {
-											case 0:
-												return;
-												break;
-											case 1:
-												//设为休息 
-												_this.setDate(2)
-												break;
-											case 2:
-												//设为未预约 
-												_this.setDate(0)
-												break;
-											default:
-												break;
+							} else {
+								/*已经预约不可改变*/
+								return {
+									hasOrder: true,
+									selectTime: this._selectTime(time)
+								}
+							}
+						},
+						/*提交保存*/
+						_save() {
+							var _this = this;
+							if(mui.os.plus) {
+								var a = [{
+									title: '设为休息'
+								}, {
+									title: '设为可预约'
+								}];
+								plus.nativeUI.actionSheet({
+									title: '状态设置',
+									cancel: '取消',
+									buttons: a
+								}, function(b) {
+									switch(b.index) {
+										case 0:
+											return;
+											break;
+										case 1:
+											//设为休息 
+											_this.setDate(2)
+											break;
+										case 2:
+											//设为未预约 
+											_this.setDate(0)
+											break;
+										default:
+											break;
+									}
+								}, false);
+							}
+						},
+						/*状态设置*/
+						setDate(t) {
+							var msg = t == 2 ? '休息' : '可预约 ';
+							var _this = this;
+
+							if(this.allDayRest) {
+								//									plus. nativeUI.toast()
+								plus.nativeUI.alert('请先关闭全天休息状态');
+								this.selectList = []
+								return
+							}
+							console.log(_this.today + _this.selectList.join(','))
+							plus.nativeUI.confirm('确定将选择时段置为' + msg + '？', () => {
+								plus.nativeUI.showWaiting()
+								app.ajax(app.baseUrl + '/api/BusiAccount/SetBookingTime', {
+									// dataType:'json',//服务器返回json格式数据
+									data: {
+										date: _this.today,
+										points: _this.selectList.join(','),
+										status: t
+									},
+									type: 'post', //HTTP请求类型
+									success: function(result) {
+										/*登陆成功*/
+										plus.nativeUI.closeWaiting()
+										if(result.Success) {
+											plus.nativeUI.toast('成功');
+											_this._getData()
+										} else {
+											plus.nativeUI.toast(result.Msg)
 										}
-									}, false);
+									}
+								});
+							}, {
+								title: '马嘿嘿提醒您'
+							})
+						},
+						/*获取当天数据*/
+						_getData() {
+							this.loader = true
+							var _this = this
+							this.selectList = [];
+							app.ajax(app.baseUrl + '/api/BusiAccount/GetBookingTimeByDate', {
+								// dataType:'json',//服务器返回json格式数据
+								data: {
+									date: _this.today
+								},
+								type: 'get', //HTTP请求类型
+								success: function(result) {
+									_this.loader = false;
+									document.getElementById('loader').style.display = 'none'
+									/*登陆成功*/
+									_this.timeList = result.Data.timeList
+
+									_this.allDayRest = result.Data.allRestEnbled //当前状态
+
+									_this._allRestEnable()
+
 								}
-							},
-							/*状态设置*/
-							setDate(t) {
-								var msg = t == 2 ? '休息' : '可预约 ';
-								var _this = this;
-								
-								if(this.allDayRest){
-//									plus. nativeUI.toast()
-									plus.nativeUI.alert('请先关闭全天休息状态');
-									this.selectList = []
-									return
+							});
+						},
+						//							是否可以全天休息
+						_allRestEnable() {
+							this.timeList.forEach((item, index) => {
+								if(parseInt(item.orderStatus) == 3) {
+									this.enbled = false;
+									return false;
 								}
-								console.log( _this.today+_this.selectList.join(','))
-								plus.nativeUI.confirm('确定将选择时段置为' + msg + '？', () => {
+							})
+
+						},
+						/*设置全天休息*/
+						_allDayRest() {
+
+							var msg = this.allDayRest ? '取消' : '开启'
+							var t = this.allDayRest ? 1 : 0 //1 可预约  2休息
+							var _this = this;
+
+							//								判断是否可以设置全天休息  只有在 当天不是全天休息状态 并且 当天没有真实预约 才可以 设为全天休息
+							if(!this.enbled && !this.allDayRest) {
+								plus.nativeUI.toast('当天已有客户预约，不可置为全天休息！')
+								return
+							}
+
+							plus.nativeUI.confirm('确定' + msg + '全天休息？', (event) => {
+								if(event.index == 0) {
 									plus.nativeUI.showWaiting()
-									app.ajax(app.baseUrl + '/api/BusiAccount/SetBookingTime', {
-										// dataType:'json',//服务器返回json格式数据
+									app.ajax(app.baseUrl + '/api/BusiAccount/SetBookingDate', {
 										data: {
-											date: _this.today,
-											points: _this.selectList.join(','),
+											dates: _this.today,
 											status: t
 										},
 										type: 'post', //HTTP请求类型
 										success: function(result) {
-											/*登陆成功*/
+											/*成功*/
 											plus.nativeUI.closeWaiting()
 											if(result.Success) {
 												plus.nativeUI.toast('成功');
+												_this.allDayRest = !_this.allDayRest;
 												_this._getData()
 											} else {
-												plus.nativeUI.toast(result.Msg)
+												alert(result.Msg)
 											}
 										}
 									});
-								}, {
-									title: '马嘿嘿提醒您'
-								})
-							},
-							/*获取当天数据*/
-							_getData() {
-								this.loader = true
-								var _this = this
-								this.selectList = [];
-								app.ajax(app.baseUrl + '/api/BusiAccount/GetBookingTimeByDate', {
-									// dataType:'json',//服务器返回json格式数据
-									data: {
-										date: _this.today
-									},
-									type: 'get', //HTTP请求类型
-									success: function(result) {
-										_this.loader = false
-										/*登陆成功*/
-										_this.timeList = result.Data.timeList
-										
-										_this.allDayRest = result.Data.allRestEnbled //当前状态
-										
-										_this._allRestEnable()
-										
-										
-									}
-								});
-							},
-//							是否可以全天休息
-							_allRestEnable(){
-								this.timeList.forEach((item,index)=>{
-								    if( parseInt(item.orderStatus) == 3){
-								    	this.enbled = false;
-								    	return false;
-								    }
-								})
-								
-								
-							},
-							/*设置全天休息*/
-							_allDayRest() {
-						
-								var msg = this.allDayRest?'取消':'开启'
-								var t = this.allDayRest?1:0   //1 可预约  2休息
-								var _this = this;
-//										alert(_this.allRestEnbled)
-//										alert(_this.allDayRest)
-								
-//								判断是否可以设置全天休息  只有在 当天不是全天休息状态 并且 当天没有真实预约 才可以 设为全天休息
-								if(!this.enbled && !this.allDayRest){
-									plus. nativeUI.toast('当天已有客户预约，不可置为全天休息！')
-									return
 								}
-								
-								plus.nativeUI.confirm('确定'+msg+'全天休息？', (event) => {
-									if(event.index == 0) {
-										plus.nativeUI.showWaiting()
-										app.ajax(app.baseUrl + '/api/BusiAccount/SetBookingDate', {
-											data: {
-												dates: _this.today,
-												status: t
-											},
-											type: 'post', //HTTP请求类型
-											success: function(result) {
-												/*成功*/
-												plus.nativeUI.closeWaiting()
-												if(result.Success) {
-													plus.nativeUI.toast('成功');
-													_this.allDayRest = !_this.allDayRest;
-													_this._getData()
-												} else {
-													alert(result.Msg)
-												}
-											}
-										});
-									}
 
-								}, {
-									title: '马嘿嘿提醒您'
-								})
-							}
-
+							}, {
+								title: '马嘿嘿提醒您'
+							})
 						}
-					})
 
-				});
-	
+					}
+				})
+
+			});
 		</script>
 	</body>
 

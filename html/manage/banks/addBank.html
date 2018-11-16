@@ -125,6 +125,21 @@
 	</head>
 
 	<body>
+		
+		<!--等待页面-->
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
 
 			<!--新卡信息-->
@@ -206,7 +221,8 @@
 					},
 					mounted: function() {
 						var _this = this
-						this.allList = allBacnkList
+						this.allList = allBacnkList;
+						document.getElementById('loader').style.display='none'
 					},
 					methods: {
 						/*更新信息*/

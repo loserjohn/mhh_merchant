@@ -249,10 +249,11 @@ app.WXinit(CryptoJS)
 								} else {
 									_this.scroll.refresh();
 								};
+								plus.nativeUI.closeWaiting()
+								mui.currentWebview.show('pop-in', 300, function() {}, {});
 							})
 							this._initHis();
-							plus.nativeUI.closeWaiting()
-							mui.currentWebview.show('pop-in', 300, function() {}, {});
+							
 						},
 						filters:{
 							getStatus(k){
