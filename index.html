@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=contain" />
@@ -7,7 +8,7 @@
 		<script src="js/mui.min.js"></script>
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/common.css" />
-				
+
 		<style>
 			.logoBg {
 				position: absolute;
@@ -17,7 +18,8 @@
 				top: 40%;
 				margin-left: -95px;
 				margin-top: -95px;
-			}			
+			}
+			
 			.loginbtns {
 				width: 100%;
 				height: 44px;
@@ -58,7 +60,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!--升级遮罩-->
 		<div id="version" class="cm_version " style="display: none;">
 			<img src="images/share.jpg" alt="" width="60" height="60" class="versionLoad" />
@@ -70,14 +72,15 @@
 		<script src="js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/system.js"></script>
 
-		
 		<script type="text/javascript" charset="utf-8">
+			 
+
 			mui.init({
 				swipeBack: false
 			});
-			
-			mui.plusReady(function() {				
-//				systemOS.checkUpdate(); //版本
+
+			mui.plusReady(function() {
+				//				systemOS.checkUpdate(); //版本
 				var APP = new Vue({
 					el: '#app',
 					data: {
@@ -87,28 +90,29 @@
 						lastLoginWay: '',
 						userAccount: '',
 						userPass: '',
-						opId: '',/* 授权登陆通道对象 */
+						opId: '',
+						/* 授权登陆通道对象 */
 						auths: {
 							s_name: '',
-							s_server: '',
+							s_server: ''
 						}
 					},
-					created: function() {
+					created: function created() {
 						var _this = this;
 						var authBtns = ['weixin'];
 					},
-					mounted: function() {
-						var _this = this
+					mounted: function mounted() {
+						var _this = this;
 
-						app.WXinit(CryptoJS)
-						
-						systemOS.versionInit((t)=>{
-//							alert(666)
-							if(t){
-								app.autoLogin()
+						app.WXinit(CryptoJS);
+
+						systemOS.versionInit(function(t) {
+							//							alert(666)
+							if(t) {
+								app.autoLogin();
 							}
-						})												
-						
+						});
+
 						//判断忆否已经存在openid，没有则不自动登陆
 						this.opId = plus.storage.getItem('opId');
 						//最后的登陆时间
@@ -136,24 +140,64 @@
 					},
 					methods: {
 						/* 手机号码登陆 按钮 */
-						toLogin() {
-							let desturl = './login.html'
-							let destid = 'login'
-							let exa = {}
-							let option = {
-								showTitle:true
-							}
-							app.navigater(desturl,destid,exa,option)
+						toLogin: function toLogin() {
+							var desturl = './login.html';
+							var destid = 'login';
+							var exa = {};
+//							var option = {
+//								showTitle: true
+//							};
+//							app.navigater(desturl, destid, exa, option);
+
+							mui.openWindow({
+								url: desturl,
+								id: destid,
+								styles: {
+									top: '0px', //新页面顶部位置
+									bottom: '0px', //新页面底部位置
+									scrollIndicator: "none",
+									plusrequire: 'ahead',
+									cachemode:'noCache',
+									// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+									titleNView: { // 窗口的标题栏控件
+										autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+										titleColor:'#fff', // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+										titleSize: "14px", // 字体大小,默认17px
+										backgroundColor: '#151515', // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+										progress: { // 标题栏控件的进度条样式
+											color: "#ccaa42", // 进度条颜色,默认值为"#00FF00"  
+											height: "2px" // 进度条高度,默认值为"2px"         
+										},
+										splitLine: { // 标题栏控件的底部分割线，类似borderBottom
+											color: "#404040", // 分割线颜色,默认值为"#CCCCCC"  
+											height: "1px" // 分割线高度,默认值为"2px"
+										}
+									}
+								},
+								createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+								show: {
+									autoShow: true, //页面loaded事件发生后自动显示，默认为true
+									duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+								},
+								extras: exa,
+								waiting: {
+									autoShow: true, //自动显示等待框，默认为true
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							})
+
 						},
+
 						// 微信手动号登陆
-						toWxLogin() {
-//							plus.nativeUI.showWaiting()
+						toWxLogin: function toWxLogin() {
+							//							plus.nativeUI.showWaiting()
 							var _this = this;
 							app.wxOAuth();
 						},
+
 						/* 加密 */
-						_Encrypt(str) {
-							str = str + '|.|' + new Date().getTime()
+						_Encrypt: function _Encrypt(str) {
+							str = str + '|.|' + new Date().getTime();
 							var key = CryptoJS.enc.Utf8.parse(app._KEY);
 							var iv = CryptoJS.enc.Utf8.parse(app._IV);
 							var encrypted = '';
@@ -166,9 +210,8 @@
 							return encrypted.ciphertext.toString();
 						}
 					}
-				})
-
-			})
+				});
+			});
 		</script>
 	</body>
 

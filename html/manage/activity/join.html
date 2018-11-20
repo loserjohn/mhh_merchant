@@ -48,18 +48,20 @@
 				/*border: 1px solid #404040;*/
 				box-sizing: border-box;
 			}
-			.mask{
+			
+			.mask {
 				position: fixed;
 				left: 0;
 				right: 0;
 				top: 0;
 				bottom: 0;
-				background: rgba(0,0,0,.8);
+				background: rgba(0, 0, 0, .8);
 				justify-content: center;
 				align-items: center;
 				z-index: 10;
 			}
-			.bar{
+			
+			.bar {
 				background: #fff;
 				width: 200px;
 				height: 200px;
@@ -68,30 +70,36 @@
 				box-sizing: border-box;
 				padding: 10px;
 			}
-			.bar .title{
+			
+			.bar .title {
 				line-height: 2;
 				border-bottom: 1px dotted #d3d3d3;
 			}
-			.bar .numBox{
+			
+			.bar .numBox {
 				box-sizing: border-box;
 				padding: 10px;
 				/*background: red;*/
 				height: 86px;
 			}
+			
 			.bar .numBox .box {
 				justify-content: center;
 				margin-top: 10px;
 				height: 44px;
 			}
-			.bar .numBox .numInput{
+			
+			.bar .numBox .numInput {
 				border: none;
 				outline: none;
 				/*margin-top: 10px;*/
 			}
-			.bar .footer{
+			
+			.bar .footer {
 				border-top: 1px dotted #d3d3d3;
 			}
-			.lh44{
+			
+			.lh44 {
 				line-height: 44px;
 			}
 		</style>
@@ -176,7 +184,7 @@
 						<div class="flex box ">
 							<input type="number" class="numInput" v-model="num" />
 							<p class="lh44"> 份</p>
-						</div>						
+						</div>
 					</div>
 					<div class="footer">
 						<div class="cm_btn" @tap.self="_doJoin">确认报名</div>
@@ -190,18 +198,20 @@
 		<script src="../../../js/bscroll.min.js"></script>
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
+			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
 						scroll: '',
-						show:false,
-						curProCode:'',  //记录当前选中的作品
-						
+						show: false,
+						curProCode: '', //记录当前选中的作品
+
 						tabContenTop: '',
 						currtab: 0, //当前tab页
 
@@ -219,18 +229,18 @@
 							index: 1,
 							norest: false
 						},
-						
-						num:10000 //参加活动的购买分数
+
+						num: 10000 //参加活动的购买分数
 
 					},
-					created: function() {
+					created: function created() {
 						var self = plus.webview.currentWebview();
 						this.activityId = self.activityId;
 						this.activityType = self.activityType;
 					},
-					mounted: function() {
-						var _this = this
-						scroll = this.$refs.scroll
+					mounted: function mounted() {
+						var _this = this;
+						scroll = this.$refs.scroll;
 						this.tabContenTop = 40 + 'px';
 
 						this.$nextTick(function() {
@@ -248,175 +258,173 @@
 										threshold: 50,
 										stop: 0
 									}
-								})
+								});
 							} else {
 								_this.scroll.refresh();
 							};
 							this.scroll.on('pullingUp', function(e) {
-								
-								_this._getData((b) => {
-									if(b) {
 
-									} else {
-										_this.scroll.finishPullUp()
+								_this._getData(function(b) {
+									if(b) {} else {
+										_this.scroll.finishPullUp();
 									}
-								})
+								});
 							});
 							/*下拉刷新*/
-							this.scroll.on('pullingDown', function(e) {								
-								_this._refresh()
-							})
-
-						})
+							this.scroll.on('pullingDown', function(e) {
+								_this._refresh();
+							});
+						});
 
 						/*初始化项目数据*/
-						this._getData((b) => {
-							if(b) {
-
-							} else {
-								_this.scroll.finishPullUp()
-
+						this._getData(function(b) {
+							if(b) {} else {
+								_this.scroll.finishPullUp();
 							}
 						});
 					},
-					filters:{
-						status(value){
-							value = parseInt(value)
-							switch (value){
+					filters: {
+						status: function status(value) {
+							value = parseInt(value);
+							switch(value) {
 								case 0:
-								return '审核中'
+									return '审核中';
 									break;
 								case 1:
 									break;
-								return '已参加'
+									return '已参加';
 								default:
 									break;
 							}
 						}
 					},
 					methods: {
-//						取消参与活动
-						_cancelJoin(key){
-							plus.nativeUI.confirm('确定取消参与该活动？', (event) => {
-								var k = event.index
-								if(k == 0) {
-									var data={
-										APPLY_CODE:key
-									}
-									var _this = this;
-									plus.nativeUI.showWaiting()
-									app.ajax(app.baseUrl + '/api/BusiActivity/DisApplyActivity', {
-											data: data,
-											type: 'post', //HTTP请求类型
-											success: function(result) {
-												plus.nativeUI.closeWaiting()
-												if(result.Success) {
-													plus.nativeUI.toast('取消成功')
-													_this._refresh()
-												} else {
-													/*验证失败*/
-													plus.nativeUI.toast(result.Msg)
-												}
-											}
-									});												
-								} else {
-									return false
-								}
+						//						取消参与活动
+						_cancelJoin: function _cancelJoin(key) {
+							var _this2 = this;
 
-							})					
+							plus.nativeUI.confirm('确定取消参与该活动？', function(event) {
+								var k = event.index;
+								if(k == 0) {
+									var data = {
+										APPLY_CODE: key
+									};
+									var _this = _this2;
+									plus.nativeUI.showWaiting();
+									app.ajax(app.baseUrl + '/api/BusiActivity/DisApplyActivity', {
+										data: data,
+										type: 'post', //HTTP请求类型
+										success: function success(result) {
+											plus.nativeUI.closeWaiting();
+											if(result.Success) {
+												plus.nativeUI.toast('取消成功');
+												_this._refresh();
+											} else {
+												/*验证失败*/
+												plus.nativeUI.toast(result.Msg);
+											}
+										}
+									});
+								} else {
+									return false;
+								}
+							});
 						},
-//						参加活动 打开弹窗
-						_joinActivity(key) {
+
+						//						参加活动 打开弹窗
+						_joinActivity: function _joinActivity(key) {
 							var _this = this;
-							
-							this.curProCode = key
+
+							this.curProCode = key;
 							this.show = true;
 						},
-//						参加活动接口操作
-						_doJoin(){
-							if(!this.num || this.num<=0){
-								plus.nativeUI.alert( "请输入正确份数", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );
+
+						//						参加活动接口操作
+						_doJoin: function _doJoin() {
+							if(!this.num || this.num <= 0) {
+								plus.nativeUI.alert("请输入正确份数", function() {}, "马嘿嘿提醒您", "莫急！容我检查检查");
 								return;
 							}
-							
-							var data={
-								ACTIVITY_CODE:this.activityId,
-								PROJECT_CODE:this.curProCode,
+
+							var data = {
+								ACTIVITY_CODE: this.activityId,
+								PROJECT_CODE: this.curProCode,
 								APPLY_TOTAL_NUM: this.num
-							}
+							};
 							var _this = this;
-							plus.nativeUI.showWaiting()
+							plus.nativeUI.showWaiting();
 							app.ajax(app.baseUrl + '/api/BusiActivity/ApplyActivity', {
-									data: data,
-									type: 'get', //HTTP请求类型
-									success: function(result) {
-										plus.nativeUI.closeWaiting()
-										if(result.Success) {
-											plus.nativeUI.toast('参与成功')
-											_this._refresh()
-										} else {
-											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
-										}
+								data: data,
+								type: 'get', //HTTP请求类型
+								success: function success(result) {
+									plus.nativeUI.closeWaiting();
+									if(result.Success) {
+										plus.nativeUI.toast('参与成功');
+										_this._refresh();
+									} else {
+										/*验证失败*/
+										plus.nativeUI.toast(result.Msg);
 									}
+								}
 							});
-							this.show = false
+							this.show = false;
 						},
-						
-						
-//						关闭弹窗
-						_close(){
-							this.show = false
+
+						//						关闭弹窗
+						_close: function _close() {
+							this.show = false;
 						},
-						_changeTab: function(key) {
-							this.currtab = parseInt(key)
+
+						_changeTab: function _changeTab(key) {
+							var _this3 = this;
+
+							this.currtab = parseInt(key);
 							switch(key) {
 								case 0:
 									if(this.MayList.index == 1) {
-										this._getData((b) => {
+										this._getData(function(b) {
 											if(b) {
 												//											this.note = "没有数据了"
 											} else {
-												this.scroll.finishPullUp()
+												_this3.scroll.finishPullUp();
 												//											this.note = "加载更多"
 											}
-										})
+										});
 									} else {
 										if(!this.MayList.norest) {
 											//										该分类还有数据
-											this.scroll.finishPullUp()
+											this.scroll.finishPullUp();
 										}
 										this.scroll.refresh();
-										return
+										return;
 									}
 									break;
 								case 1:
 									if(this.happliedList.index == 1) {
-										this._getData((b) => {
+										this._getData(function(b) {
 											if(b) {
 												//											this.note = "没有数据了"
 											} else {
-												this.scroll.finishPullUp()
+												_this3.scroll.finishPullUp();
 												//											this.note = "加载更多"
 											}
-										})
+										});
 									} else {
 										if(!this.happliedList.norest) {
 											//										该分类还有数据
-											this.scroll.finishPullUp()
+											this.scroll.finishPullUp();
 										}
 										this.scroll.refresh();
-										return
+										return;
 									}
 									break;
 								default:
 									break;
 							}
-
 						},
 						/*加载数据*/
-						_getData(callback) {
-							var _this = this
+						_getData: function _getData(callback) {
+							var _this = this;
 							var tabType = this.currtab;
 
 							//							全部未报名的作品
@@ -427,17 +435,17 @@
 									PROJECT_TYPE: this.activityType,
 									APPLY_ACTIVITY: true,
 									PROJECT_STATUS: 1
-								}
+								};
 
 								app.ajax(app.baseUrl + '/api/BusiProject/GetProjects', {
 									data: data,
 									// dataType:'json',//服务器返回json格式数据
 									type: 'get', //HTTP请求类型
-									success: function(result) {
-										document.getElementById('loader').style.display = 'none'
+									success: function success(result) {
+										document.getElementById('loader').style.display = 'none';
 										if(result.Success) {
 											var l = _this.MayList.list.length;
-											var arr = _this.MayList.list
+											var arr = _this.MayList.list;
 											_this.MayList.list = arr.concat(result.Data.ListInfo);
 
 											if(_this.MayList.list.length == l) {
@@ -445,13 +453,12 @@
 												if(callback) callback(true);
 												return;
 											}
-											_this.MayList.index += 1
+											_this.MayList.index += 1;
 											_this.scroll.refresh();
 											if(callback) callback(false);
-
 										} else {
 											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
+											plus.nativeUI.toast(result.Msg);
 										}
 									}
 								});
@@ -460,18 +467,18 @@
 								var data = {
 									pageIndex: this.happliedList.index,
 									pageSize: 10,
-									ACTIVITY_CODE: this.activityId,
-								}
+									ACTIVITY_CODE: this.activityId
+								};
 
 								app.ajax(app.baseUrl + '/api/BusiActivity/GetPrjActivityList', {
 									data: data,
 									// dataType:'json',//服务器返回json格式数据
 									type: 'get', //HTTP请求类型
-									success: function(result) {
-										document.getElementById('loader').style.display = 'none'
+									success: function success(result) {
+										document.getElementById('loader').style.display = 'none';
 										if(result.Success) {
 											var l = _this.happliedList.list.length;
-											var arr = _this.happliedList.list
+											var arr = _this.happliedList.list;
 											_this.happliedList.list = arr.concat(result.Data.ListInfo);
 
 											if(_this.happliedList.list.length == l) {
@@ -479,45 +486,41 @@
 												if(callback) callback(true);
 												return;
 											}
-											_this.happliedList.index += 1
+											_this.happliedList.index += 1;
 											_this.scroll.refresh();
 											if(callback) callback(false);
-
 										} else {
 											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
+											plus.nativeUI.toast(result.Msg);
 										}
 									}
 								});
 							}
-
 						},
-						_refresh(){
+						_refresh: function _refresh() {
 							this.MayList = { //当前商家可以报名的作品
 								list: [],
 								index: 1,
 								norest: false
-							}
+							};
 							this.happliedList = { //该活动已经报名的作品
 								list: [],
 								index: 1,
 								norest: false
-							}
-							var _this = this
-							plus.nativeUI.showWaiting()
-							this._getData((b) => {
-									plus.nativeUI.closeWaiting()
-									_this.scroll.finishPullDown()
-									if(b) {
-
-									} else {
-										_this.scroll.finishPullUp()
-									}
-							})
+							};
+							var _this = this;
+							plus.nativeUI.showWaiting();
+							this._getData(function(b) {
+								plus.nativeUI.closeWaiting();
+								_this.scroll.finishPullDown();
+								if(b) {} else {
+									_this.scroll.finishPullUp();
+								}
+							});
 						}
 					}
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

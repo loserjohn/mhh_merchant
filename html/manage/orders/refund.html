@@ -54,7 +54,8 @@
 				background: #404040;
 				color: #fff;
 			}
-			.textInput{
+			
+			.textInput {
 				border: none;
 				color: #404040;
 			}
@@ -63,19 +64,19 @@
 
 	<body>
 		<!--等待页面-->
-			<div class="loader" style="top:0" id="loader">
-					<ul>
-						<li id='a'></li>
-						<li id='b'></li>
-						<li id='c'></li>
-						<li id='d'></li>
-						<li id='e'></li>
-						<li id='f'></li>
-						<li id='g'></li>
-						<li id='h'></li>
-						<li id='i'></li>
-					</ul>
-			</div>
+		<div class="loader" style="top:0" id="loader">
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
+		</div>
 		<div id="app">
 			<div class="panel2">
 				<p>订单编号: <span class="fr">{{detail.ORDER_CODE}}</span></p>
@@ -131,7 +132,7 @@
 					不同意
 				</div>
 			</div>
-			
+
 			<!--拒绝原因框-->
 			<div class="cm_mask_bot" v-if="show" @tap.self="_toggle">
 				<div class="cm_modal_top  animated slideInDown">
@@ -139,7 +140,7 @@
 
 					<div class=" container  ">
 						<textarea class="textInput" v-model="reason" placeholder="请输入文字信息"></textarea>
-						<div class="cm_btn" @tap = "_noRefund">确认</div>
+						<div class="cm_btn" @tap="_noRefund">确认</div>
 					</div>
 				</div>
 			</div>
@@ -151,16 +152,32 @@
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			 
+
+			function _defineProperty(obj, key, value) {
+				if(key in obj) {
+					Object.defineProperty(obj, key, {
+						value: value,
+						enumerable: true,
+						configurable: true,
+						writable: true
+					});
+				} else {
+					obj[key] = value;
+				}
+				return obj;
+			}
+
 			mui.init({
 				swipeBack: true
 			});
 			var APP;
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				//				app.initHeader();
 				APP = new Vue({
 					el: '#app',
-					data: {
+					data: _defineProperty({
 						isLoading: false,
 
 						orderCode: '',
@@ -170,158 +187,155 @@
 						order: '',
 						/*退款订单详情*/
 						detail: '',
-						remark:'',
+						remark: '',
 						reason: 0,
 						picList: [],
-						show:false,
-						reason:''
-					},
-					created: function() {
+						show: false
+					}, 'reason', ''),
+					created: function created() {
 
 						var self = plus.webview.currentWebview();
 						this.detail = self.order;
-						this.orderCode = self.order.ORDER_CODE
+						this.orderCode = self.order.ORDER_CODE;
 					},
-					mounted: function() {
+					mounted: function mounted() {
 						var _this = this;
 
-						var scroll = this.$refs.scroll
+						var scroll = this.$refs.scroll;
 						//						var wraper = this.$refs.wraper
 						//							初始化scroll的屏幕位置
 						this.appHeight = 0;
 						/*初始化数据*/
-						this._getData(() => {})
+						this._getData(function() {});
 					},
 					methods: {
-						_toggle(){
-							this.show = !this.show 
-							this.reason = ''
+						_toggle: function _toggle() {
+							this.show = !this.show;
+							this.reason = '';
 						},
+
 						/*选择原因*/
-						_preview(url) {
-							url = url.replace('_small', '_nomal')
+						_preview: function _preview(url) {
+							url = url.replace('_small', '_nomal');
 							plus.nativeUI.previewImage(url, {});
 						},
+
 						/*获取数据*/
-						_getData(callback) {
-							var _this = this
+						_getData: function _getData(callback) {
+							var _this = this;
 							/*获取订单详情*/
 							app.ajax(app.baseUrl + '/api/BusiOrder/ViewRefundOrder', {
 								type: 'post', //HTTP请求类型
 								data: {
 									ORDER_CODE: _this.orderCode
 								},
-								success: function(result) {
-									document.getElementById('loader').style.display = 'none'
+								success: function success(result) {
+									document.getElementById('loader').style.display = 'none';
 									if(result.Success) {
 										_this.order = result.Data;
-										_this.picList = result.Data.REFUND_LIST_IMG
-										_this.remark = result.Data.REFUND_DETAILS
-										if(callback) callback()
+										_this.picList = result.Data.REFUND_LIST_IMG;
+										_this.remark = result.Data.REFUND_DETAILS;
+										if(callback) callback();
 									} else {
 										/*验证失败*/
-										plus.nativeUI.toast(result.Msg)
-										if(callback) callback()
+										plus.nativeUI.toast(result.Msg);
+										if(callback) callback();
 									}
 								}
 							});
-
 						},
 
 						/*同意退款*/
-						_yesRefund() {
-							plus.nativeUI.confirm('确定同意该笔退款？', (event) => {
-								var k = event.index
+						_yesRefund: function _yesRefund() {
+							var _this2 = this;
+
+							plus.nativeUI.confirm('确定同意该笔退款？', function(event) {
+								var k = event.index;
 								//								alert(k)
 								if(k == 0) {
-										plus.nativeUI.showWaiting()
-									var _this = this
+									plus.nativeUI.showWaiting();
+									var _this = _this2;
 									/*获取订单详情*/
 									app.ajax(app.baseUrl + '/api/BusiOrder/RefundOrder', {
 										type: 'post', //HTTP请求类型
 										data: {
 											ORDER_CODE: _this.orderCode
 										},
-										success: function(result) {
-											plus.nativeUI.closeWaiting()
+										success: function success(result) {
+											plus.nativeUI.closeWaiting();
 											if(result.Success) {
-												
-												plus.nativeUI.toast('您已同意该笔退款')
-												plus.webview.getWebviewById('orders').evalJS('refresh()')
-												mui.later(()=>{
-														mui.back()
-												},500)
-											
+
+												plus.nativeUI.toast('您已同意该笔退款');
+												plus.webview.getWebviewById('orders').evalJS('refresh()');
+												mui.later(function() {
+													mui.back();
+												}, 500);
 											} else {
 												/*验证失败*/
-												plus.nativeUI.toast(result.Msg)
-												if(callback) callback()
+												plus.nativeUI.toast(result.Msg);
+												if(callback) callback();
 											}
 										}
 									});
-							
 								} else {
-									return false
+									return false;
 								}
-
-							})
-							
-							
+							});
 						},
+
 						/*不同意退款*/
-						_noRefund() {
-							if(!this.reason){
-								plus.nativeUI.alert("请输入拒绝原因", function(){},'马嘿嘿提醒您');
-								return ;
+						_noRefund: function _noRefund() {
+							var _this3 = this;
+
+							if(!this.reason) {
+								plus.nativeUI.alert("请输入拒绝原因", function() {}, '马嘿嘿提醒您');
+								return;
 							}
-							
-							plus.nativeUI.confirm('确定拒绝该笔退款？', (event) => {
-								var k = event.index
+
+							plus.nativeUI.confirm('确定拒绝该笔退款？', function(event) {
+								var k = event.index;
 								//								alert(k)
 								if(k == 0) {
-									plus.nativeUI.showWaiting()
-									var _this = this
+									plus.nativeUI.showWaiting();
+									var _this = _this3;
 									/*获取订单详情*/
 									app.ajax(app.baseUrl + '/api/BusiOrder/RefundFailOrder', {
 										type: 'post', //HTTP请求类型
 										data: {
 											ORDER_CODE: _this.orderCode
 										},
-										success: function(result) {
-											plus.nativeUI.closeWaiting()
+										success: function success(result) {
+											plus.nativeUI.closeWaiting();
 											if(result.Success) {
 												plus.nativeUI.toast('您已成功拒绝该笔退款');
-												plus.webview.getWebviewById('orders').evalJS('refresh()')
-												mui.later(()=>{
-														mui.back()
-												},500)
+												plus.webview.getWebviewById('orders').evalJS('refresh()');
+												mui.later(function() {
+													mui.back();
+												}, 500);
 											} else {
 												/*验证失败*/
-												plus.nativeUI.toast(result.Msg)
-												if(callback) callback()
+												plus.nativeUI.toast(result.Msg);
+												if(callback) callback();
 											}
 										}
 									});
-							
 								} else {
-									return false
+									return false;
 								}
-
-							})
+							});
 						}
 					}
-				})
-
+				});
 			});
 
 			function hasTime(date) {
 				//				alert(new Date(date) )
-				let time = new Date(date)
+				var time = new Date(date);
 				//				alert(date+time)
 				if(date) {
 					/*如果有回传选择的日期*/
 					//					alert(666)
-					APP._orderTime(time)
+					APP._orderTime(time);
 				}
 				var self = plus.webview.currentWebview();
 				self.setStyle({

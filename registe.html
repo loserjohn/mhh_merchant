@@ -77,9 +77,11 @@
 		<script src="js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: false
-			})
+			});
 			app.WXinit(CryptoJS);
 			mui.plusReady(function() {
 				var APP = new Vue({
@@ -103,21 +105,21 @@
 						enables: false,
 						time: 90
 					},
-					created() {
+					created: function created() {
 						//							app.initHeader();
 					},
-					computed: {
-						ctime() {
-							return '(' + this.time + 's)'
 
+					computed: {
+						ctime: function ctime() {
+							return '(' + this.time + 's)';
 						}
 					},
-					mounted() {
+					mounted: function mounted() {
 						this.opId = plus.storage.getItem('opId');
 						this.pic_head = plus.storage.getItem('pic_head');
 						this.petname = plus.storage.getItem('petname');
 
-						plus.nativeUI.closeWaiting()
+						plus.nativeUI.closeWaiting();
 						mui.currentWebview.show('pop-in', 300, function() {}, {});
 						if(mui.os.android) {
 							var originalHeight = document.documentElement.clientHeight || document.body.clientHeight;
@@ -127,18 +129,19 @@
 								//软键盘弹起与隐藏  都会引起窗口的高度发生变化
 								var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
 
-								if(resizeHeight * 1 < originalHeight * 1) { //resizeHeight<originalHeight证明窗口被挤压了
+								if(resizeHeight * 1 < originalHeight * 1) {
+									//resizeHeight<originalHeight证明窗口被挤压了
 
 									plus.webview.currentWebview().setStyle({
 										height: originalHeight
 									});
-
 								}
-							}
+							};
 						}
 					},
+
 					methods: {
-						_toregiste() {
+						_toregiste: function _toregiste() {
 							/*号码验证*/
 							if(!this.mobile) {
 								plus.nativeUI.alert("请输入手机号", function() {}, '马嘿嘿提醒您');
@@ -175,30 +178,30 @@
 								petname: this.petname,
 								openid: this.opId,
 								aesopenid: this._Encrypt(this.opId),
-								mobile: this.mobile,
-							}
+								mobile: this.mobile
+							};
 							app.registe(data, function(status, msg) {
 								waiting.close();
 								if(status) {
-									plus.nativeUI.toast('注册成功，请完善信息')
-									let desturl = './msg.html'
-								let destid = 'msg'
-								let exa = {}
-								let option = {
-									showTitle:true,
-									autoShow: false
-								}
-								app.navigater(desturl,destid,exa,option)	
-									
-								
+									plus.nativeUI.toast('注册成功，请完善信息');
+									var desturl = './msg.html';
+									var destid = 'msg';
+									var exa = {};
+									var option = {
+										showTitle: true,
+										autoShow: false
+									};
+									app.navigater(desturl, destid, exa, option);
 								} else {
-									plus.nativeUI.toast(msg)
+									plus.nativeUI.toast(msg);
 								}
-							}, 'wx')
-
+							}, 'wx');
 						},
+
 						/* 获取验证码 */
-						_getYZM() {
+						_getYZM: function _getYZM() {
+							var _this = this;
+
 							if(this.enables) return;
 							// alert(app.checkPhone(this.mobile))
 							if(!this.mobile || !app.checkPhone(this.mobile)) {
@@ -209,20 +212,21 @@
 							}
 
 							var waiting = plus.nativeUI.showWaiting();
-							app.getValidate(this.mobile, 1, (status, Msg) => {
-								waiting.close()
+							app.getValidate(this.mobile, 1, function(status, Msg) {
+								waiting.close();
 								if(status) {
 									/*开始倒计时*/
-									this._timeMove()
+									_this._timeMove();
 									plus.nativeUI.toast("发送成功");
 								} else {
 									plus.nativeUI.toast(Msg);
 								}
-							})
+							});
 						},
+
 						//							加密
-						_Encrypt(str) {
-							str = str + '|.|' + new Date().getTime()
+						_Encrypt: function _Encrypt(str) {
+							str = str + '|.|' + new Date().getTime();
 							var key = CryptoJS.enc.Utf8.parse(app._KEY);
 							var iv = CryptoJS.enc.Utf8.parse(app._IV);
 							var encrypted = '';
@@ -234,26 +238,30 @@
 							});
 							return encrypted.ciphertext.toString();
 						},
+
 						//							切换密码框
-						_toggleType() {
-							this.toggleType = !this.toggleType
+						_toggleType: function _toggleType() {
+							this.toggleType = !this.toggleType;
 						},
+
 						/*倒计时*/
-						_timeMove() {
+						_timeMove: function _timeMove() {
+							var _this2 = this;
+
 							this.enables = true;
-							var time = setInterval(() => {
-								this.time -= 1;
-								if(this.time == 0) {
-									this.enables = false;
+							var time = setInterval(function() {
+								_this2.time -= 1;
+								if(_this2.time == 0) {
+									_this2.enables = false;
 									clearInterval(time);
-									this.time = 90
+									_this2.time = 90;
 								}
-							}, 1000)
+							}, 1000);
 						}
 					}
 
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

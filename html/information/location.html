@@ -177,12 +177,14 @@
 			<a href="#" id="submit">确定</a>
 		</div>
 		<script>
+			 
+
 			mui.init({
 				swipeBack: true
 			});
 			mui.plusReady(function() {
 				app.initHeader();
-				plus.nativeUI.closeWaiting()
+				plus.nativeUI.closeWaiting();
 				mui.currentWebview.show('pop-in', 300, function() {}, {});
 
 				var lon = '';
@@ -211,8 +213,8 @@
 					});
 
 					function onComplete(data) {
-						$('#address').val(data.formattedAddress)
-						$('.address .info').text(data.formattedAddress)
+						$('#address').val(data.formattedAddress);
+						$('.address .info').text(data.formattedAddress);
 					}
 					//解析定位错误信息
 					function onError(data) {
@@ -227,45 +229,44 @@
 
 					positionPicker.on('success', function(positionResult) {
 						//						console.log(JSON.stringify(positionResult.position) )
-						lon = positionResult.position.lng
-						lan = positionResult.position.lat
+						lon = positionResult.position.lng;
+						lan = positionResult.position.lat;
 						address = positionResult.address;
 
-						$('.poi .nearpoi').text(positionResult.nearestPOI)
-						$('.address .info').text(positionResult.address)
-
+						$('.poi .nearpoi').text(positionResult.nearestPOI);
+						$('.address .info').text(positionResult.address);
 					});
 					positionPicker.on('fail', function(positionResult) {
-						$('.poi .nearpoi').text('')
-						$('.address .info').text('')
+						$('.poi .nearpoi').text('');
+						$('.address .info').text('');
 					});
-					var onModeChange = function(e) {
-						positionPicker.setMode(e.target.value)
-					}
+					var onModeChange = function onModeChange(e) {
+						positionPicker.setMode(e.target.value);
+					};
 					positionPicker.start();
 					map.panBy(0, 1);
 
 					mui('#addressDels').on('tap', '#submit', function() {
 
 						if(!lon || !lan || !address) {
-							mui.back()
+							mui.back();
 							return;
 						}
 
-						var s = plus.webview.getWebviewById('chat')
-						
+						var s = plus.webview.getWebviewById('chat');
+
 						var co = {
 							longitude: lon,
 							/*经度*/
 							latitude: lan,
 							/*纬度*/
 							poi: address
-						}
-						s.evalJS('getLocation('+JSON.stringify(co) +')') 
-						mui.back()
-					})
+						};
+						s.evalJS('getLocation(' + JSON.stringify(co) + ')');
+						mui.back();
+					});
 				});
-			})
+			});
 			//			提交操作
 		</script>
 	</body>

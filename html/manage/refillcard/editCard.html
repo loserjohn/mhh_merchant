@@ -139,7 +139,7 @@
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">有效期</div>
-							<input type="number" class="cellInputTxt" v-model="enabledtime"  placeholder="有效期" />
+							<input type="number" class="cellInputTxt" v-model="enabledtime" placeholder="有效期" />
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">充值面额</div>
@@ -188,7 +188,7 @@
 					</div>
 				</div>
 				<div class="f1" v-if="cardStatus==1">
-					<div class="cm_btn" @tap="_submit(0)"> 
+					<div class="cm_btn" @tap="_submit(0)">
 						禁用
 					</div>
 				</div>
@@ -206,167 +206,163 @@
 		<script src="../../../js/bscroll.min.js"></script>
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
+			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
 						/*卡信息*/
-						cardName:'',
+						cardName: '',
 						enabledtime: '',
-						payDenomination:'',
-						giveDenomination:'',
-						cardDetail:'',
-						cardExplain:'',
-						cardStatus:''//卡的状态
+						payDenomination: '',
+						giveDenomination: '',
+						cardDetail: '',
+						cardExplain: '',
+						cardStatus: '' //卡的状态
 					},
-					created: function() {
+					created: function created() {
 						//							alert(1)
 
 					},
-					mounted: function() {
-						var _this = this					
-						this._initDetail()
-						
-							plus.nativeUI.closeWaiting()
-//							mui.currentWebview.show('pop-in', 300, function () {}, {});
-											
+					mounted: function mounted() {
+						var _this = this;
+						this._initDetail();
+
+						plus.nativeUI.closeWaiting();
+						//							mui.currentWebview.show('pop-in', 300, function () {}, {});
 					},
 					methods: {
 						/*初始化信息*/
-						_initDetail(){
+						_initDetail: function _initDetail() {
 							var self = plus.webview.currentWebview();
-							if(self.cardDetail){
+							if(self.cardDetail) {
 								/*初始化赋值卡片*/
 								this.cardName = self.cardDetail.RECHARGE_NAME;
 								this.enabledtime = self.cardDetail.RECHARGE_LIFE;
 								this.payDenomination = self.cardDetail.RECHARGE_AMOUNT;
 								this.giveDenomination = self.cardDetail.RECHARGE_GRANT;
 								this.cardDetail = self.cardDetail.RECHARGE_DETAILS;
-								this.cardExplain = self.cardDetail.RECHARGE_DESCRIBE;	
-								this.cardStatus = parseInt(self.cardDetail.RECHARGE_STATUS) 
-								this.cardCode = self.cardDetail.RECHARGE_CODE
-								
-								document.getElementById('loader').style.display='none'
+								this.cardExplain = self.cardDetail.RECHARGE_DESCRIBE;
+								this.cardStatus = parseInt(self.cardDetail.RECHARGE_STATUS);
+								this.cardCode = self.cardDetail.RECHARGE_CODE;
+
+								document.getElementById('loader').style.display = 'none';
 							}
-							
-							
 						},
-						
+
 						//	选择起始时间
-						_chooseStime(key) {
+						_chooseStime: function _chooseStime(key) {
 							var d = new Date();
-							var _this = this
+							var _this = this;
 
 							plus.nativeUI.pickDate(function(e) {
 								var d = e.date;
-//								console.log("选择的日期：" + d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate());						
-								if(key==1){
-									_this.startTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+								//								console.log("选择的日期：" + d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate());						
+								if(key == 1) {
+									_this.startTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 								}
-								if(key==2){
-									_this.endTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+								if(key == 2) {
+									_this.endTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 								}
-								
-								
 							}, function(e) {
-//								console.log("未选择日期：" + e.message);
-								
+								//								console.log("未选择日期：" + e.message);
+
 							}, {
-								title:'请选择起始时间',
-								minDate:d
+								title: '请选择起始时间',
+								minDate: d
 							});
 						},
+
 						/*更新信息*/
-						_updatedMsg(){
-								this.cardEnabled = !this.cardEnabled
+						_updatedMsg: function _updatedMsg() {
+							this.cardEnabled = !this.cardEnabled;
 						},
+
 						/*提交修改*/
-						_submit(t){
-							var _this =this
-							var data={
-								RECHARGE_CODE:this.cardCode,
-								RECHARGE_NAME:this.cardName,
-								RECHARGE_LIFE:this.enabledtime,
-								RECHARGE_AMOUNT:this.payDenomination,
-								RECHARGE_GRANT:this.giveDenomination,
-								RECHARGE_DETAILS:this.cardDetail,
-								RECHARGE_DESCRIBE:this.cardExplain,
-								RECHARGE_TYPE:1
+						_submit: function _submit(t) {
+							var _this = this;
+							var data = {
+								RECHARGE_CODE: this.cardCode,
+								RECHARGE_NAME: this.cardName,
+								RECHARGE_LIFE: this.enabledtime,
+								RECHARGE_AMOUNT: this.payDenomination,
+								RECHARGE_GRANT: this.giveDenomination,
+								RECHARGE_DETAILS: this.cardDetail,
+								RECHARGE_DESCRIBE: this.cardExplain,
+								RECHARGE_TYPE: 1
+							};
+
+							if(t == 0 || t == 2) {
+								data.RECHARGE_STATUS = t;
 							}
-							
-							if(t==0 || t==2){
-								data.RECHARGE_STATUS = t
-							}
-							
-//							alert(JSON.stringify(data))
-							plus.nativeUI.showWaiting('提交中...')
+
+							//							alert(JSON.stringify(data))
+							plus.nativeUI.showWaiting('提交中...');
 							app.ajax(app.baseUrl + '/api/BusiRecharge/UpdateBusiRecharge', {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
 								type: 'post', //HTTP请求类型
-								success: function(result) {					
+								success: function success(result) {
 									if(result.Success) {
-										
-										var msg = "修改成功";
-										mui.later(()=>{
-											plus.nativeUI.closeWaiting()
-											plus.webview.getWebviewById('refillcard').evalJS('refresh()')
-											plus.nativeUI.alert(msg, function() {																					
-												mui.back()
-											}, "马嘿嘿提醒您", "ok");
-										},1500)
-										
-										/*还原数据*/										
-									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-										console.log(result.Msg)
-									}
 
+										var msg = "修改成功";
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
+											plus.webview.getWebviewById('refillcard').evalJS('refresh()');
+											plus.nativeUI.alert(msg, function() {
+												mui.back();
+											}, "马嘿嘿提醒您", "ok");
+										}, 1500);
+
+										/*还原数据*/
+									} else {
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
+										console.log(result.Msg);
+									}
 								}
 							});
-							
 						},
+
 						/*操作菜单*/
-						_delect(){
-							plus.nativeUI.showWaiting('删除中...')
+						_delect: function _delect() {
+							plus.nativeUI.showWaiting('删除中...');
 							app.ajax(app.baseUrl + '/api/BusiRecharge/DeleteRecharge', {
 								// dataType:'json',//服务器返回json格式数据
 								data: {
-									RECHARGE_CODE:this.cardCode
+									RECHARGE_CODE: this.cardCode
 								},
 								type: 'post', //HTTP请求类型
-								success: function(result) {
-						
-									
-									if(result.Success) {
-										
-										var msg = "删除成功";
-										mui.later(()=>{
-											plus.nativeUI.closeWaiting()
-											plus.webview.getWebviewById('refillcard').evalJS('refresh()')
-											plus.nativeUI.alert(msg, function() {																					
-												mui.back()
-											}, "马嘿嘿提醒您", "ok");
-										},1500)
-										
-										/*还原数据*/										
-									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-										console.log(result.Msg)
-									}
+								success: function success(result) {
 
+									if(result.Success) {
+
+										var msg = "删除成功";
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
+											plus.webview.getWebviewById('refillcard').evalJS('refresh()');
+											plus.nativeUI.alert(msg, function() {
+												mui.back();
+											}, "马嘿嘿提醒您", "ok");
+										}, 1500);
+
+										/*还原数据*/
+									} else {
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
+										console.log(result.Msg);
+									}
 								}
 							});
 						}
 					}
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

@@ -106,7 +106,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background: #212121;" id="header">
-	
+
 			<h1 class="mui-title" style="color:#fff">最近聊天</h1>
 		</header>
 
@@ -168,6 +168,8 @@
 		<script src="../../js/db.js"></script>
 
 		<script type="text/javascript">
+			"use strict";
+
 			mui.init({
 				swipeBack: false,
 				pullRefresh: {
@@ -178,27 +180,26 @@
 						contentup: "上拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
 						contentnomore: '没有更多数据了', //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
 						contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
-						callback: function() {
+						callback: function callback() {
 							getList(function() {
 								mui.later(function() {
-									mui('#content').pullRefresh().endPullupToRefresh()
-								}, 1500)
-							})
-
+									mui('#content').pullRefresh().endPullupToRefresh();
+								}, 1500);
+							});
 						} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 					}
 				}
-			})
+			});
 
 			//				当前页条数		
-			var pageSize = 10
+			var pageSize = 10;
 			//				当前页码	
-			var pageIndex = 1
+			var pageIndex = 1;
 			var friends;
 			getList();
 
-			var main_loaded_flag
-			var mainPage
+			var main_loaded_flag;
+			var mainPage;
 			mui.plusReady(function() {
 
 				//				初始化聊天记录列表
@@ -208,39 +209,37 @@
 				//							console.log(token)
 				//预加载页面,之前需要通过后台获取token
 
-				InitIM()
+				InitIM();
 
 				mainPage.addEventListener("loaded", function() {
 					main_loaded_flag = true;
 				});
 
 				mui.back = function(event) {
-					plus.webview.currentWebview().hide()
-				}
+					plus.webview.currentWebview().hide();
+				};
 
-				var toChat = function() {
+				var toChat = function toChat() {
 					var id = setInterval(function() {
 						if(main_loaded_flag) {
 							clearInterval(id);
-							mainPage.show("pop-in", 300, function() {
-
-							}, {});
+							mainPage.show("pop-in", 300, function() {}, {});
 						}
 					}, 1000);
-				}
+				};
 				//				点击进入聊天详情页
 				mui('#listInfoBox').on('tap', '.listItem', function() {
 					var fdId = this.getAttribute('userid');
 
 					var fdAvatar = document.getElementById('fdAvatar' + fdId).getAttribute('src');
 
-					var fdname = document.getElementById('fdName' + fdId).innerText
-					mainPage.evalJS('initHis("' + fdId + '","' + fdname + '","' + fdAvatar + '")')
+					var fdname = document.getElementById('fdName' + fdId).innerText;
+					mainPage.evalJS('initHis("' + fdId + '","' + fdname + '","' + fdAvatar + '")');
 					toChat();
 
-					document.getElementById('fdRed' + fdId).innerText = 0
-					document.getElementById('fdRed' + fdId).style.display = 'none'
-				})
+					document.getElementById('fdRed' + fdId).innerText = 0;
+					document.getElementById('fdRed' + fdId).style.display = 'none';
+				});
 				//				//				点击删除
 				mui('#listInfoBox').on('tap', '.delect', function() {
 					var fdId = this.getAttribute('userid');
@@ -249,8 +248,8 @@
 					mui.swipeoutClose(li);
 					li.parentNode.removeChild(li);
 					//					alert(fdId)
-					DB.delectDataByIndex(fdId)
-				})
+					DB.delectDataByIndex(fdId);
+				});
 
 				mui('#listInfoBox').on('tap', '.sysItem', function() {
 					mui.openWindow({
@@ -284,40 +283,36 @@
 						extras: {},
 						waiting: {
 							autoShow: true, //自动显示等待框，默认为true
-							title: '正在加载...', //等待对话框上显示的提示内容
+							title: '正在加载...' //等待对话框上显示的提示内容
 						}
-					})
-				})
-
-			})
+					});
+				});
+			});
 
 			//			刷新最近聊天的对象列表
 			function getList(callback) {
 				var time = setInterval(function() {
-					if(!DB.db) {
-
-					} else {
-						DB.getCount((res) => {
+					if(!DB.db) {} else {
+						DB.getCount(function(res) {
 
 							friends = {
 								list: res,
-								time: function(str) {
-									return(new Date(str)).Format('MM-dd hh:mm:ss')
+								time: function time(str) {
+									return new Date(str).Format('MM-dd hh:mm:ss');
 								}
-							}
+							};
 							var html = template('friends', friends);
 							document.getElementById('listInfo').innerHTML = html;
-							if(callback) callback()
+							if(callback) callback();
 						});
-						mui('#content').pullRefresh().endPullupToRefresh()
-						clearInterval(time)
-
+						mui('#content').pullRefresh().endPullupToRefresh();
+						clearInterval(time);
 					}
-				}, 200)
+				}, 200);
 			}
 			//			接收到对方消息,列表页消息提示变化
 			function receive(data) {
-				var getor = data.senderUserId
+				var getor = data.senderUserId;
 				var time;
 				var text;
 				var box = document.getElementById('fdBox' + getor);
@@ -326,16 +321,16 @@
 					time = document.getElementById('fdTime' + getor);
 					text = document.getElementById('fdTxt' + getor);
 
-					time.innerText = (new Date()).Format("yyyy-MM-dd hh:mm:ss");
+					time.innerText = new Date().Format("yyyy-MM-dd hh:mm:ss");
 
 					if(data.messageType == 'TextMessage') {
-						text.innerText = data.content.content
+						text.innerText = data.content.content;
 					} else if(data.messageType == 'LocationMessage') {
-						text.innerText = '向您发送了位置'
+						text.innerText = '向您发送了位置';
 					} else if(data.messageType == 'VoiceMessage') {
-						text.innerText = '语音信息'
+						text.innerText = '语音信息';
 					} else {
-						text.innerText = '图片'
+						text.innerText = '图片';
 					}
 					var m = document.getElementById('fdRed' + getor);
 					m.style.display = 'block';
@@ -346,36 +341,34 @@
 						userId: getor,
 						avatar: data.content.extra.avatar,
 						msgList: [].push(data)
-					})
+					});
 
 					getList(function() {
 						var m = document.getElementById('fdRed' + getor);
-						if(!m) return
-						m.innerText = 1
+						if(!m) return;
+						m.innerText = 1;
 						time = document.getElementById('fdTime' + getor);
 						text = document.getElementById('fdTxt' + getor);
 
-						time.innerText = (new Date()).Format("yyyy-MM-dd hh:mm:ss");
+						time.innerText = new Date().Format("yyyy-MM-dd hh:mm:ss");
 
 						if(data.messageType == 'TextMessage') {
-							text.innerText = data.content.content
+							text.innerText = data.content.content;
 						} else if(data.messageType == 'LocationMessage') {
-							text.innerText = '向您发送了位置'
+							text.innerText = '向您发送了位置';
 						} else if(data.messageType == 'VoiceMessage') {
-							text.innerText = '语音信息'
+							text.innerText = '语音信息';
 						} else {
-							text.innerText = '图片'
+							text.innerText = '图片';
 						}
 						m.style.display = 'block';
 					});
-
 				}
-
 			}
 			//自己发送消息
 			function send(data) {
 
-				var getor = data.targetId
+				var getor = data.targetId;
 				var time;
 				var text;
 				var box = document.getElementById('fdBox' + getor);
@@ -384,46 +377,43 @@
 					time = document.getElementById('fdTime' + getor);
 					text = document.getElementById('fdTxt' + getor);
 
-					time.innerText = (new Date()).Format("yyyy-MM-dd hh:mm:ss");
+					time.innerText = new Date().Format("yyyy-MM-dd hh:mm:ss");
 
 					if(data.messageType == 'TextMessage') {
-						text.innerText = data.content.content
+						text.innerText = data.content.content;
 					} else if(data.messageType == 'LocationMessage') {
-						text.innerText = '发送了位置信息'
+						text.innerText = '发送了位置信息';
 					} else if(data.messageType == 'VoiceMessage') {
-						text.innerText = '语音信息'
+						text.innerText = '语音信息';
 					} else {
-						text.innerText = '图片'
+						text.innerText = '图片';
 					}
-
 				} else {
 					//					表示是新的聊天天对象
 					friends.list.push({
 						userId: getor,
 						avatar: data.content.extra.avatar,
 						msgList: [].push(data)
-					})
+					});
 
 					getList(function() {
 
 						time = document.getElementById('fdTime' + getor);
 						text = document.getElementById('fdTxt' + getor);
 
-						time.innerText = (new Date()).Format("yyyy-MM-dd hh:mm:ss");
+						time.innerText = new Date().Format("yyyy-MM-dd hh:mm:ss");
 
 						if(data.messageType == 'TextMessage') {
-							text.innerText = data.content.content
+							text.innerText = data.content.content;
 						} else if(data.messageType == 'LocationMessage') {
-							text.innerText = '发送了位置信息'
+							text.innerText = '发送了位置信息';
 						} else if(data.messageType == 'VoiceMessage') {
-							text.innerText = '语音信息'
+							text.innerText = '语音信息';
 						} else {
-							text.innerText = '图片'
+							text.innerText = '图片';
 						}
 					});
-
 				}
-
 			}
 			//			新消息产生红点提示
 			function redSet(msg) {
@@ -432,11 +422,10 @@
 				m.innerText = parseInt(m.innerText) + 1;
 
 				var t = document.getElementById('sysTime');
-				t.innerText = (new Date()).Format('MM-dd hh:mm:ss');
+				t.innerText = new Date().Format('MM-dd hh:mm:ss');
 
 				var c = document.getElementById('sysTxt');
-				c.innerText = msg
-
+				c.innerText = msg;
 			}
 
 			function redClean(msg) {
@@ -444,10 +433,10 @@
 				m.style.display = 'none';
 				m.innerText = 0;
 			}
-			
-			function InitIM(){
-//				alert('InitIM')
-				main_loaded_flag = false
+
+			function InitIM() {
+				//				alert('InitIM')
+				main_loaded_flag = false;
 				if(!mainPage) {
 					mainPage = mui.preload({
 						"id": 'chat',
@@ -458,7 +447,8 @@
 					main_loaded_flag = true;
 				}
 			}
-			Date.prototype.Format = function(fmt) { // author: meizz
+			Date.prototype.Format = function(fmt) {
+				// author: meizz
 				var o = {
 					"M+": this.getMonth() + 1, // 月份
 					"d+": this.getDate(), // 日
@@ -468,12 +458,12 @@
 					"q+": Math.floor((this.getMonth() + 3) / 3), // 季度
 					"S": this.getMilliseconds() // 毫秒
 				};
-				if(/(y+)/.test(fmt))
-					fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-				for(var k in o)
-					if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+				if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+				for(var k in o) {
+					if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+				}
 				return fmt;
-			}
+			};
 		</script>
 	</body>
 

@@ -9,33 +9,35 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
-			.goYZM{
+			.goYZM {
 				justify-content: flex-end;
 				font-size: 14px;
 				line-height: 30px;
 				margin: 38px 0;
 			}
-			.goYZMoicon{
+			
+			.goYZMoicon {
 				height: 30px;
 				margin-left: 10px;
 			}
-			.btns{
-				margin-top:15px
+			
+			.btns {
+				margin-top: 15px
 			}
 		</style>
 	</head>
 
 	<body style="background: #fff;">
-		<div  id="app" >
+		<div id="app">
 			<!--<header class="mui-bar mui-bar-nav " id="header">
 				<a class="mui-action-back mui-pull-left">
 					<i class="iconfont icon-xitongfanhui cm_back"></i>
 				</a>
 				<h1 class="mui-title" >登陆</h1>
 			</header>-->
-			
-			<div class="container " id = "content">
-				<header class="flex goYZM" @tap = "_toYZMlogin">
+
+			<div class="container " id="content">
+				<header class="flex goYZM" @tap="_toYZMlogin">
 					<p style="line-height: 30px">验证码登录</p>
 					<img src="images/go.png" alt="" class="goYZMoicon" />
 				</header>
@@ -43,19 +45,19 @@
 					<div class="cm_input_groups flex">
 						<div class="cm_groups_title">
 							手机
-						</div>	
-						<input class="f1 cm_groups_input" type="text" placeholder="请输入您的手机号码"  v-model.number="mobile" />
+						</div>
+						<input class="f1 cm_groups_input" type="text" placeholder="请输入您的手机号码" v-model.number="mobile" />
 					</div>
 					<div class="cm_input_groups flex">
 						<div class="cm_groups_title">
 							密码
-						</div>	
+						</div>
 						<input class="f1 cm_groups_input" :type="toggleType?'password':'text'" placeholder="密码由6~16位数字和字母组成" v-model="password" />
 						<i class="iconfont icon-kanguo fs16" @tap="_toggleType" :class="{cor_y:toggleType?true:false}"></i>
-					</div>					
+					</div>
 				</div>
 				<div class="btns">
-					<div class="cm_btn" @tap = "_login">
+					<div class="cm_btn" @tap="_login">
 						登录
 					</div>
 					<div class="flex">
@@ -68,7 +70,7 @@
 					</div>
 				</div>
 				<img src="images/logo2.png" alt="" class="logo_bg" v-show="androidShow" />
-				
+
 			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
@@ -76,132 +78,139 @@
 		<script src="js/vue.js"></script>
 		<script src="js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			mui.init()
-			app.WXinit(CryptoJS);
-			mui.plusReady(function(){
-				
-				var APP = new Vue({
-						el: '#app',
-						data: {
-							mobile:'',/* 电话 */
-							password:'', /* 密码 */
-							toggleType:true,
-							androidShow:true
-						},
-						created: function() {
-//							app.initHeader();
-						},
-						mounted: function() {
-								 
-							if(mui.os.android){
-								var originalHeight=document.documentElement.clientHeight || document.body.clientHeight;
-							
-								window.onresize=function(){
-								
-								    //软键盘弹起与隐藏  都会引起窗口的高度发生变化
-								    var  resizeHeight=document.documentElement.clientHeight || document.body.clientHeight;
-								
-								    if(resizeHeight*1<originalHeight*1){ //resizeHeight<originalHeight证明窗口被挤压了
-								
-								            plus.webview.currentWebview().setStyle({
-								                height:originalHeight
-								            });
-								
-								      }
-								}
-							}	 
-						},
-						methods: {
-							/*跳转到手机号码注册*/
-							_toRegiste(){
-								let desturl = './registe.html'
-								let destid = 'registe'
-								let exa = {}
-								let option = {
-									showTitle:true
-								}
-								app.navigater(desturl,destid,exa,option)
-								
-							},
-							/*跳转忘记密码*/
-							
-							_toForget(){
-								let desturl = './forgetPass.html'
-								let destid = 'forgetPass'
-								let exa = {}
-								let option = {
-									showTitle:true
-								}
-								app.navigater(desturl,destid,exa,option)
-							
-							},
-							/*	手机号码登陆*/
-							_login(){
-								/*号码验证*/
-								if(!this.mobile){
-									plus.nativeUI.alert("请输入手机号", function(){},'马嘿嘿提醒您');
-									return;
-								}else if(!app.checkPhone(this.mobile)){
-									plus.nativeUI.alert("手机号码不正确", function(){},'马嘿嘿提醒您');
-									return;
-								}else if(!this.password){
-									plus.nativeUI.alert("请输入密码", function(){},'马嘿嘿提醒您');
-									return;
-								}
-								plus.nativeUI.showWaiting();
-								/*调用登陆接口*/
-								
-								var data ={
-									username:this.mobile,
-									rpass:this.password,
-									password:this._Encrypt(this.password),
-									type:3,						
-								}
-								app.zhlogin(data,(status,msg)=>{
-									plus.nativeUI.closeWaiting();
-									if(status){						
-										/*跳转首页*/
-//										plus.webview.currentWebview().close()
-									}else{
-										plus.nativeUI.toast(msg)
-									}
-								})
-								
-							},
-							/* 加密 */
-							_Encrypt(str) {
-								str = str + '|.|' + new Date().getTime()
-								var key = CryptoJS.enc.Utf8.parse(app._KEY);
-								var iv = CryptoJS.enc.Utf8.parse(app._IV);
-								var encrypted = '';
-								var srcs = CryptoJS.enc.Utf8.parse(str);
-								encrypted = CryptoJS.AES.encrypt(srcs, key, {
-									iv: iv,
-									mode: CryptoJS.mode.CBC,
-									padding: CryptoJS.pad.Pkcs7
-								});
-								return encrypted.ciphertext.toString();
-							},
-//							切换密码框
-							_toggleType(){
-								this.toggleType =!this.toggleType
-							},
-							/*验证码登陆*/
-							_toYZMlogin(){
-								let desturl = './yzmLogin.html'
-								let destid = 'yzmLogin'
-								let exa = {}
-								let option = {
-									showTitle:true,
-									autoShow: false
-								}
-								app.navigater(desturl,destid,exa,option)							
-							}
-						
-						}
+			 
 
-					})
-			})
+			mui.init();
+			app.WXinit(CryptoJS);
+			mui.plusReady(function() {
+				plus.webview.currentWebview().setStyle({
+					cachemode:'noCache'
+				})
+				var APP = new Vue({
+					el: '#app',
+					data: {
+						mobile: '',
+						/* 电话 */
+						password: '',
+						/* 密码 */
+						toggleType: true,
+						androidShow: true
+					},
+					created: function created() {
+						//							app.initHeader();
+					},
+					mounted: function mounted() {
+
+						if(mui.os.android) {
+							var originalHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+							window.onresize = function() {
+
+								//软键盘弹起与隐藏  都会引起窗口的高度发生变化
+								var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+								if(resizeHeight * 1 < originalHeight * 1) {
+									//resizeHeight<originalHeight证明窗口被挤压了
+
+									plus.webview.currentWebview().setStyle({
+										height: originalHeight
+									});
+								}
+							};
+						}
+					},
+					methods: {
+						/*跳转到手机号码注册*/
+						_toRegiste: function _toRegiste() {
+							var desturl = './registe.html';
+							var destid = 'registe';
+							var exa = {};
+							var option = {
+								showTitle: true
+							};
+							app.navigater(desturl, destid, exa, option);
+						},
+
+						/*跳转忘记密码*/
+
+						_toForget: function _toForget() {
+							var desturl = './forgetPass.html';
+							var destid = 'forgetPass';
+							var exa = {};
+							var option = {
+								showTitle: true
+							};
+							app.navigater(desturl, destid, exa, option);
+						},
+
+						/*	手机号码登陆*/
+						_login: function _login() {
+							/*号码验证*/
+							if(!this.mobile) {
+								plus.nativeUI.alert("请输入手机号", function() {}, '马嘿嘿提醒您');
+								return;
+							} else if(!app.checkPhone(this.mobile)) {
+								plus.nativeUI.alert("手机号码不正确", function() {}, '马嘿嘿提醒您');
+								return;
+							} else if(!this.password) {
+								plus.nativeUI.alert("请输入密码", function() {}, '马嘿嘿提醒您');
+								return;
+							}
+							plus.nativeUI.showWaiting();
+							/*调用登陆接口*/
+
+							var data = {
+								username: this.mobile,
+								rpass: this.password,
+								password: this._Encrypt(this.password),
+								type: 3
+							};
+							app.zhlogin(data, function(status, msg) {
+								plus.nativeUI.closeWaiting();
+								if(status) {
+									/*跳转首页*/
+									//										plus.webview.currentWebview().close()
+								} else {
+									plus.nativeUI.toast(msg);
+								}
+							});
+						},
+
+						/* 加密 */
+						_Encrypt: function _Encrypt(str) {
+							str = str + '|.|' + new Date().getTime();
+							var key = CryptoJS.enc.Utf8.parse(app._KEY);
+							var iv = CryptoJS.enc.Utf8.parse(app._IV);
+							var encrypted = '';
+							var srcs = CryptoJS.enc.Utf8.parse(str);
+							encrypted = CryptoJS.AES.encrypt(srcs, key, {
+								iv: iv,
+								mode: CryptoJS.mode.CBC,
+								padding: CryptoJS.pad.Pkcs7
+							});
+							return encrypted.ciphertext.toString();
+						},
+
+						//							切换密码框
+						_toggleType: function _toggleType() {
+							this.toggleType = !this.toggleType;
+						},
+
+						/*验证码登陆*/
+						_toYZMlogin: function _toYZMlogin() {
+							var desturl = './yzmLogin.html';
+							var destid = 'yzmLogin';
+							var exa = {};
+							var option = {
+								showTitle: true,
+								autoShow: false
+							};
+							app.navigater(desturl, destid, exa, option);
+						}
+					}
+
+				});
+			});
 		</script>
 	</body>
 

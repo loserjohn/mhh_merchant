@@ -254,18 +254,20 @@
 							<li class="mui-table-view-cell flex">
 								<div class="f1 cellName">从业年限</div>
 								<input type="number" class="cellInputTxt" placeholder="您的从业年限" v-model.number="jobAge" />
+								<span>年</span>
 							</li>
 							<li class="mui-table-view-cell flex">
 								<div class="f1 cellName">本地从业年限</div>
-								<input type="number" class="cellInputTxt" placeholder="您的本地从业年限" v-model.number="localJobAge"/>
+								<input type="number" class="cellInputTxt" placeholder="您的本地从业年限" v-model.number="localJobAge" />
+								<span>年</span>
 							</li>
 							<li class="mui-table-view-cell flex">
 								<div class="f1 cellName">之前工作的店名</div>
-								<input type="text" class="cellInputTxt" placeholder="您的之前工作的店名" v-model.number="hisShop"/>
+								<input type="text" class="cellInputTxt" placeholder="您的之前工作的店名" v-model.number="hisShop" />
 							</li>
 						</ul>
 						<p class="container cm_name ">您每天希望在马嘿嘿大马车里的接单数<span class="cor_y">(单选)</span></p>
-						<ul class="mui-table-view mui-table-view-radio">						
+						<ul class="mui-table-view mui-table-view-radio">
 							<li class="mui-table-view-cell " :class="{'mui-selected':orders=='1~3单'?true:false}" @tap="this.orders='1~3单'">
 								<a class="mui-navigate-right">
 									1~3单
@@ -276,7 +278,7 @@
 									4~15单
 								</a>
 							</li>
-							<li class="mui-table-view-cell" :class="{'mui-selected':orders=='15天以上'?true:false}"  @tap="this.orders='15天以上'">
+							<li class="mui-table-view-cell" :class="{'mui-selected':orders=='15天以上'?true:false}" @tap="this.orders='15天以上'">
 								<a class="mui-navigate-right">
 									15单以上
 								</a>
@@ -284,17 +286,17 @@
 						</ul>
 						<p class="container cm_name ">您的服务价格<span class="cor_y">(单选)</span></p>
 						<ul class="mui-table-view mui-table-view-radio">
-							<li class="mui-table-view-cell "  :class="{'mui-selected':prize=='100~300元'?true:false}" @tap="this.prize='100~300元'">
+							<li class="mui-table-view-cell " :class="{'mui-selected':prize=='100~300元'?true:false}" @tap="this.prize='100~300元'">
 								<a class="mui-navigate-right">
 									100~300元
 								</a>
 							</li>
-							<li class="mui-table-view-cell"  :class="{'mui-selected':prize=='300~500元'?true:false}" @tap="this.prize='300~500元'">
+							<li class="mui-table-view-cell" :class="{'mui-selected':prize=='300~500元'?true:false}" @tap="this.prize='300~500元'">
 								<a class="mui-navigate-right">
 									300~500元
 								</a>
 							</li>
-							<li class="mui-table-view-cell"  :class="{'mui-selected':prize=='500元以上'?true:false}" @tap="this.prize='500元以上'">
+							<li class="mui-table-view-cell" :class="{'mui-selected':prize=='500元以上'?true:false}" @tap="this.prize='500元以上'">
 								<a class="mui-navigate-right">
 									500元以上
 								</a>
@@ -315,13 +317,17 @@
 							</li>
 							<li class="mui-table-view-cell flex">
 								<div class="f1 cellName">证件号码</div>
-								<input type="number" class="cellInputTxt" placeholder="请输入你的证件号码" v-model="cardNum" />
+								<input type="text" class="cellInputTxt" placeholder="请输入你的证件号码" v-model="cardNum" />
 							</li>
 						</ul>
 						<p class="container cm_name ">证件</p>
 						<ul class="mui-table-view flex picPreBox">
-							<li class="picPre" @tap="_uploadPic(4)"><img :src="frontSFZ?frontSFZ:'images/blank.png'" alt="" class="contain" /><p class="time t_c">身份证正面</p></li>
-							<li class="picPre" @tap="_uploadPic(5)"><img :src="reverseSFZ?reverseSFZ:'images/blank.png'" alt="" class="contain" /><p class="time t_c">身份证反面</p></li>
+							<li class="picPre" @tap="_uploadPic(4)"><img :src="frontSFZ?frontSFZ:'images/blank.png'" alt="" class="contain" />
+								<p class="time t_c">身份证正面</p>
+							</li>
+							<li class="picPre" @tap="_uploadPic(5)"><img :src="reverseSFZ?reverseSFZ:'images/blank.png'" alt="" class="contain" />
+								<p class="time t_c">身份证反面</p>
+							</li>
 						</ul>
 
 					</div>
@@ -348,16 +354,16 @@
 		<script src="js/app.js"></script>
 		<script src="js/imgClip.js"></script>
 		<script type="text/javascript">
-			mui.init(
+			 
 
-			)
-			var APP
+			mui.init();
+			var APP;
 			mui.plusReady(function() {
 				APP = new Vue({
 					el: '#app',
 					data: {
-						currStep:1, //当前步骤
-						
+						currStep: 1, //当前步骤
+
 						direction: 'forward', //切换方向
 						//						第一步
 						avatar: '', //头像
@@ -374,29 +380,31 @@
 						town: '',
 						areaList: [], //区
 						area: '',
-						address: '',/*详细地址*/
+						address: '',
+						/*详细地址*/
 						//						第三步
-						workList:[],
-						works:[],//选择呢从业职业
+						workList: [],
+						works: [], //选择呢从业职业
 						//						第四步
-						jobAge:'',//工龄
-						localJobAge:'',//本地工龄
-						hisShop:'',//上一家店铺 
-						orders:'1~3单',//每天接单数
-						prize:'100~300元',//价格											//       				第五步
+						jobAge: '', //工龄
+						localJobAge: '', //本地工龄
+						hisShop: '', //上一家店铺 
+						orders: '1~3单', //每天接单数
+						prize: '100~300元', //价格					
+						//       				第五步
 						realname: '', //真实姓名
-						cardNum:'',//身分钟号码
-						frontSFZ:'',//身份证正面 
-						reverseSFZ:''//身份反面
+						cardNum: '', //身分钟号码
+						frontSFZ: '', //身份证正面 
+						reverseSFZ: '' //身份反面
 					},
-					created: function() {
-						if(plus.storage.getItem('pic_head')){
-							this.avatar = plus.storage.getItem('pic_head')
+					created: function created() {
+						if(plus.storage.getItem('pic_head')) {
+							this.avatar = plus.storage.getItem('pic_head');
 						}
 					},
-					mounted: function() {
-//						console.log(this.avatar)
-						var _this = this
+					mounted: function mounted() {
+						//						console.log(this.avatar)
+						var _this = this;
 						/*首次进入加载省份信息*/
 						mui.ajax(app.baseUrl + '/api/Area/GetListProvince', {
 							// dataType:'json',//服务器返回json格式数据
@@ -405,129 +413,141 @@
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'
 							},
-							success: function(result) {
+							success: function success(result) {
 								/*登陆成功*/
 								// 储存本地 记录登陆时间							
 								_this.provinceList = result;
-								plus.nativeUI.closeWaiting()
+								plus.nativeUI.closeWaiting();
 								mui.currentWebview.show('pop-in', 300, function() {}, {});
 							},
-							error: function(xhr, type, errorThrown) {
+							error: function error(xhr, type, errorThrown) {
 								//异常处理；
-								plus.nativeUI.closeWaiting()
+								plus.nativeUI.closeWaiting();
 								console.log(type);
 							}
 						});
-						
-					/*加载职业*/
+
+						/*加载职业*/
 						mui.ajax(app.baseUrl + '/api/Dictionary/GetDictionary', {
-							 data:{
-							 	dicName:'PROJECT_TYPE'
-							 },//服务器返回json格式数据
+							data: {
+								dicName: 'PROJECT_TYPE'
+							}, //服务器返回json格式数据
 							type: 'get', //HTTP请求类型
 							timeout: 10000, //超时时间设置为10秒；
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'
 							},
-							success: function(result) {
+							success: function success(result) {
 								/*登陆成功*/
 								// 储存本地 记录登陆时间			
-//alert(JSON.stringify(result.Data.ListInfo))
-								_this.workList = result.Data.ListInfo
+								//alert(JSON.stringify(result.Data.ListInfo))
+								_this.workList = result.Data.ListInfo;
 							},
-							error: function(xhr, type, errorThrown) {
+							error: function error(xhr, type, errorThrown) {
 								//异常处理；
 								console.log(type);
 							}
 						});
-						
 					},
-					computed: {
-
-					},
+					computed: {},
 					methods: {
-						noPic(){
-							this.avatar = './images/default_avatar.jpg'
+						noPic: function noPic() {
+							this.avatar = './images/default_avatar.jpg';
 						},
-						_chooseWork() {
-//							console.log(JSON.stringify(this.works))
+						_chooseWork: function _chooseWork() {
+							//							console.log(JSON.stringify(this.works))
 						},
+
 						/*下一步*/
-						_nextStep() {
-							this.direction = 'forward'
-							switch (this.currStep){
+						_nextStep: function _nextStep() {
+							this.direction = 'forward';
+							switch(this.currStep) {
 								case 1:
-								/*判断第一页表单*/
-								if(!this.avatar || !this.nickname ){
-									plus.nativeUI.alert( "请完善当前头像和昵称信息", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );
-									return;
-								}								
+									/*判断第一页表单*/
+									if(!this.avatar || !this.nickname) {
+										plus.nativeUI.alert("请完善当前头像和昵称信息", function() {}, "马嘿嘿提醒您", "莫急！容我检查检查");
+										return;
+									}
 									break;
 								case 2:
-								if(!this.province || !this.town ||!this.area || !this.address ){
-									plus.nativeUI.alert( "请完善地址资料信息", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );return;
-								}
+									if(!this.province || !this.town || !this.area || !this.address) {
+										plus.nativeUI.alert("请完善地址资料信息", function() {}, "马嘿嘿提醒您", "莫急！容我检查检查");
+										return;
+									}
 									break;
 								case 3:
-								if(this.works.length<=0 ){
-									plus.nativeUI.alert( "请选择从事的职业", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );return;
-								}
+									if(this.works.length <= 0) {
+										plus.nativeUI.alert("请选择从事的职业", function() {}, "马嘿嘿提醒您", "莫急！容我检查检查");
+										return;
+									}
 									break;
 								case 4:
-								if(!this.jobAge || !this.localJobAge ){
-									plus.nativeUI.alert( "请填写您的从业经验", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );return;
-								}
+									if(this.jobAge !==0){
+										if(!this.jobAge){
+											plus.nativeUI.alert("请填写您的从业经验,无相关经验请填写0", function() {}, "马嘿嘿提醒您", "莫急！容我检查检查");
+										return;
+										}
+									}
+									if(this.localJobAge !==0){
+										if(!this.localJobAge){
+											plus.nativeUI.alert("请填写当地从业经验,无相关经验请填写0", function() {}, "马嘿嘿提醒您", "莫急！容我检查检查");
+										return;
+										}
+									}
+									
+									
+									
 									break;
 								case 5:
-								if(!this.realname || !this.cardNum ||!this.frontSFZ || !this.reverseSFZ ){
-									plus.nativeUI.alert( "请确认填写您的身份信息", function(){}, "马嘿嘿提醒您", "莫急！容我检查检查" );return;
-								}								
-								/*确认通过 则提交验证*/
-								this._verifyData();	
-								return
-								break;	
-								
-								default:
-								break;
-							}
-							this.currStep++;	
-							
+									if(!this.realname || !this.cardNum || !this.frontSFZ || !this.reverseSFZ) {
+										plus.nativeUI.alert("请确认填写您的身份信息", function() {}, "马嘿嘿提醒您", "莫急！容我检查检查");
+										return;
+									}
+									/*确认通过 则提交验证*/
+									this._verifyData();
+									return;
+									break;
 
-						},
-						/*提交验证信息*/
-						_verifyData(){
-							if(this.currStep< 5) return;
-							plus.nativeUI.showWaiting()
-							var  Info ={
-								ACCOUNT_PETNAME:this.nickname,
-								ACCOUNT_FULL_NAME:this.realname,
-								ACCOUNT_SEX:this.sex,
-								ADDRESS_SHENG:this.province,
-								ADDRESS_SHI:this.town,
-								ADDRESS_QU:this.area,	
-								ACCOUNT_RESUME:this.SelfIntroduction,
-								CARD_TYPE:1,
-								
-								CARD_NUM:this.cardNum,
-//								SETTING_TIME_LIMIT:this.nickname,
-								SERVICE_PRICE:this.prize,
-//								JOIN_ORDER:this.nickname,
-								JOB_AGE:this.jobAge,
-								THIS_JOB_AGE:this.localJobAge,
-								THIS_SHOP:this.hisShop,
-								JOIN_ORDER:this.orders,
-								SHOP_ADDRESS:this.address,
-								SHOP_BUSINESS_TYPE:this.works.length==0?'_':this.works.join(','),
-								
-								PIC_LIFEP_HOTO1:this.lifePic1,
-								PIC_LIFEP_HOTO2:this.lifePic2,
-								PIC_LIFEP_HOTO3:this.lifePic3,
-								PIC_IDCARD1:this.frontSFZ,
-								PIC_IDCARD2:this.reverseSFZ
+								default:
+									break;
 							}
-								
-							if(this.avatar){
-								Info.PIC_HEAD = this.avatar
+							this.currStep++;
+						},
+
+						/*提交验证信息*/
+						_verifyData: function _verifyData() {
+							if(this.currStep < 5) return;
+							plus.nativeUI.showWaiting();
+							var Info = {
+								ACCOUNT_PETNAME: this.nickname,
+								ACCOUNT_FULL_NAME: this.realname,
+								ACCOUNT_SEX: this.sex,
+								ADDRESS_SHENG: this.province,
+								ADDRESS_SHI: this.town,
+								ADDRESS_QU: this.area,
+								ACCOUNT_RESUME: this.SelfIntroduction,
+								CARD_TYPE: 1,
+
+								CARD_NUM: this.cardNum,
+								//								SETTING_TIME_LIMIT:this.nickname,
+								SERVICE_PRICE: this.prize,
+								//								JOIN_ORDER:this.nickname,
+								JOB_AGE: this.jobAge,
+								THIS_JOB_AGE: this.localJobAge,
+								THIS_SHOP: this.hisShop,
+								JOIN_ORDER: this.orders,
+								SHOP_ADDRESS: this.address,
+								SHOP_BUSINESS_TYPE: this.works.length == 0 ? '_' : this.works.join(','),
+
+								PIC_LIFEP_HOTO1: this.lifePic1,
+								PIC_LIFEP_HOTO2: this.lifePic2,
+								PIC_LIFEP_HOTO3: this.lifePic3,
+								PIC_IDCARD1: this.frontSFZ,
+								PIC_IDCARD2: this.reverseSFZ
+							};
+
+							if(this.avatar) {
+								Info.PIC_HEAD = this.avatar;
 							}
 							/*提交接口*/
 							mui.ajax(app.baseUrl + '/api/BusiAccount/UpdateAccountInfo', {
@@ -537,61 +557,62 @@
 								timeout: 10000, //超时时间设置为10秒；
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded',
-									'Authorization':app.mark + plus.storage.getItem('token')
+									'Authorization': app.mark + plus.storage.getItem('token')
 								},
-								success: function(result) {
+								success: function success(result) {
 									/*更新成功*/
-									plus.nativeUI.closeWaiting()
+									plus.nativeUI.closeWaiting();
 									if(result.Success) {
-//										console.log(JSON.stringify(result.data))
-										
+										//										console.log(JSON.stringify(result.data))
+
 										mui.openWindow({
-												url: './auditing.html',
-												id: 'auditing',
-												styles: {
-													top: '0px', //新页面顶部位置
-													bottom: '0px', //新页面底部位置
-													scrollIndicator: "none",
-													plusrequire: 'ahead'
-												},
-												createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-												show: {
-													autoShow: true, //页面loaded事件发生后自动显示，默认为true
-													duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-												},
-												extras: {
-													//自定义扩展参数，可以用来处理页面间传值  
-												},
-												waiting: {
-													autoShow: true, //自动显示等待框，默认为true
-													title: '正在加载...', //等待对话框上显示的提示内容
-												}
-										})
+											url: './auditing.html',
+											id: 'auditing',
+											styles: {
+												top: '0px', //新页面顶部位置
+												bottom: '0px', //新页面底部位置
+												scrollIndicator: "none",
+												plusrequire: 'ahead'
+											},
+											createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+											show: {
+												autoShow: true, //页面loaded事件发生后自动显示，默认为true
+												duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+											},
+											extras: {
+												//自定义扩展参数，可以用来处理页面间传值  
+											},
+											waiting: {
+												autoShow: true, //自动显示等待框，默认为true
+												title: '正在加载...' //等待对话框上显示的提示内容
+											}
+										});
 									} else {
 										/*验证失败*/
-										plus.nativeUI.toast(result.Msg)
-					
+										plus.nativeUI.toast(result.Msg);
 									}
 								},
-								error: function(xhr, type, errorThrown) {
+								error: function error(xhr, type, errorThrown) {
 									//异常处理；
-									app.catchErr(type, errorThrown)
+									app.catchErr(type, errorThrown);
 								}
 							});
-																	
 						},
+
 						/*上一步*/
-						_prevStep() {
-							this.direction = 'back'
+						_prevStep: function _prevStep() {
+							this.direction = 'back';
 							if(this.currStep == 1) return;
-							this.currStep--
+							this.currStep--;
 						},
+
 						/*图片上传*/
-						_uploadPic(key) {
+						_uploadPic: function _uploadPic(key) {
+							var _this2 = this;
 
 							switch(key) {
 								case 0:
-									Clip.getIMG('选择头像', (src) => {		
+									Clip.getIMG('选择头像', function(src) {
 										mui.openWindow({
 											url: './html/manage/imgClick.html',
 											id: 'imgClick',
@@ -613,50 +634,81 @@
 											},
 											waiting: {
 												autoShow: true, //自动显示等待框，默认为true
-												title: '正在加载...', //等待对话框上显示的提示内容
+												title: '正在加载...' //等待对话框上显示的提示内容
 											}
-										})
-									})
+										});
+									});
 									break;
 								case 1:
-									app.getIMG('选择生活照', (src) => {
-				
-										this.lifePic1 = src
-									})
+									app.getIMG('选择生活照', function(src) {
+
+										_this2.lifePic1 = src;
+										plus.nativeUI.showWaiting();
+										var img = new Image();
+										img.src = src;
+										img.onload = function(){
+											plus.nativeUI.closeWaiting();
+										}
+									});
 									break;
 								case 2:
-									app.getIMG('选择生活照', (src) => {
-										this.lifePic2 = src
-									})
+									app.getIMG('选择生活照', function(src) {
+										_this2.lifePic2 = src;
+										plus.nativeUI.showWaiting();
+										var img = new Image();
+										img.src = src;
+										img.onload = function(){
+											plus.nativeUI.closeWaiting();
+										}
+									});
 									break;
 								case 3:
-									app.getIMG('选择生活照', (src) => {
-										this.lifePic3 = src
-									})
+									app.getIMG('选择生活照', function(src) {
+										_this2.lifePic3 = src;
+										plus.nativeUI.showWaiting();
+										var img = new Image();
+										img.src = src;
+										img.onload = function(){
+											plus.nativeUI.closeWaiting();
+										}
+									});
 									break;
 								case 4:
-									app.getIMG('选择身分证正面', (src) => {
-										console.log(src)
-										this.frontSFZ = src
-									})
+									app.getIMG('选择身分证正面', function(src) {
+										_this2.frontSFZ = src;
+										plus.nativeUI.showWaiting();
+										var img = new Image();
+										img.src = src;
+										img.onload = function(){
+											plus.nativeUI.closeWaiting();
+										}
+										
+									});
 									break;
 								case 5:
-									app.getIMG('选择身分证反面', (src) => {
-										this.reverseSFZ = src
-									})
+									app.getIMG('选择身分证反面', function(src) {
+										_this2.reverseSFZ = src;
+										plus.nativeUI.showWaiting();
+										var img = new Image();
+										img.src = src;
+										img.onload = function(){
+											plus.nativeUI.closeWaiting();
+										}
+									});
 									break;
 								default:
 									break;
 							}
 						},
-						_chooseAvatar(res) {
-							var _this = this
+						_chooseAvatar: function _chooseAvatar(res) {
+							var _this = this;
 							if(!res) return;
-							_this.avatar = res
+							_this.avatar = res;
 						},
+
 						//	更新城市选项
-						_updatedTown(t) {
-							var _this = this
+						_updatedTown: function _updatedTown(t) {
+							var _this = this;
 							switch(t) {
 								case 1:
 									/*更新市信息*/
@@ -670,11 +722,11 @@
 										headers: {
 											'Content-Type': 'application/x-www-form-urlencoded'
 										},
-										success: function(result) {
+										success: function success(result) {
 											/*登陆成功*/
-											_this.townList = result
+											_this.townList = result;
 										},
-										error: function(xhr, type, errorThrown) {
+										error: function error(xhr, type, errorThrown) {
 											//异常处理；
 											console.log(type);
 										}
@@ -692,11 +744,11 @@
 										headers: {
 											'Content-Type': 'application/x-www-form-urlencoded'
 										},
-										success: function(result) {
+										success: function success(result) {
 											/*登陆成功*/
-											_this.areaList = result
+											_this.areaList = result;
 										},
-										error: function(xhr, type, errorThrown) {
+										error: function error(xhr, type, errorThrown) {
 											//异常处理；
 											console.log(type);
 										}
@@ -705,16 +757,14 @@
 								default:
 									break;
 							}
-
-						},
-
+						}
 					}
-				})
-			})
-			
+				});
+			});
+
 			function choosePic(res) {
-//				res = JSON.parse(res)
-				APP._chooseAvatar(res)
+				//				res = JSON.parse(res)
+				APP._chooseAvatar(res);
 			}
 		</script>
 	</body>

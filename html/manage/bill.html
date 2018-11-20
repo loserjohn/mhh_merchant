@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../css/animate.css" />
 		<link rel="stylesheet" href="../../css/loading.css" />
-		
+
 		<style>
 			/*账户明细*/
 			
@@ -41,7 +41,8 @@
 				right: 0;
 				bottom: 0;
 			}
-			.cm_tabsT{
+			
+			.cm_tabsT {
 				background: #fff;
 			}
 		</style>
@@ -74,9 +75,9 @@
 				<div ref="scroll" class="cm_tabsContent scrollBox" :style="{top:tabContenTop}">
 					<div class="slider clearfix" style="min-height: 101%;">
 						<!--刷新提示框-->
-					<div class="refresh">
-						<p class="t_c cor_y  refresh_txt">有种你放开我</p>
-					</div>
+						<div class="refresh">
+							<p class="t_c cor_y  refresh_txt">有种你放开我</p>
+						</div>
 						<!--全部-->
 						<div class="animated fadeInDownBig" v-show="currtab==0?true:false">
 							<ul class="mui-table-view  ">
@@ -93,14 +94,13 @@
 										<p class='mui-ellipsis'>{{item.DETAIL_TIME}}</p>
 									</div>
 								</li>
-<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{detailList[0].norest?'没有数据了':'加载更多'}}</li>
+								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{detailList[0].norest?'没有数据了':'加载更多'}}</li>
 							</ul>
 						</div>
 
 						<!--账户提现-->
 						<div class="animated fadeInDownBig" v-show="currtab==1?true:false">
 							<ul class="mui-table-view  ">
-
 
 								<li class="mui-table-view-cell mui-media" v-for="item in detailList[1].list">
 
@@ -113,7 +113,7 @@
 										<p class='mui-ellipsis'>{{item.DETAIL_TIME}}</p>
 									</div>
 								</li>
-<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{detailList[1].norest?'没有数据了':'加载更多'}}</li>
+								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{detailList[1].norest?'没有数据了':'加载更多'}}</li>
 							</ul>
 						</div>
 
@@ -133,7 +133,7 @@
 										<p class='mui-ellipsis'>{{item.DETAIL_TIME}}</p>
 									</div>
 								</li>
-								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{detailList[2].norest?'没有数据了':'加载更多'}}</li>		
+								<li class="t_c cor_g" style="margin-bottom: 10px;line-height: 40px;">{{detailList[2].norest?'没有数据了':'加载更多'}}</li>
 							</ul>
 						</div>
 					</div>
@@ -148,11 +148,13 @@
 		<script src="../../js/bscroll.min.js"></script>
 		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
+			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
@@ -160,30 +162,25 @@
 						message: '',
 						tabContenTop: '',
 						currtab: 0,
-						note:'加载更多',
+						note: '加载更多',
 						detailList: [{ //全部
-								index: 1,
-								list: [],
-								norest: false
-							},
-							{ //提现
-								index: 1,
-								list: [],
-								norest: false
-							},
-							{ //营收
-								index: 1,
-								list: [],
-								norest: false
-							}
-						]
+							index: 1,
+							list: [],
+							norest: false
+						}, { //提现
+							index: 1,
+							list: [],
+							norest: false
+						}, { //营收
+							index: 1,
+							list: [],
+							norest: false
+						}]
 					},
-					created: function() {
-
-					},
-					mounted: function() {
-						var _this = this
-						var scroll = this.$refs.scroll
+					created: function created() {},
+					mounted: function mounted() {
+						var _this = this;
+						var scroll = this.$refs.scroll;
 						this.tabContenTop = 40 + 'px';
 
 						this.$nextTick(function() {
@@ -197,112 +194,106 @@
 									pullUpLoad: {
 										threshold: -50 // 当上拉距离超过30px时触发 pullingUp 事件
 									}
-								})
+								});
 							} else {
 								_this.scroll.refresh();
 							};
 							this.scroll.on('pullingUp', function(e) {
-								_this._getData((b) => {
-										if(b){
-											
-										}else{
-											_this.scroll.finishPullUp()
-											
-										}
-									})
-							})
-						})
-						
-						/*初始化项目数据*/
-							this._getData((b)=>{
-								 if(b){
-											
-										}else{
-											_this.scroll.finishPullUp()
-											
-										}
+								_this._getData(function(b) {
+									if(b) {} else {
+										_this.scroll.finishPullUp();
+									}
+								});
 							});
+						});
+
+						/*初始化项目数据*/
+						this._getData(function(b) {
+							if(b) {} else {
+								_this.scroll.finishPullUp();
+							}
+						});
 					},
 					methods: {
-						_jumpToDetail(key) {
-						},
-						_changeTab: function(key) {
-							this.currtab = parseInt(key)
+						_jumpToDetail: function _jumpToDetail(key) {},
+
+						_changeTab: function _changeTab(key) {
+							var _this2 = this;
+
+							this.currtab = parseInt(key);
 							if(this.detailList[this.currtab].index == 1) {
-									this._getData((b) => {
-										if(b){
-//											this.note = "没有数据了"
-										}else{
-											this.scroll.finishPullUp()
-//											this.note = "加载更多"
-										}
-									})
-								} else {
-									if(!this.detailList[this.currtab].norest){
-//										该分类还有数据
-										this.scroll.finishPullUp()								
+								this._getData(function(b) {
+									if(b) {
+										//											this.note = "没有数据了"
+									} else {
+										_this2.scroll.finishPullUp();
+										//											this.note = "加载更多"
 									}
-									this.scroll.refresh();
-									return
-								}	
+								});
+							} else {
+								if(!this.detailList[this.currtab].norest) {
+									//										该分类还有数据
+									this.scroll.finishPullUp();
+								}
+								this.scroll.refresh();
+								return;
+							}
 						},
 						/*加载数据*/
-						_getData(callback) {
-							var _this = this
+						_getData: function _getData(callback) {
+							var _this = this;
 							var tabType = this.currtab;
 							var index = this.detailList[tabType].index;
-							
-							var data={
+
+							var data = {
 								pageIndex: index,
-								pageSize: 10								
-							}
+								pageSize: 10
+							};
 							var status;
-						
-							if(tabType == 1){
-								status = 5
-								data.DETAIL_TYPE = status
+
+							if(tabType == 1) {
+								status = 5;
+								data.DETAIL_TYPE = status;
 							}
-							if(tabType == 2){
-								status = 6
-								data.DETAIL_TYPE = status
+							if(tabType == 2) {
+								status = 6;
+								data.DETAIL_TYPE = status;
 							}
 
 							app.ajax(app.baseUrl + '/api/BusiAccount/GetDetails', {
 								data: data,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
-									mui.later(() => {
-										document.getElementById('loader').style.display='none'
+								success: function success(result) {
+									mui.later(function() {
+										document.getElementById('loader').style.display = 'none';
 										if(result.Success) {
 											var l = _this.detailList[tabType].list.length;
-											var arr = _this.detailList[tabType].list
+											var arr = _this.detailList[tabType].list;
 											_this.detailList[tabType].list = arr.concat(result.Data.ListInfo);
-	//											console.log(_this.detailList[tabType].list.length,l)			
-	
+											//											console.log(_this.detailList[tabType].list.length,l)			
+
 											if(_this.detailList[tabType].list.length == l) {
 												_this.detailList[tabType].norest = true;
-													if(callback)callback(true);
-													return;
+												if(callback) callback(true);
+												return;
 											}
 											//											console.log('当前页'+_this.productsList[tabType].index)
-											_this.detailList[tabType].index += 1
-											
-												_this.scroll.refresh();												
-													if(callback)callback(false);
-											
+											_this.detailList[tabType].index += 1;
+
+											_this.scroll.refresh();
+											if(callback) callback(false);
 										} else {
 											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
-	
+											plus.nativeUI.toast(result.Msg);
 										}
-									}, 500)
+									}, 500);
 								}
 							});
-						},
+						}
 					}
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

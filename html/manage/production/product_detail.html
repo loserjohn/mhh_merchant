@@ -215,7 +215,7 @@
 						<div v-html="detail.PROJECT_DETAILS"></div>
 						<ul>
 							<li class="" v-for="item in detail.DETAILS_IMGS">
-								<img :src="item" alt=""  class="contain" />
+								<img :src="item" alt="" class="contain" />
 							</li>
 						</ul>
 					</div>
@@ -282,12 +282,14 @@
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			 
+
 			(function() {
 				mui.init({
 					swipeBack: true
 				});
 				mui.plusReady(function() {
-					app.WXinit(CryptoJS)
+					app.WXinit(CryptoJS);
 					var APP = new Vue({
 						el: '#app',
 						data: {
@@ -304,22 +306,22 @@
 							screenWidth: '240px'
 						},
 						filters: {
-							getStatus(k) {
+							getStatus: function getStatus(k) {
 								switch(k) {
 									case '0':
-										return '未提交'
+										return '未提交';
 										break;
 									case '1':
-										return '已发布'
+										return '已发布';
 										break;
 									case '2':
-										return '待审核'
+										return '待审核';
 										break;
 									case '3':
-										return '未通过'
+										return '未通过';
 										break;
 									case '4':
-										return '已下架'
+										return '已下架';
 										break;
 
 									default:
@@ -327,23 +329,23 @@
 								}
 							}
 						},
-						created: function() {
+						created: function created() {
 							app.initHeader();
-							this.screenWidth = plus.screen.resolutionWidth + 'px'
+							this.screenWidth = plus.screen.resolutionWidth + 'px';
 						},
-						mounted: function() {
-							var _this = this
+						mounted: function mounted() {
+							var _this = this;
 							var self = plus.webview.currentWebview();
 							var gallery = this.$refs.slider;
-							var scroll = this.$refs.scroll
-							this.top = document.getElementById('header').offsetHeight + 'px'
+							var scroll = this.$refs.scroll;
+							this.top = document.getElementById('header').offsetHeight + 'px';
 
-							this._getData(() => {
+							this._getData(function() {
 
 								mui(gallery).slider({
 									interval: 3000 //自动播放周期
 								});
-							})
+							});
 							this.$nextTick(function() {
 								//	初始化轮播图	
 								//							初始化scrool
@@ -358,7 +360,7 @@
 											stop: 20
 										}
 
-									})
+									});
 								} else {
 									_this.scroll.refresh();
 								};
@@ -380,48 +382,44 @@
 									} else {
 										_this.opacity = (y / 400).toFixed(1);
 									}
-
-								})
+								});
 								/*下拉刷新*/
 								this.scroll.on('pullingDown', function(e) {
-									plus.nativeUI.showWaiting()
-									_this._getData(() => {
+									plus.nativeUI.showWaiting();
+									_this._getData(function() {
 										plus.nativeUI.closeWaiting();
-										_this.scroll.finishPullDown()
-									})
-
-								})
-
-							})
+										_this.scroll.finishPullDown();
+									});
+								});
+							});
 							//							alert(self.productId)
 
 							/*加载历史评价*/
-							this._getCommont()
+							this._getCommont();
 							/*加载作品详情*/
-
 						},
 						methods: {
 							//							tab切换
-							_changeTab: function(key) {
+							_changeTab: function _changeTab(key) {
 								//								alert(key)
 								//								console.log(11)
-								this.currtab = key
+								this.currtab = key;
 								switch(key) {
 									case 1:
-										this.scroll.scrollToElement(this.$refs.anchor1, 300, 0, 0)
+										this.scroll.scrollToElement(this.$refs.anchor1, 300, 0, 0);
 										break;
 									case 2:
-										this.scroll.scrollToElement(this.$refs.anchor2, 300, 0, 0)
+										this.scroll.scrollToElement(this.$refs.anchor2, 300, 0, 0);
 										break;
 									default:
-										this.scroll.scrollToElement(this.$refs.anchor3, 300, 0, 0)
+										this.scroll.scrollToElement(this.$refs.anchor3, 300, 0, 0);
 										break;
 								}
 							},
 							/*删除项目*/
-							_delectProduct() {
+							_delectProduct: function _delectProduct() {
 								var self = plus.webview.currentWebview();
-								plus.nativeUI.confirm('确定删除该项目？', (event) => {
+								plus.nativeUI.confirm('确定删除该项目？', function(event) {
 									//									alert(self.productId)
 									if(event.index == 0) {
 										app.ajax(app.baseUrl + '/api/BusiProject/DeleteProject', {
@@ -431,28 +429,28 @@
 											},
 											type: 'post', //HTTP请求类型
 
-											success: function(result) {
+											success: function success(result) {
 												//									alert('yes')
 												if(result.Success) {
 													plus.nativeUI.toast('删除成功');
-													plus.webview.getWebviewById('production').evalJS('refresh()')
-													mui.back()
+													plus.webview.getWebviewById('production').evalJS('refresh()');
+													mui.back();
 												} else {
-													console.log(result.Msg)
+													console.log(result.Msg);
 												}
-
 											}
 										});
 									}
 								}, {
 									title: '马嘿嘿提醒您'
-								})
+								});
 							},
+
 							/*上架项目*/
-							_putawayProduct() {
+							_putawayProduct: function _putawayProduct() {
 								var self = plus.webview.currentWebview();
-								var _this = this
-								plus.nativeUI.confirm('确定上架该项目？', (event) => {
+								var _this = this;
+								plus.nativeUI.confirm('确定上架该项目？', function(event) {
 									//									alert(self.productId)
 									if(event.index == 0) {
 										app.ajax(app.baseUrl + '/api/BusiProject/UpdateProject', {
@@ -462,27 +460,26 @@
 												PROJECT_STATUS: 2
 											},
 											type: 'post', //HTTP请求类型
-											success: function(result) {
+											success: function success(result) {
 												//									alert('yes')
 												if(result.Success) {
 													plus.nativeUI.toast('成功提交审核');
-													plus.webview.getWebviewById('production').evalJS('refresh()')
+													plus.webview.getWebviewById('production').evalJS('refresh()');
 													_this._getData();
-
 												} else {
-													console.log(result.Msg)
+													console.log(result.Msg);
 													plus.nativeUI.toast('提交审核失败');
 												}
-
 											}
 										});
 									}
 								}, {
 									title: '马嘿嘿提醒您'
-								})
+								});
 							},
+
 							/*编辑项目*/
-							_editProduct() {
+							_editProduct: function _editProduct() {
 								mui.openWindow({
 									url: './product_edit.html',
 									id: 'product_edit',
@@ -493,7 +490,7 @@
 										plusrequire: 'ahead',
 										// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
 										titleNView: { // 窗口的标题栏控件
-											autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+											autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
 											titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
 											titleSize: "14px", // 字体大小,默认17px
 											backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
@@ -517,13 +514,14 @@
 									},
 									waiting: {
 										autoShow: false, //自动显示等待框，默认为true
-										title: '正在加载...', //等待对话框上显示的提示内容
+										title: '正在加载...' //等待对话框上显示的提示内容
 									}
-								})
+								});
 							},
+
 							/*加载历史评价*/
-							_getCommont() {
-								var _this = this
+							_getCommont: function _getCommont() {
+								var _this = this;
 								var self = plus.webview.currentWebview();
 								app.ajax(app.baseUrl + '/api/BusiOrderReview/GetReviewList', {
 									// dataType:'json',//服务器返回json格式数据
@@ -533,24 +531,24 @@
 										PROJECT_CODE: self.productId
 									},
 									type: 'get', //HTTP请求类型
-									success: function(result) {
+									success: function success(result) {
 										//									alert('yes')
 										if(result.Success) {
 											_this.commonList = _this.commonList.concat(result.Data.ListInfo);
 											_this.commonTotal = result.Data.Total;
 										} else {
-											console.log(result.Msg)
+											console.log(result.Msg);
 										}
-
 									}
 								});
 							},
+
 							/*加载项目信息*/
-							_getData(callback) {
+							_getData: function _getData(callback) {
 								/*加载项目详情*/
 								//								console.log(app.mark + plus.storage.getItem('token'))
 								var self = plus.webview.currentWebview();
-								var _this = this
+								var _this = this;
 								app.ajax(app.baseUrl + '/api/BusiProject/GetProject', {
 									// dataType:'json',//服务器返回json格式数据
 									data: {
@@ -558,11 +556,11 @@
 									},
 									type: 'get', //HTTP请求类型
 
-									success: function(result) {
+									success: function success(result) {
 
-										mui.later(() => {
+										mui.later(function() {
 
-											document.getElementById('loader').style.display = 'none'
+											document.getElementById('loader').style.display = 'none';
 											if(result.Success) {
 												_this.detail = result.Data.dataFormart;
 												//											console.log(JSON.stringify(result.Data.dataFormart.ErrMsg))
@@ -572,28 +570,28 @@
 												_this.scroll.refresh();
 												//											 	alert(_this.detail.PROJECT_STATUS)
 												if(callback) callback();
-
 											} else {
-												console.log(result.Msg)
+												console.log(result.Msg);
 											}
-										}, 500)
-
+										}, 500);
 									}
 								});
 							},
+
 							/*加载更多*/
-							_scankMore() {
-								this.index += 1
+							_scankMore: function _scankMore() {
+								this.index += 1;
 								if(this.commonList.length == this.commonTotal) {
-									plus.nativeUI.toast('没有更多评论了')
+									plus.nativeUI.toast('没有更多评论了');
 									return;
 								}
-								this._getCommont()
+								this._getCommont();
 
 								//								alert(this.index)
 							},
+
 							/*浏览全部评价*/
-							_scanAll() {
+							_scanAll: function _scanAll() {
 								var self = plus.webview.currentWebview();
 								mui.openWindow({
 									url: './product_common.html',
@@ -605,7 +603,7 @@
 										plusrequire: 'ahead',
 										// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
 										titleNView: { // 窗口的标题栏控件
-											autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+											autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
 											titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
 											titleSize: "14px", // 字体大小,默认17px
 											backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
@@ -629,15 +627,16 @@
 									},
 									waiting: {
 										autoShow: false, //自动显示等待框，默认为true
-										title: '正在加载...', //等待对话框上显示的提示内容
+										title: '正在加载...' //等待对话框上显示的提示内容
 									}
-								})
+								});
 							},
+
 							/*下架商品*/
-							_downProduct() {
+							_downProduct: function _downProduct() {
 								var self = plus.webview.currentWebview();
-								var _this = this
-								plus.nativeUI.confirm('确定下架该项目？', (event) => {
+								var _this = this;
+								plus.nativeUI.confirm('确定下架该项目？', function(event) {
 									//									alert(self.productId)
 									if(event.index == 0) {
 										app.ajax(app.baseUrl + '/api/BusiProject/UpdateProject', {
@@ -648,29 +647,25 @@
 											},
 											type: 'post', //HTTP请求类型
 
-											success: function(result) {
+											success: function success(result) {
 												//									alert('yes')
 												if(result.Success) {
 													plus.nativeUI.toast('下架成功');
-													plus.webview.getWebviewById('production').evalJS('refresh()')
+													plus.webview.getWebviewById('production').evalJS('refresh()');
 													_this._getData();
-
 												} else {
-													console.log(result.Msg)
+													console.log(result.Msg);
 													plus.nativeUI.toast('提交审核失败');
 												}
-
 											}
 										});
 									}
 								}, {
 									title: '马嘿嘿提醒您'
-								})
+								});
 							}
-
 						}
-					})
-
+					});
 				});
 			})();
 		</script>

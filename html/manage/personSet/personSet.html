@@ -18,8 +18,8 @@
 			}
 			
 			.personMsgList .useravatar {
-				width: 80px;
-				height: 80px;
+				width: 60px;
+				height: 60px;
 				border-radius: 0;
 			}
 			
@@ -49,12 +49,14 @@
 				height: auto;
 				font-size: 14px;
 			}
-			.status{
+			
+			.status {
 				text-align: center;
 				line-height: 44px;
 				color: #ccaa42;
 			}
-			.eletBox{
+			
+			.eletBox {
 				position: absolute;
 				left: 0;
 				top: 0;
@@ -81,12 +83,15 @@
 		<div id="app">
 			<!--资料项-->
 			<ul class="mui-table-view  personMsgList">
+				<!--艾草值-->
+				
 				<li class="mui-table-view-cell flex">
 					<div class="f1  ">头像</div>
 					<div class="useravatar " @tap="changeAvatar">
 						<img :src="avatar?avatar:'../../../images/default_avatar.jpg'" alt="" class="contain" />
 					</div>
 				</li>
+				
 				<li class="mui-table-view-cell flex">
 					<div class="f1 cellName">昵称</div>
 					<div class="f1">
@@ -106,9 +111,18 @@
 					<!--<i class="iconfont icon-geren  mui-pull-left cor_y"></i>-->
 					<div>服务时间段</div>
 					<div class="f1 t_r">
-											{{personMsg.SETTING_TIME_LIMIT}}
+						{{personMsg.SETTING_TIME_LIMIT}}
 					</div>
 					<i class="iconfont icon-xiayibu "></i>
+				</li>
+				<li class="mui-table-view-cell ">
+					<!--<a class="mui-navigate-right">-->
+					<i class="iconfont icon-store  mui-pull-left cor_y"></i>
+					<div class="f1 t_r cor_g" v-if="personMsg.SHOP">
+						店铺状态: {{personMsg.SHOP.SHOP_STATUS | shopStatus}}
+					</div>
+					<!--</a>-->
+
 				</li>
 				<!--等级-->
 				<li class="mui-table-view-cell flex">
@@ -146,12 +160,20 @@
 					<!--<a class="mui-navigate-right">-->
 					<i class="iconfont icon-rfq  mui-pull-left cor_y"></i>
 					<div class="f1 t_r cor_g">
-						小草值 {{personMsg?personMsg.SHOP.INTEGRAL:''}}
+						小草值: {{personMsg?personMsg.SHOP.INTEGRAL:''}}
 					</div>
 					<!--</a>-->
 
 				</li>
+				<li class="mui-table-view-cell ">
+					<!--<a class="mui-navigate-right">-->
+					<span class="fl">当前版本</span>
+					<div class="f1 t_r cor_g">
+						 V 1.1.0
+					</div>
+					<!--</a>-->
 
+				</li>
 				<!--银行卡-->
 				<!--<li class="mui-table-view-cell " @tap="_toBanks">
 					<a class="mui-navigate-right">
@@ -200,26 +222,26 @@
 						<ul class="mui-table-view  personMsgList">
 							<li class="mui-table-view-cell flex" style="position: relative;">
 								<div class="f1 cellName">开始时间:</div>
-								<div class="f1 t_r" >
+								<div class="f1 t_r">
 									<div class="f cellName t_r">{{startTime?startTime:c_sTime}}</div>
-									
+
 								</div>
-								<select v-model="startTime" class=" t_r  reset eletBox " style="opacity: 0;" >
-										<option v-for="item in time" :value="item" :key="item.Value">{{item}}</option>
+								<select v-model="startTime" class=" t_r  reset eletBox " style="opacity: 0;">
+									<option v-for="item in time" :value="item" :key="item.Value">{{item}}</option>
 								</select>
 							</li>
 							<li class="mui-table-view-cell flex" style="position: relative;">
 								<div class="f1 cellName">结束时间:</div>
 								<div class="f1 t_r">
 									<div class="f cellName t_r">{{endTime?endTime:c_eTime}}</div>
-									
-								</div>	
-								<select v-model="endTime" class=" t_r  reset eletBox" style="opacity: 0;" >
-										<option v-for="item in time" :value="item" :key="item.Value">{{item}}</option>
-									</select>
+
+								</div>
+								<select v-model="endTime" class=" t_r  reset eletBox" style="opacity: 0;">
+									<option v-for="item in time" :value="item" :key="item.Value">{{item}}</option>
+								</select>
 							</li>
 						</ul>
-						<div class="cm_btn" @tap = "_setWorkTime">确认时间段</div>
+						<div class="cm_btn" @tap="_setWorkTime">确认时间段</div>
 					</div>
 				</div>
 			</div>
@@ -233,191 +255,165 @@
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
 			});
-			var APP
+			var APP;
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				APP = new Vue({
 					el: '#app',
 					data: {
-						c_sTime:'',
-						c_eTime:'',
-						startTime:'',
-						endTime:'',
-						show:false,
+						c_sTime: '',
+						c_eTime: '',
+						startTime: '',
+						endTime: '',
+						show: false,
 						personMsg: '',
 						avatar: '',
 						nickname: '',
-						time:[
-							'00:00',
-							'00:30',
-							'01:00',
-							'01:30',
-							'02:00',
-							'02:30',
-							'03:00',
-							'03:30',
-							'04:00',
-							'04:30',
-							'05:00',
-							'05:30',
-							'06:00',
-							'06:30',
-							'07:00',
-							'07:30',
-							'08:00',
-							'08:30',
-							'09:00',
-							'09:30',
-							'10:00',
-							'10:30',
-							'11:00',
-							'11:30',
-							'12:00',
-							'12:30',
-							'13:00',
-							'13:30',
-							'14:00',
-							'14:30',
-							'15:00',
-							'15:30',
-							'16:00',
-							'16:30',
-							'17:00',
-							'17:30',
-							'18:00',
-							'18:30',
-							'19:00',
-							'19:30',
-							'20:00',
-							'20:30',
-							'21:00',
-							'21:30',
-							'22:00',
-							'22:30',
-							'23:00',
-							'23:30',
-							'24:00',
-							'24:30',
-						]
+						version:'',
+						time: ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30', '24:00', '24:30']
 					},
-					created: function() {},
-					mounted: function() {
+					created: function created() {
+							this.version = plus.runtime.version
+					},
+					mounted: function mounted() {
 
-						this._getData()
+						this._getData();
+					},
+					filters:{
+						shopStatus:function(value){
+							switch (value){
+								case '0':
+								return '未启用'
+									break;
+								case '1':
+								return '正常营业中'
+									break;
+								default:
+								return '已停业'
+									break;
+							}
+							
+						}
 					},
 					methods: {
-						_toggle(){
-							this.show = !this.show
+						_toggle: function _toggle() {
+							this.show = !this.show;
 						},
-						//							设置服务时间
-						_setWorkTime(k) {
-//							对比开始时间和结束时间排错
-							var s = this.time.indexOf(this.startTime) 
-							var e = this.time.indexOf(this.endTime);
-							if(s>=e){
-								plus.nativeUI.toast('请选择正确的时间段');
-								return
-							}
-							var _this = this
-//							alert(_this.startTime+'-'+this.endTime)
-							plus.nativeUI.showWaiting()
-							_this._toggle()
-							app.ajax(app.baseUrl + '/api/BusiAccount/UpdateAccountInfo', {
-								data: {SETTING_TIME_LIMIT:_this.startTime+'-'+_this.endTime},
-								type: 'post', //HTTP请求类型
-								success: function(result) {
-									if(result.Success) {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast('修改成功');
-										_this._getData()
-										
 
+						//							设置服务时间
+						_setWorkTime: function _setWorkTime(k) {
+							//							对比开始时间和结束时间排错
+							var s = this.time.indexOf(this.startTime);
+							var e = this.time.indexOf(this.endTime);
+							if(s >= e) {
+								plus.nativeUI.toast('请选择正确的时间段');
+								return;
+							}
+							var _this = this;
+							//							alert(_this.startTime+'-'+this.endTime)
+							plus.nativeUI.showWaiting();
+							_this._toggle();
+							app.ajax(app.baseUrl + '/api/BusiAccount/UpdateAccountInfo', {
+								data: {
+									SETTING_TIME_LIMIT: _this.startTime + '-' + _this.endTime
+								},
+								type: 'post', //HTTP请求类型
+								success: function success(result) {
+									if(result.Success) {
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast('修改成功');
+										_this._getData();
 									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
 									}
 								}
 							});
-							
 						},
+
 						//						修改信息
-						_uploadMsg(callback) {
-							var _this = this
+						_uploadMsg: function _uploadMsg(callback) {
+							var _this = this;
 							var option = {
 								SHOP_NAME: this.nickname
-							}
-							plus.nativeUI.showWaiting()
+							};
+							plus.nativeUI.showWaiting();
 							app.ajax(app.baseUrl + '/api/BusiShop/UpdateShop', {
 								data: option,
 								type: 'post', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									if(result.Success) {
 										//	alert('更新成功')
-										plus.nativeUI.closeWaiting()
-										_this._getData()
+										plus.nativeUI.closeWaiting();
+										_this._getData();
 										if(callback) callback();
-										plus.webview.getWebviewById('home').evalJS('refresh()')
-
+										plus.webview.getWebviewById('home').evalJS('refresh()');
 									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
 									}
 								}
 							});
 						},
-						_updatedNum() {
-							var _this = this
-							let desturl = './updatedNum.html'
-							let destid = 'updatedNum'
-							let exa = {phone: _this.phone}
-							let option = {
-								showTitle:true
-							}
-							app.navigater(desturl,destid,exa,option)
-					
+						_updatedNum: function _updatedNum() {
+							var _this = this;
+							var desturl = './updatedNum.html';
+							var destid = 'updatedNum';
+							var exa = {
+								phone: _this.phone
+							};
+							var option = {
+								showTitle: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*跳转页面*/
-						_navigateTo(dstUrl, dstId, extras) {
-		
-							let exa = {phone: _this.phone}
-							let option = {
-								showTitle:true,
-								autoShow:false
-							}
-							app.navigater(desturl,destid,exa,option)						
+						_navigateTo: function _navigateTo(dstUrl, dstId, extras) {
+
+							var exa = {
+								phone: _this.phone
+							};
+							var option = {
+								showTitle: true,
+								autoShow: false
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*获取信息*/
-						_getData(callback) {
-							var _this = this
+						_getData: function _getData(callback) {
+							var _this = this;
 							app.ajax(app.baseUrl + '/api/BusiAccount/GetAccountInfo', {
 								//							data: Info,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									/*登陆成功*/
-									document.getElementById('loader').style.display = 'none'
+									document.getElementById('loader').style.display = 'none';
 									if(result.Success) {
-										_this.personMsg = result.Data
-										_this.avatar = result.Data.SHOP.SHOP_LOGO
-										_this.nickname = result.Data.SHOP.SHOP_NAME
-										_this.phone = result.Data.ACCOUNT_MOBILE
-										_this.c_sTime =  result.Data.SETTING_TIME_LIMIT.split('-')[0]
-										_this.c_eTime =  result.Data.SETTING_TIME_LIMIT.split('-')[1]
+										_this.personMsg = result.Data;
+										_this.avatar = result.Data.SHOP.SHOP_LOGO;
+										_this.nickname = result.Data.SHOP.SHOP_NAME;
+										_this.phone = result.Data.ACCOUNT_MOBILE;
+										_this.c_sTime = result.Data.SETTING_TIME_LIMIT.split('-')[0];
+										_this.c_eTime = result.Data.SETTING_TIME_LIMIT.split('-')[1];
 										if(callback) callback();
 									} else {
 										/*验证失败*/
-										if(callback) callback(false, result.Msg)
-
+										if(callback) callback(false, result.Msg);
 									}
 								}
 							});
 						},
+
 						/*登出*/
-						_loginOut() {
+						_loginOut: function _loginOut() {
 							plus.nativeUI.confirm("退出当前用户？", function(e) {
 								if(e.index == 0) {
 									//										alert(1)
@@ -446,15 +442,15 @@
 										},
 										waiting: {
 											autoShow: false, //自动显示等待框，默认为true
-											title: '正在加载...', //等待对话框上显示的提示内容
+											title: '正在加载...' //等待对话框上显示的提示内容
 										}
-									})
+									});
 								}
-
 							});
 						},
+
 						/*跳转银行卡管理*/
-						_toBanks() {
+						_toBanks: function _toBanks() {
 							mui.openWindow({
 								url: '../banks/banks.html',
 								id: 'banks',
@@ -473,14 +469,15 @@
 								},
 								waiting: {
 									autoShow: true, //自动显示等待框，默认为true
-									title: '正在加载...', //等待对话框上显示的提示内容
+									title: '正在加载...' //等待对话框上显示的提示内容
 								}
-							})
+							});
 						},
+
 						/*换头像*/
-						changeAvatar() {
-							var _this = this
-							Clip.getIMG('选择头像', (src) => {
+						changeAvatar: function changeAvatar() {
+							var _this = this;
+							Clip.getIMG('选择头像', function(src) {
 								//								console.log(src)
 								mui.openWindow({
 									url: '../imgClick.html',
@@ -503,61 +500,59 @@
 									},
 									waiting: {
 										autoShow: true, //自动显示等待框，默认为true
-										title: '正在加载...', //等待对话框上显示的提示内容
+										title: '正在加载...' //等待对话框上显示的提示内容
 									}
-								})
-							})
+								});
+							});
 						},
-						_chooseAvatar(res) {
-							var _this = this
+						_chooseAvatar: function _chooseAvatar(res) {
+							var _this = this;
 							if(!res) return;
 
 							this._upload({
 								SHOP_LOGO: res
-							}, () => {
-								_this.avatar = res
-							})
+							}, function() {
+								_this.avatar = res;
+							});
 						},
+
 						//							修改资料
-						_upload(option, callback) {
+						_upload: function _upload(option, callback) {
 							if(!option) return;
 							//							console.log(JSON.stringify(option))
-							plus.nativeUI.showWaiting()
+							plus.nativeUI.showWaiting();
 							app.ajax(app.baseUrl + '/api/BusiShop/UpdateShop', {
 								data: option,
 								type: 'post', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									if(result.Success) {
-										mui.later(() => {
-											plus.nativeUI.closeWaiting()
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
 											if(callback) callback();
-											plus.webview.getWebviewById('home').evalJS('refresh()')
-										}, 1000)
-
+											plus.webview.getWebviewById('home').evalJS('refresh()');
+										}, 1000);
 									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
 									}
 								},
-								error: function(xhr, type, errorThrown) {
+								error: function error(xhr, type, errorThrown) {
 									console.log(type);
 								}
 							});
-						},
+						}
 					}
 
-				})
-
+				});
 			});
 
 			function choosePic(res) {
-//				res = JSON.parse(res)
-				APP._chooseAvatar(res)
+				//				res = JSON.parse(res)
+				APP._chooseAvatar(res);
 			}
 
 			function refresh() {
-				APP._getData()
+				APP._getData();
 			}
 		</script>
 	</body>

@@ -346,12 +346,14 @@
 		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<!--<script src="../../js/bscroll.min.js"></script>-->
 		<script type="text/javascript">
+			 
+
 			var APP;
 			mui.plusReady(function() {
 				initPage();
-				var self = plus.webview.currentWebview()
-				app.WXinit(CryptoJS)
-				
+				var self = plus.webview.currentWebview();
+				app.WXinit(CryptoJS);
+
 				APP = new Vue({
 					el: '#app',
 					data: {
@@ -387,12 +389,12 @@
 						account: ''
 
 					},
-					created: function() {
+					created: function created() {
 						app.initHeader();
-						app.pushInit()
+						app.pushInit();
 					},
-					mounted: function() {
-						var _this = this
+					mounted: function mounted() {
+						var _this = this;
 						mui.init({
 							swipeBack: false,
 							pullRefresh: {
@@ -404,13 +406,13 @@
 									range: '100px', //可选 默认100px,控件可下拉拖拽的范围
 									offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
 									auto: false, //可选,默认false.首次加载自动上拉刷新一次
-									callback: () => {
-										_this._initShop(() => {
+									callback: function callback() {
+										_this._initShop(function() {
 											//											alert(1)
-											mui.later(() => {
+											mui.later(function() {
 												mui('#app').pullRefresh().endPulldown();
-											}, 1000)
-										})
+											}, 1000);
+										});
 									} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 								}
 							}
@@ -431,23 +433,22 @@
 							}, 1000);
 							return false;
 						};
-
 					},
 					methods: {
 						/*更改公告*/
-						_issue: function(e) {
-							var _this = this
+						_issue: function _issue(e) {
+							var _this = this;
 							if(!_this.shopNotice) {
 								plus.nativeUI.toast('至少说点啥吧？');
-								return
+								return;
 							}
 							if(_this.shopNotice == _this.oldTxt) {
 								plus.nativeUI.alert("能不能来点不一样的", function() {}, "马嘿嘿提醒您", "ok");
 								return;
 							}
-							plus.nativeUI.confirm('确定修改公告？', (event) => {
+							plus.nativeUI.confirm('确定修改公告？', function(event) {
 
-								var k = event.index
+								var k = event.index;
 								//								alert(k)
 								if(k == 0) {
 									app.ajax(app.baseUrl + '/api/BusiShop/UpdateShop', {
@@ -459,34 +460,36 @@
 											'Content-Type': 'application/x-www-form-urlencoded',
 											'Authorization': app.mark + plus.storage.getItem('token')
 										},
-										success: function(result) {
+										success: function success(result) {
 											/*登陆成功*/
 											plus.nativeUI.toast('修改成功');
-											_this.$refs.GGtext.blur()
+											_this.$refs.GGtext.blur();
 										}
 									});
 								} else {
-									return false
+									return false;
 								}
 							}, {
 								title: '马嘿嘿提醒您'
-							})
+							});
 						},
 						/*清空公告*/
-						_reset() {
-							plus.nativeUI.confirm('确定清空公告？', (event) => {
-								var k = event.index
+						_reset: function _reset() {
+							var _this2 = this;
+
+							plus.nativeUI.confirm('确定清空公告？', function(event) {
+								var k = event.index;
 								//								alert(k)
 								if(k == 0) {
-									this.shopNotice = ''
+									_this2.shopNotice = '';
 								} else {
-									return false
+									return false;
 								}
-
-							})
+							});
 						},
+
 						/*获取 ,更新商户信息*/
-						_initShop(callback) {
+						_initShop: function _initShop(callback) {
 							//														alert(app.mark + plus.storage.getItem('token'))
 							var _this = this;
 							/*商户信息*/
@@ -494,7 +497,7 @@
 								//							data: Info,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									/*登陆成功*/
 									if(result.Success) {
 
@@ -517,14 +520,13 @@
 										plus.storage.setItem('userNickName', result.Data.SHOP.SHOP_NAME);
 
 										if(plus.webview.getWebviewById('chat')) {
-											plus.webview.getWebviewById('chat').evalJS('refresh()')
+											plus.webview.getWebviewById('chat').evalJS('refresh()');
 										}
 
 										if(callback) callback();
 									} else {
 										/*验证失败*/
-										if(callback) callback(false, result.Msg)
-
+										if(callback) callback(false, result.Msg);
 									}
 								}
 							});
@@ -533,7 +535,7 @@
 								//								data: Info,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									if(result.Success) {
 										//										alert(1)
 										_this.productList = result.Data.ListInfo;
@@ -549,87 +551,91 @@
 								//								data: Info,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									/*登陆成功*/
 									if(result.Success) {
 										//										alert(1)
-										_this.todayData = result.Data
+										_this.todayData = result.Data;
 									} else {
 										/*验证失败*/
 									}
 								}
 							});
 						},
+
 						/*编辑商圈*/
-						_toEditBusinessArea() {
+						_toEditBusinessArea: function _toEditBusinessArea() {
 							var _this = this;
-							let desturl = './businessEdiet.html'
-							let destid = 'businessEdiet'
-							let exa = {}
-							let option = {
-								showTitle:true
-							}
-							app.navigater(desturl,destid,exa,option)
+							var desturl = './businessEdiet.html';
+							var destid = 'businessEdiet';
+							var exa = {};
+							var option = {
+								showTitle: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*菜单跳转*/
-						_NWnavigateTo: function(key) {
+						_NWnavigateTo: function _NWnavigateTo(key) {
 							//							alert(1)
 							var url = '../manage/' + key + '/' + key + '.html';
 							if(key == 'deposit') {
-								url = '../manage/' + key + '.html'
+								url = '../manage/' + key + '.html';
 							};
 
-							let exa = {account: this.account}
-							let option = {
-								showTitle:false
-							}
-							app.navigater(url,key,exa,option)
-							
-						
+							var exa = {
+								account: this.account
+							};
+							var option = {
+								showTitle: false
+							};
+							app.navigater(url, key, exa, option);
 						},
 						/*菜单跳转*/
-						_jumpMenus: function(key) {
+						_jumpMenus: function _jumpMenus(key) {
 							//							alert(1)
 							var url = '../manage/' + key + '/' + key + '.html';
-							
-							
-							let exa = {account: this.account}
-							let option = {
-								showTitle:true
-							}
-							app.navigater(url,key,exa,option)	
+
+							var exa = {
+								account: this.account
+							};
+							var option = {
+								showTitle: true
+							};
+							app.navigater(url, key, exa, option);
 						},
 						//							跳转详情页面
-						_jumpToDetail(e) {
-							let desturl = '../../html/manage/production/product_detail.html'
-							let destid = 'product_detail'
-							let exa = {productId: e}
-							let option = {
-								showTitle:false
-							}
-							app.navigater(desturl,destid,exa,option)			
+						_jumpToDetail: function _jumpToDetail(e) {
+							var desturl = '../../html/manage/production/product_detail.html';
+							var destid = 'product_detail';
+							var exa = {
+								productId: e
+							};
+							var option = {
+								showTitle: false
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
-						/*跳转个人信息页面*/
-						_person() {
-							let desturl = '../../html/manage/personSet/personSet.html'
-							let destid = 'personSet'
-							let exa = {}
-							let option = {
-								showTitle:true
-							}
-							app.navigater(desturl,destid,exa,option)	
 
+						/*跳转个人信息页面*/
+						_person: function _person() {
+							var desturl = '../../html/manage/personSet/personSet.html';
+							var destid = 'personSet';
+							var exa = {};
+							var option = {
+								showTitle: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						}
 					}
-				})
-
+				});
 			});
 			/*获取用户身份之后刷新页面*/
 			function initPage() {
 				var time = setInterval(function() {
 					if(!APP._initShop) return;
 
-					APP._initShop(() => {
+					APP._initShop(function() {
 						//自定义监听图标点击事件
 						var active_color = '#fff';
 
@@ -681,24 +687,23 @@
 
 						util.toggleNview(0);
 						plus.nativeUI.closeWaiting();
-						plus.webview.getWebviewById('manage').hide()
+						plus.webview.getWebviewById('manage').hide();
 						plus.webview.currentWebview().show('pop-in', 300, function() {
 							mui('#app').pullRefresh().endPulldown();
 						}, {});
-
-					})
+					});
 
 					clearInterval(time);
-				}, 200)
+				}, 200);
 			}
 
 			function refresh(src) {
-				plus.nativeUI.showWaiting()
-				APP._initShop(() => {
+				plus.nativeUI.showWaiting();
+				APP._initShop(function() {
 					//											mui.later(() => {
-					plus.nativeUI.closeWaiting()
+					plus.nativeUI.closeWaiting();
 					//											}, 1000)
-				})
+				});
 			}
 		</script>
 	</body>

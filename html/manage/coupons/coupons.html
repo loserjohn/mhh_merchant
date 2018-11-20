@@ -188,13 +188,15 @@
 		<script src="../../../js/bscroll.min.js"></script>
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
-			var APP
+			});
+			var APP;
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
-				
+				app.WXinit(CryptoJS);
+
 				APP = new Vue({
 					el: '#app',
 					data: {
@@ -204,16 +206,14 @@
 						couponsList: '',
 						detailPre: {}
 					},
-					created: function() {
+					created: function created() {},
+					mounted: function mounted() {
 
-					},
-					mounted: function() {
-
-						var _this = this
-						var scroll = this.$refs.scroll
-						this.scrollTop = 0 + 'px'
+						var _this = this;
+						var scroll = this.$refs.scroll;
+						this.scrollTop = 0 + 'px';
 						/*首次加载数据*/
-						this._getData()
+						this._getData();
 
 						this.$nextTick(function() {
 							//							初始化scrool
@@ -227,34 +227,33 @@
 										threshold: 50,
 										stop: 0
 									}
-								})
+								});
 							} else {
 								_this.scroll.refresh();
 							};
 							/*下拉刷新*/
 							_this.scroll.on('pullingDown', function(e) {
 
-								plus.nativeUI.showWaiting()
-								_this._getData(() => {
+								plus.nativeUI.showWaiting();
+								_this._getData(function() {
 									plus.nativeUI.closeWaiting();
-									_this.scroll.finishPullDown()
-								})
-
-							})
-						})
+									_this.scroll.finishPullDown();
+								});
+							});
+						});
 					},
 					filters: {
-						getStatus(k) {
+						getStatus: function getStatus(k) {
 							//							优惠券状态0-未启用，1-启用中,2-审核中
 							switch(k) {
 								case '0':
-									return '未启用'
+									return '未启用';
 									break;
 								case '1':
-									return '启用中'
+									return '启用中';
 									break;
 								case '2':
-									return '审核中...'
+									return '审核中...';
 									break;
 								default:
 									break;
@@ -263,22 +262,22 @@
 					},
 					methods: {
 						/*添加新卡*/
-						_toAddNewCard() {
-							let desturl = './addCoupon.html'
-							let destid = 'addCoupon'
-							let exa = {}
-							let option = {
-								showTitle:true,
-								autoWaiting:false,
-								createNew: true,
-							}
-							app.navigater(desturl,destid,exa,option)
-			
+						_toAddNewCard: function _toAddNewCard() {
+							var desturl = './addCoupon.html';
+							var destid = 'addCoupon';
+							var exa = {};
+							var option = {
+								showTitle: true,
+								autoWaiting: false,
+								createNew: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*查看详情*/
-						_checkDetail(item) {
+						_checkDetail: function _checkDetail(item) {
 							if(item) {
-								this.detailPre = item
+								this.detailPre = item;
 							}
 
 							this.show = !this.show;
@@ -288,126 +287,126 @@
 								//								this.scroll.enable()
 							}
 						},
+
 						/*编辑修改*/
-						_edite(item) {
-							var li = document.getElementById(item.DISCOUNT_CODE)
+						_edite: function _edite(item) {
+							var li = document.getElementById(item.DISCOUNT_CODE);
 							//							console.log(li)
-							mui.swipeoutClose(li)
-							let desturl = './editCoupon.html'
-							let destid = 'editCoupon'
-							let exa = {coupon: item}
-							let option = {
-								showTitle:true,
-								autoWaiting:false,
-								createNew: true,
-							}
-							app.navigater(desturl,destid,exa,option)
-							
-						
+							mui.swipeoutClose(li);
+							var desturl = './editCoupon.html';
+							var destid = 'editCoupon';
+							var exa = {
+								coupon: item
+							};
+							var option = {
+								showTitle: true,
+								autoWaiting: false,
+								createNew: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*删除操作*/
-						_delect(code) {
-							var li = document.getElementById(code)
-							mui.swipeoutClose(li)
-							var _this = this
+						_delect: function _delect(code) {
+							var li = document.getElementById(code);
+							mui.swipeoutClose(li);
+							var _this = this;
 							var data = {
-								DISCOUNT_CODE: code,
-							}
-							//
-							plus.nativeUI.showWaiting('删除中...')
+								DISCOUNT_CODE: code
+								//
+							};
+							plus.nativeUI.showWaiting('删除中...');
 							app.ajax(app.baseUrl + '/api/BusiDiscount/DeleteDiscount', {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
 								type: 'post', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									if(result.Success) {
 
 										var msg = "删除成功";
-										mui.later(() => {
-											plus.nativeUI.closeWaiting()
-											plus.nativeUI.toast(msg)
-											_this._getData()
-										}, 1500)
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
+											plus.nativeUI.toast(msg);
+											_this._getData();
+										}, 1500);
 
 										/*还原数据*/
 									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-										console.log(result.Msg)
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
+										console.log(result.Msg);
 									}
-
 								}
 							});
 						},
+
 						/*启用  禁用操作*/
-						_handle(code, t) {
-							var li = document.getElementById(code)
+						_handle: function _handle(code, t) {
+							var li = document.getElementById(code);
 							//							console.log(li)
-							mui.swipeoutClose(li)
-							var _this = this
+							mui.swipeoutClose(li);
+							var _this = this;
 							var data = {
 								DISCOUNT_CODE: code,
 								DISCOUNT_STATUS: t
-							}
-							//								console.log(JSON.stringify(data))
-							plus.nativeUI.showWaiting('修改中...')
+								//								console.log(JSON.stringify(data))
+							};
+							plus.nativeUI.showWaiting('修改中...');
 							app.ajax(app.baseUrl + '/api/BusiDiscount/UpdateDiscount', {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
 								type: 'post', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 
 									if(result.Success) {
 
 										var msg = "修改成功";
-										mui.later(() => {
-											plus.nativeUI.closeWaiting()
-											plus.nativeUI.toast(msg)
-											_this._getData()
-										}, 1500)
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
+											plus.nativeUI.toast(msg);
+											_this._getData();
+										}, 1500);
 
 										/*还原数据*/
 									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-										console.log(result.Msg)
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
+										console.log(result.Msg);
 									}
-
 								}
 							});
 						},
+
 						/*获取数据*/
-						_getData(callback) {
-							var _this = this
+						_getData: function _getData(callback) {
+							var _this = this;
 							app.ajax(app.baseUrl + '/api/BusiDiscount/GetDiscountList', {
 								//									data: data,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
-									mui.later(() => {
-										document.getElementById('loader').style.display = 'none'
+								success: function success(result) {
+									mui.later(function() {
+										document.getElementById('loader').style.display = 'none';
 										if(result.Success) {
-											_this.couponsList = result.Data.ListInfo
+											_this.couponsList = result.Data.ListInfo;
 
 											_this.scroll.refresh();
 											if(callback) callback();
-
 										} else {
 											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
-
+											plus.nativeUI.toast(result.Msg);
 										}
-									}, 500)
+									}, 500);
 								}
 							});
 						}
 					}
-				})
-			})
+				});
+			});
 
 			function refresh() {
 				//				alert(1)
-				APP._getData()
+				APP._getData();
 			}
 		</script>
 	</body>

@@ -75,8 +75,15 @@
 					}
 				},'马嘿嘿提醒你');
 			} else {
-				plus.navigator.closeSplashscreen();
-				owner.downWgt(1);
+				plus.navigator.closeSplashscreen();			
+				plus.nativeUI.confirm("发现新的更新包,立即更新?", function(e) {
+					if(e.index == 0) {
+						owner.downWgt(1);
+					} else {
+						if(callback) callback(true)
+					}
+				}, '马嘿嘿提醒你');
+				
 			}
 		} else {
 			if(owner.versionMsg.iOS == 1) {
@@ -92,7 +99,14 @@
 				},'马嘿嘿提醒你');
 			} else {
 				plus.navigator.closeSplashscreen();
-				owner.downWgt(2);
+				plus.nativeUI.confirm("发现新的更新包,立即更新?", function(e) {
+					if(e.index == 0) {		
+						owner.downWgt(2);
+					} else {
+						if(callback) callback(true)
+					}
+				}, '马嘿嘿提醒你');
+				
 			}
 		}
 	}

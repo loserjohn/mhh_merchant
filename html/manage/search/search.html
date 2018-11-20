@@ -196,12 +196,14 @@
 		<script src="../../../js/bscroll.min.js"></script>
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			(function() {
 				mui.init({
 					swipeBack: true
 				});
 				mui.plusReady(function() {
-app.WXinit(CryptoJS)
+					app.WXinit(CryptoJS);
 					var APP = new Vue({
 						el: '#app',
 						data: {
@@ -212,12 +214,11 @@ app.WXinit(CryptoJS)
 							wordList: [],
 							resultList: []
 						},
-						created: function() {
+						created: function created() {
 							app.initHeader();
-
 						},
-						mounted: function() {
-							var scroll = this.$refs.scroll
+						mounted: function mounted() {
+							var scroll = this.$refs.scroll;
 							//							初始化scroll的屏幕位置
 							//							this.tabContenTop = (parseInt(this.$refs.content.style.paddingTop) + 40) + 'px';
 							this.scrollTop = document.getElementById('header').offsetHeight + document.getElementById('history').offsetHeight + 'px';
@@ -233,45 +234,43 @@ app.WXinit(CryptoJS)
 										pullUpLoad: {
 											threshold: -50 // 当上拉距离超过30px时触发 pullingUp 事件
 										}
-									})
+									});
 									//							下拉函数
 									this.scroll.on('pullingUp', function(e) {
-										_this.scroll.disable()
-										plus.nativeUI.showWaiting("加载中")
+										_this.scroll.disable();
+										plus.nativeUI.showWaiting("加载中");
 										mui.later(function() {
-											_this.scroll.finishPullUp()
-											_this.scroll.refresh()
-											plus.nativeUI.closeWaiting()
-											_this.scroll.enable()
-										}, 2000)
-
-									})
+											_this.scroll.finishPullUp();
+											_this.scroll.refresh();
+											plus.nativeUI.closeWaiting();
+											_this.scroll.enable();
+										}, 2000);
+									});
 								} else {
 									_this.scroll.refresh();
 								};
-								plus.nativeUI.closeWaiting()
+								plus.nativeUI.closeWaiting();
 								mui.currentWebview.show('pop-in', 300, function() {}, {});
-							})
+							});
 							this._initHis();
-							
 						},
-						filters:{
-							getStatus(k){
-								switch (k){
+						filters: {
+							getStatus: function getStatus(k) {
+								switch(k) {
 									case '0':
-									return '未提交'
+										return '未提交';
 										break;
 									case '1':
-									return '正常'
+										return '正常';
 										break;
 									case '2':
-									return '待审核'
+										return '待审核';
 										break;
 									case '3':
-									return '未通过'
+										return '未通过';
 										break;
 									case '4':
-									return '已下架'
+										return '已下架';
 										break;
 									default:
 										break;
@@ -281,15 +280,15 @@ app.WXinit(CryptoJS)
 						methods: {
 
 							/*搜索数据*/
-							_getData(keyword) {
+							_getData: function _getData(keyword) {
 								//								alert(this.keyword)
 
-								var _this = this
+								var _this = this;
 								if(!this.keyword) {
 									plus.nativeUI.alert("输入关键词", function() {}, "马嘿嘿提醒您", "ok");
-									return
+									return;
 								}
-								plus.nativeUI.showWaiting('搜索中...')
+								plus.nativeUI.showWaiting('搜索中...');
 
 								app.ajax(app.baseUrl + '/api/BusiProject/GetProjects', {
 									data: {
@@ -297,27 +296,26 @@ app.WXinit(CryptoJS)
 									},
 									// dataType:'json',//服务器返回json格式数据
 									type: 'get', //HTTP请求类型
-									success: function(result) {
+									success: function success(result) {
 
 										if(result.Success) {
-											mui.later(() => {
-												plus.nativeUI.closeWaiting()
-												_this.resultList = result.Data.ListInfo
-												_this.total = result.Data.Total
-												_this.scroll.refresh()
-												_this._saveKeyWord(_this.keyword)
-											}, 1000)
-
+											mui.later(function() {
+												plus.nativeUI.closeWaiting();
+												_this.resultList = result.Data.ListInfo;
+												_this.total = result.Data.Total;
+												_this.scroll.refresh();
+												_this._saveKeyWord(_this.keyword);
+											}, 1000);
 										} else {
 											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
-
+											plus.nativeUI.toast(result.Msg);
 										}
 									}
 								});
 							},
+
 							//							跳转详情页面
-							_jumpToDetail(key) {
+							_jumpToDetail: function _jumpToDetail(key) {
 								mui.openWindow({
 									url: '../production/product_detail.html',
 									id: 'product_detail',
@@ -333,47 +331,49 @@ app.WXinit(CryptoJS)
 										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 									},
 									extras: {
-										productId:key
+										productId: key
 									},
 									waiting: {
 										autoShow: false, //自动显示等待框，默认为true
-										title: '正在加载...', //等待对话框上显示的提示内容
+										title: '正在加载...' //等待对话框上显示的提示内容
 									}
-								})
+								});
 							},
+
 							/*删除历史数据*/
-							_cleanHistory() {
-								var _this = this
-								plus.nativeUI.confirm('确定清除历史记录？', (event) => {
-//									alert(event.index)
+							_cleanHistory: function _cleanHistory() {
+								var _this = this;
+								plus.nativeUI.confirm('确定清除历史记录？', function(event) {
+									//									alert(event.index)
 									if(event.index == 0) {
 										//										alert(1)
 										localStorage.setItem('$keyword', '');
-										_this._initHis()
-//										alert(1)
+										_this._initHis();
+										//										alert(1)
 									}
 								}, {
 									title: '马嘿嘿提醒您'
-								})
-
+								});
 							},
+
 							/*刷新历史记录显示*/
-							_initHis() {
+							_initHis: function _initHis() {
 								var arr = this._getKeyWord();
 								if(arr) {
-									this.wordList = arr
+									this.wordList = arr;
 								} else {
-									this.wordList = []
+									this.wordList = [];
 								}
 							},
+
 							/*储存搜索历史*/
-							_saveKeyWord(word) {
+							_saveKeyWord: function _saveKeyWord(word) {
 								var r = localStorage.getItem('$keyword');
 
 								if(r) {
 									r = JSON.parse(r);
 									if(r.indexOf(word) < 0) {
-										r.push(word)
+										r.push(word);
 										localStorage.setItem('$keyword', JSON.stringify(r));
 									} else {}
 								} else {
@@ -382,26 +382,25 @@ app.WXinit(CryptoJS)
 									localStorage.setItem('$keyword', JSON.stringify(a));
 								}
 
-								this._initHis()
-
+								this._initHis();
 							},
+
 							/*读取搜索历史*/
-							_getKeyWord() {
+							_getKeyWord: function _getKeyWord() {
 								var r = localStorage.getItem('$keyword');
 								if(r) {
-									return JSON.parse(r)
+									return JSON.parse(r);
 								} else {
-									return null
+									return null;
 								}
-
 							},
+
 							/*选择某个关键词*/
-							_choose(word) {
+							_choose: function _choose(word) {
 								this.keyword = word;
 							}
 						}
-					})
-
+					});
 				});
 			})();
 		</script>

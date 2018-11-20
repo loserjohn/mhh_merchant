@@ -80,22 +80,23 @@
 		<!--<script src="../../js/cs.min.js"></script>-->
 		<!--<script src="https://www.sobot.com/chat/frame/js/entrance.js?sysNum=053184bbe2174048b2dbc1df8f498c23" class="zhiCustomBtn" id="zhichiScript"></script>-->
 		<script type="text/javascript" charset="utf-8">
+			 
+
 			mui.init({
 				swipeBack: true
 			});
 			//			app.initHeader()
 			mui.plusReady(function() {
 
-
 				var iframe = document.createElement('iframe');
-				var face = plus.storage.getItem('pic_head')
-				var uname = plus.storage.getItem('userName')
+				var face = plus.storage.getItem('pic_head');
+				var uname = plus.storage.getItem('userName');
 				//				var uname = 'xhasdfadsf '
-				var partnerId = plus.storage.getItem('IMtoken')
+				var partnerId = plus.storage.getItem('IMtoken');
 				iframe.src = 'https://www.sobot.com/chat/h5/index.html?sysNum=053184bbe2174048b2dbc1df8f498c23&face=' + face + '&uname=' + uname + '&partnerId=' + partnerId;
-//				console.log(iframe.src)
-				iframe.className = 'demo'
-				document.body.appendChild(iframe)
+				//				console.log(iframe.src)
+				iframe.className = 'demo';
+				document.body.appendChild(iframe);
 
 				//				var zhiManager = (getzhiSDKInstance());
 				//				//再调用load方法
@@ -134,7 +135,7 @@
 				//						plus.nativeUI.toast('客服连接断开');
 				//					}
 				//				});
-			})
+			});
 			//			document.getElementById('resetBtn').onclick = function() {
 			//				mui.back()
 			//			}

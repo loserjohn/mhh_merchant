@@ -90,7 +90,8 @@
 				margin-top: -4px;
 				left: -15px;
 			}*/
-			.result{
+			
+			.result {
 				position: absolute;
 				left: 0;
 				right: 0;
@@ -106,7 +107,7 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#fff"></a>
 			<h1 class="mui-title" style="color:#fff" id="title"></h1>
 		</header>
-		<div class="result " id="refreshContainer" >
+		<div class="result " id="refreshContainer">
 			<div class="reset" style="min-height: 101%;">
 				<ul class="chatContent " id="chatContent"></ul>
 				<p id="resultEnd" class="lh44 t_c">我是有底线的</p>
@@ -213,9 +214,10 @@
 		<script src="../../js/app.js"></script>
 		<!--<script src="../../js/mui.lazyload.js"></script>
 		<script src="../../js/mui.lazyload.img.js" type="text/javascript" charset="utf-8"></script>-->
-		
-		
+
 		<script type="text/javascript" charset="utf-8">
+			 
+
 			mui.init({
 				swipeBack: true,
 				gestureConfig: {
@@ -226,12 +228,11 @@
 					drag: true, //默认为true
 					hold: true, //默认为false，不监听
 					release: true //默认为false，不监听
-				},
+				}
 			});
-			var IMtoken
-			var myId
-			
-			
+			var IMtoken;
+			var myId;
+
 			//				console.log('111'+IMtoken)
 			var ui = {
 				modalToggle: document.getElementById('modalToggle'),
@@ -256,14 +257,14 @@
 				// 菜单按钮
 				menuBtn: document.getElementById('menuBtn'),
 				menusBox: document.getElementById('menusBox')
-			}
 
-			//	全局变量		
-			var myAvatar //	wode头像
-			var targetAvatar = '' //目标头像
-			var targetNickName = '' //目标的昵称
-			var myNickName =''
-			var ImStaus = false
+				//	全局变量		
+			};
+			var myAvatar; //	wode头像
+			var targetAvatar = ''; //目标头像
+			var targetNickName = ''; //目标的昵称
+			var myNickName = '';
+			var ImStaus = false;
 			var r = null; //储存mui录音对象、
 			var p = null; //语音播放对象
 			var s_time; //语音开始时间
@@ -277,7 +278,7 @@
 			var latitude = ""; //当前位置纬度
 			var poi = ""; //当前位置文字描述
 
-			var isPlaying = false //当前是否在播放语音，同时只允许播放一条语音
+			var isPlaying = false; //当前是否在播放语音，同时只允许播放一条语音
 			var plaingVoice = null; //正在播放的声音（取消播放样式用的）
 			var isLoading = false; //正在加载一次数据中
 			var scroll = null;
@@ -286,89 +287,88 @@
 			var realHisRecords = []; //真实渲染的记录
 
 			var pageIndex = 1;
-			var pageSize = 30
+			var pageSize = 30;
 			var linking = false;
-			var isHome=true  //判断是否在前台
-	
-			targetId = null;
-			onChatPage = true;
-			
-			var wrapper = document.getElementById('refreshContainer')
+			var isHome = true; //判断是否在前台
 
-				//				初始化下拉框
-				scroll = new BScroll(wrapper, {
-					click: true,
-					swipeBounceTime: 400,
-					probeType: 3,
-					bounceTime: 200,
-					resizePolling: 60,
-					pullDownRefresh: {
-						threshold: 50,
-						stop: 0
-					}
-				})
+			var targetId = null;
+			var onChatPage = true;
 
-				scroll.on('pullingDown', function(pos) {
-					plus.nativeUI.showWaiting();
-					pageIndex += 1;
-					paging((b) => {
-						mui.later(() => {
-							plus.nativeUI.closeWaiting();
-							if(b) {
-								plus.nativeUI.toast('没有更多数据了')
-							} else {
-								scroll.finishPullDown();
-							}
-						}, 500)
+			var wrapper = document.getElementById('refreshContainer');
 
-					})
-				})
+			//				初始化下拉框
+			scroll = new BScroll(wrapper, {
+				click: true,
+				swipeBounceTime: 400,
+				probeType: 3,
+				bounceTime: 200,
+				resizePolling: 60,
+				pullDownRefresh: {
+					threshold: 50,
+					stop: 0
+				}
+			});
+
+			scroll.on('pullingDown', function(pos) {
+				plus.nativeUI.showWaiting();
+				pageIndex += 1;
+				paging(function(b) {
+					mui.later(function() {
+						plus.nativeUI.closeWaiting();
+						if(b) {
+							plus.nativeUI.toast('没有更多数据了');
+						} else {
+							scroll.finishPullDown();
+						}
+					}, 500);
+				});
+			});
 			mui.plusReady(function() {
 				app.initHeader();
-				
+
 				//				客服初始化	
-				IMtoken = plus.storage.getItem('IMtoken')
-					
+				IMtoken = plus.storage.getItem('IMtoken');
+
 				RongIMLib.RongIMClient.init("n19jmcy5n8ke9");
 				//	服务器链接监听
 				RongIMClient.setConnectionStatusListener({
-					onChanged: function(status) {
+					onChanged: function onChanged(status) {
 						switch(status) {
 							case RongIMLib.ConnectionStatus.CONNECTED:
-//							alert('Sussecc')
+								//							alert('Sussecc')
 								console.log('链接成功');
-								linking = true
+								linking = true;
 								break;
 							case RongIMLib.ConnectionStatus.CONNECTING:
 								console.log('正在链接');
 								break;
 							case RongIMLib.ConnectionStatus.DISCONNECTED:
 								console.log('断开连接');
-								linking = false
-//				试探重连
-								 var callback = {
-							        onSuccess: function(userId) {
-							            console.log("Reconnect successfully." + userId);
-							              linking = true
-							        },
-							        onTokenIncorrect: function() {
-							            console.log('token无效');
-							        },
-							        onError:function(errorCode){
-							            console.log(errorcode);
-							        }
-							    };
-							    var config = {
-							        // 默认 false, true 启用自动重连，启用则为必选参数
-							        auto: true,
-							        token:IMtoken,
-							        // 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
-				//			        url: 'cdn.ronghub.com/RongIMLib-2.2.6.min.js',
-							       url: ' https://cdn.ronghub.com/RongIMLib-2.3.2.min.js',
-							        // 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.6.min.js 可选
-							        rate: [100, 1000, 3000, 6000, 10000]
-							    };
-							    RongIMClient.reconnect(callback, config);
+								linking = false;
+								//				试探重连
+								var callback = {
+									onSuccess: function onSuccess(userId) {
+										console.log("Reconnect successfully." + userId);
+										linking = true;
+									},
+									onTokenIncorrect: function onTokenIncorrect() {
+										console.log('token无效');
+									},
+									onError: function onError(errorCode) {
+										console.log(errorcode);
+									}
+								};
+								var config = {
+									// 默认 false, true 启用自动重连，启用则为必选参数
+									auto: true,
+									token: IMtoken,
+									// 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
+									//			        url: 'cdn.ronghub.com/RongIMLib-2.2.6.min.js',
+									url: ' https://cdn.ronghub.com/RongIMLib-2.3.2.min.js',
+									// 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.6.min.js 可选
+									rate: [100, 1000, 3000, 6000, 10000]
+								};
+								RongIMClient.reconnect(callback, config);
 								break;
 							case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
 								console.log('其他设备登录');
@@ -380,29 +380,29 @@
 								console.log('网络不可用');
 								linking = false;
 								//				试探重连
-								 var callback = {
-							        onSuccess: function(userId) {
-							            console.log("Reconnect successfully." + userId);
-							            linking = true
-							        },
-							        onTokenIncorrect: function() {
-							            console.log('token无效');
-							        },
-							        onError:function(errorCode){
-							            console.log(errorcode);
-							        }
-							    };
-							    var config = {
-							        // 默认 false, true 启用自动重连，启用则为必选参数
-							        auto: true,
-							        token:IMtoken,
-							        // 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
-				//			        url: 'cdn.ronghub.com/RongIMLib-2.2.6.min.js',
-							       url: ' https://cdn.ronghub.com/RongIMLib-2.3.2.min.js',
-							        // 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.6.min.js 可选
-							        rate: [100, 1000, 3000, 6000, 10000]
-							    };
-							    RongIMClient.reconnect(callback, config);
+								var callback = {
+									onSuccess: function onSuccess(userId) {
+										console.log("Reconnect successfully." + userId);
+										linking = true;
+									},
+									onTokenIncorrect: function onTokenIncorrect() {
+										console.log('token无效');
+									},
+									onError: function onError(errorCode) {
+										console.log(errorcode);
+									}
+								};
+								var config = {
+									// 默认 false, true 启用自动重连，启用则为必选参数
+									auto: true,
+									token: IMtoken,
+									// 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
+									//			        url: 'cdn.ronghub.com/RongIMLib-2.2.6.min.js',
+									url: ' https://cdn.ronghub.com/RongIMLib-2.3.2.min.js',
+									// 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.6.min.js 可选
+									rate: [100, 1000, 3000, 6000, 10000]
+								};
+								RongIMClient.reconnect(callback, config);
 								break;
 						}
 					}
@@ -414,15 +414,15 @@
 				var list = RongIMLib.RongIMEmoji.list;
 				list.map(function(item, index) {
 					var li = document.createElement('li');
-					li.classList.add('emojiItem')
-					li.appendChild(item.node)
-					emojis.appendChild(li)
-				})
+					li.classList.add('emojiItem');
+					li.appendChild(item.node);
+					emojis.appendChild(li);
+				});
 				template.defaults.escape = false;
 				// 消息监听器
 				RongIMClient.setOnReceiveMessageListener({
 					// 接收到的消息 
-					onReceived: function(message) {
+					onReceived: function onReceived(message) {
 						// 判断消息类型 
 						switch(message.messageType) {
 							//		接收到文本 
@@ -430,20 +430,20 @@
 								// message.content.content => 消息内容
 								//console.log(JSON.stringify(message))
 
-								receiveMsg(message)
+								receiveMsg(message);
 								break;
 							case RongIMClient.MessageType.VoiceMessage:
 								// 对声音进行预加载                
 								// message.content.content 格式为 AMR 格式的 base64 码				
 								//100毫秒滚动到顶
-								receiveMsg(message, true)
+								receiveMsg(message, true);
 								break;
 								//收到图片信息	
 							case RongIMClient.MessageType.ImageMessage:
 								//						console.log(JSON.stringify(message))
 								// message.content.content => 图片缩略图 base64。
 								// message.content.imageUri => 原图 URL。
-								receiveMsg(message)
+								receiveMsg(message);
 
 								break;
 							case RongIMClient.MessageType.DiscussionNotificationMessage:
@@ -454,7 +454,7 @@
 								// message.content.latiude => 纬度。
 								// message.content.longitude => 经度。
 								// message.content.content => 位置图片 base64。
-								receiveMsg(message)
+								receiveMsg(message);
 
 								break;
 							case RongIMClient.MessageType.RichContentMessage:
@@ -485,46 +485,44 @@
 						}
 					}
 				});
-				
-				
+
 				ImInit();
-				document.addEventListener("resume", function(){
-					isHome = true
-					if(!linking){
-						connect()
-					}else{}					
+				document.addEventListener("resume", function() {
+					isHome = true;
+					if(!linking) {
+						connect();
+					} else {}
 				}, false);
-				
-				document.addEventListener("pause", function(){
-					isHome = false					
+
+				document.addEventListener("pause", function() {
+					isHome = false;
 				}, false);
-			})
+			});
 			//初始化***************************************
 			function ImInit() {
 				r = plus.audio.getRecorder(); //储存mui录音对象、
-				myAvatar = plus.storage.getItem('pic_head')
-				myNickName = plus.storage.getItem('userNickName')
-				myId = plus.storage.getItem('myId')
+				myAvatar = plus.storage.getItem('pic_head');
+				myNickName = plus.storage.getItem('userNickName');
+				myId = plus.storage.getItem('myId');
 				self = plus.webview.currentWebview();
-	
-				
+
 				//		启用页面事件绑定
-				eventInit()
-				connect()
+				eventInit();
+				connect();
 			}
-			
-			function connect(){
+
+			function connect() {
 				//	链接服务器
 				RongIMClient.connect(IMtoken, {
-					onSuccess: function(userId) {
-						ImStaus = true
+					onSuccess: function onSuccess(userId) {
+						ImStaus = true;
 						plus.nativeUI.closeWaiting();
 						//				plus.webview.currentWebview().show('slide-in-right', 300);
 					},
-					onTokenIncorrect: function() {
+					onTokenIncorrect: function onTokenIncorrect() {
 						console.log('token无效');
 					},
-					onError: function(errorCode) {
+					onError: function onError(errorCode) {
 						var info = '';
 						switch(errorCode) {
 							case RongIMLib.ErrorCode.TIMEOUT:
@@ -549,67 +547,66 @@
 			function eventInit() {
 				//	切换语音
 				ui.modalToggle.addEventListener('tap', function() {
-					ui.sayTxt.classList.toggle('AudioModal')
-				})
+					ui.sayTxt.classList.toggle('AudioModal');
+				});
 
 				ui.chatContent.addEventListener('tap', function() {
-					ui.sayBox.classList.remove('showMenu')
+					ui.sayBox.classList.remove('showMenu');
 					ui.textArea.blur();
 					if(ui.textArea.value.length <= 0) {
 						ui.textArea.style.height = '36px';
 					}
-				})
+				});
 				ui.emojiBtn.addEventListener('tap', function() {
-					ui.sayBox.classList.add('showMenu')
-					ui.emojiBox.classList.add('slideInUp', 'animated')
-					ui.emojiBox.classList.remove('hidden')
-					ui.menusBox.classList.add('hidden')
-					ui.menusBox.classList.remove('slideInUp', 'animated')
-				})
+					ui.sayBox.classList.add('showMenu');
+					ui.emojiBox.classList.add('slideInUp', 'animated');
+					ui.emojiBox.classList.remove('hidden');
+					ui.menusBox.classList.add('hidden');
+					ui.menusBox.classList.remove('slideInUp', 'animated');
+				});
 				ui.menuBtn.addEventListener('tap', function() {
-					ui.sayBox.classList.add('showMenu')
-					ui.menusBox.classList.add('slideInUp', 'animated')
-					ui.menusBox.classList.remove('hidden')
-					ui.emojiBox.classList.add('hidden')
-					ui.emojiBox.classList.remove('slideInUp', 'animated')
-				})
+					ui.sayBox.classList.add('showMenu');
+					ui.menusBox.classList.add('slideInUp', 'animated');
+					ui.menusBox.classList.remove('hidden');
+					ui.emojiBox.classList.add('hidden');
+					ui.emojiBox.classList.remove('slideInUp', 'animated');
+				});
 
 				//			发送文字消息
 				ui.postTxtMsg.addEventListener('tap', function() {
-					SendTxtMsg()
-				})
+					SendTxtMsg();
+				});
 
 				//			发送图片
 				ui.postPic.addEventListener('tap', function() {
-					SendImgMsg()
-				})
+					SendImgMsg();
+				});
 
 				//		监听文本框引起的样式变化
 				ui.textArea.addEventListener('tap', function() {
 
 					if(ui.textArea.value.length < 1 || !ui.textArea.value.length) {
-						ui.postTxtMsg.style.display = 'none'
-						ui.menuBtn.style.display = 'block'
+						ui.postTxtMsg.style.display = 'none';
+						ui.menuBtn.style.display = 'block';
 					} else {
-						ui.menuBtn.style.display = 'none'
-						ui.postTxtMsg.style.display = 'block'
+						ui.menuBtn.style.display = 'none';
+						ui.postTxtMsg.style.display = 'block';
 					}
-
-				})
+				});
 
 				//		监听文本框引起的样式变化
 				ui.textArea.addEventListener('keyup', function() {
 					if(ui.textArea.value.length < 1 || !ui.textArea.value.length) {
-						ui.postTxtMsg.style.display = 'none'
-						ui.menuBtn.style.display = 'block'
+						ui.postTxtMsg.style.display = 'none';
+						ui.menuBtn.style.display = 'block';
 					} else {
-						ui.sayBox.classList.add('textLine2')
+						ui.sayBox.classList.add('textLine2');
 
 						this.style.height = this.scrollHeight + 'px';
-						ui.menuBtn.style.display = 'none'
-						ui.postTxtMsg.style.display = 'block'
+						ui.menuBtn.style.display = 'none';
+						ui.postTxtMsg.style.display = 'block';
 					}
-				})
+				});
 				//			发送位置
 				ui.postPosition.addEventListener('tap', function() {
 					mui.openWindow({
@@ -624,47 +621,46 @@
 						createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 						show: {
 							autoShow: false, //页面loaded事件发生后自动显示，默认为true
-							duration: 300, //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+							duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 						},
 						waiting: {
 							autoShow: true, //自动显示等待框，默认为true
-							title: '正在加载...', //等待对话框上显示的提示内容
+							title: '正在加载...' //等待对话框上显示的提示内容
 						}
-					})
-				})
+					});
+				});
 
 				//			点击选中表情表情
 				mui('#emojis').on('tap', '.rong-emoji-content', function() {
-					ui.textArea.value += this.getAttribute('name')
+					ui.textArea.value += this.getAttribute('name');
 					mui('#emojiSheet').popover('toggle');
-				})
+				});
 
 				//				录音长按
 				ui.postVoice.addEventListener('hold', function() {
-					if(plaingVoice) plaingVoice.classList.remove('playing')
+					if(plaingVoice) plaingVoice.classList.remove('playing');
 					if(onHolding || !ImStaus) return;
 					if(p) p.stop();
 					onHolding = true;
 					ui.audioTxt.innerText = '稍等片刻';
-					ui.record.style.display = 'block'
-					s_time = new Date().getTime()
+					ui.record.style.display = 'block';
+					s_time = new Date().getTime();
 					time = setTimeout(function() {
 						plus.device.vibrate(300);
-						onSpeaking = true
-						startAudio()
-					}, 1200)
-
-				})
+						onSpeaking = true;
+						startAudio();
+					}, 1200);
+				});
 				//		向上滑动取消
 				document.body.addEventListener("drag", function(event) {
 					if(!onSpeaking) {
-						return false
+						return false;
 					} else {
 						if(Math.abs(event.detail.deltaY) >= 150) {
-							reset = true
+							reset = true;
 							mui.later(function() {
-								record.style.display = 'none'
-							}, 500)
+								record.style.display = 'none';
+							}, 500);
 						}
 					}
 				});
@@ -674,14 +670,13 @@
 					e_time = new Date().getTime();
 					if(e_time - s_time < 1200) {
 						clearTimeout(time);
-						time = null
+						time = null;
 
 						ui.audioTxt.innerText = '说话时间太短';
 						mui.later(function() {
 							record.style.display = 'none';
-							onHolding = false
-						}, 500)
-
+							onHolding = false;
+						}, 500);
 					} else {
 						if(reset) {
 							ui.audioTxt.innerText = '消息撤回';
@@ -689,45 +684,41 @@
 							ui.audioTxt.innerText = '准备发送';
 						}
 						setTimeout(function() {
-							onSpeaking = false
-							stopAudio()
-
-						}, 1000)
-
+							onSpeaking = false;
+							stopAudio();
+						}, 1000);
 					}
-
-				})
+				});
 
 				//				点击语音播放
 				mui('#chatContent').on('tap', '.voiceMsg', function() {
 					if(p) p.stop();
-					if(plaingVoice) plaingVoice.classList.remove('playing')
-					plaingVoice = this
-					this.classList.add('playing')
+					if(plaingVoice) plaingVoice.classList.remove('playing');
+					plaingVoice = this;
+					this.classList.add('playing');
 
-					this.classList.remove('newVoice')
+					this.classList.remove('newVoice');
 					var voice = this.getAttribute('voiceData');
 					var key = this.getAttribute('voiceKey');
 
-					DB.getData(key,function(message){
-						message.content.extra.isNew = false
-						DB.updatedData(key, message)
-						
+					DB.getData(key, function(message) {
+						message.content.extra.isNew = false;
+						DB.updatedData(key, message);
+
 						playAudio(voice, function() {
-							plaingVoice.classList.remove('playing')
-						})
+							plaingVoice.classList.remove('playing');
+						});
 					});
-//					
+					//					
 					//					修改未读数据
-					
-					
-				})
+
+				});
 
 				//            点击图片预览
 				mui('#chatContent').on('tap', '.picMsg', function() {
 					var url = this.getAttribute('src');
 					plus.nativeUI.previewImage(url, {});
-				})
+				});
 				//            点击位置预览图打开第三方定位
 				mui('#chatContent').on('tap', '.posMsg', function() {
 					var dstlo = this.getAttribute('dstlo');
@@ -749,7 +740,7 @@
 						createNew: true, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 						show: {
 							autoShow: false, //页面loaded事件发生后自动显示，默认为true
-							duration: 300, //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+							duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 						},
 						extras: {
 							dstlo: dstlo,
@@ -758,23 +749,22 @@
 						},
 						waiting: {
 							autoShow: true, //自动显示等待框，默认为true
-							title: '正在加载...', //等待对话框上显示的提示内容
+							title: '正在加载...' //等待对话框上显示的提示内容
 						}
-					})
-
-				})
+					});
+				});
 
 				//		页面返回参数变化
 				mui('.mui-bar').on('tap', '.mui-action-back', function() {
-					onChatPage = false
-				})
+					onChatPage = false;
+				});
 			}
 
 			//	发送文字消息
 			function SendTxtMsg() {
 				if(!ui.textArea.value || ui.textArea.value.length < 1) {
-					mui.toast('请输入内容！')
-					return
+					mui.toast('请输入内容！');
+					return;
 				}
 
 				var msg = new RongIMLib.TextMessage({
@@ -782,24 +772,24 @@
 					extra: {
 						pro: '',
 						SHavatar: myAvatar,
-						KHavatar:  targetAvatar,
+						KHavatar: targetAvatar,
 						SHnickName: myNickName,
-						KHnickName:  targetNickName
+						KHnickName: targetNickName
 					}
 				});
-				
+
 				var conversationtype = RongIMLib.ConversationType.PRIVATE; // 单聊,其他会话选择相应的消息类型即可。
 				//					var targetId = "13365035771"; // 目标 Id
 				SendMsg(conversationtype, targetId, msg, function(message) {
-					createHistory(message)
-					addHisType(message)
-					ui.menuBtn.style.display = 'block'
-					ui.postTxtMsg.style.display = 'none'
+					createHistory(message);
+					addHisType(message);
+					ui.menuBtn.style.display = 'block';
+					ui.postTxtMsg.style.display = 'none';
 					ui.textArea.blur();
 
 					ui.textArea.style.height = '36px';
-					ui.textArea.value = ''
-				})
+					ui.textArea.value = '';
+				});
 			}
 			//	发送图片信息
 			function SendImgMsg() {
@@ -814,7 +804,8 @@
 						title: "选择图片",
 						cancel: "取消",
 						buttons: buttonTit
-					}, function(b) { /*actionSheet 按钮点击事件*/
+					}, function(b) {
+						/*actionSheet 按钮点击事件*/
 						switch(b.index) {
 							case 0:
 								break;
@@ -827,9 +818,8 @@
 							default:
 								break;
 						}
-					})
+					});
 				}
-
 			}
 
 			//拍照获取相片
@@ -839,34 +829,33 @@
 					plus.io.resolveLocalFileSystemURL(e, function(entry) {
 
 						var path = entry.toLocalURL();
-						var fileArr = [path]
+						var fileArr = [path];
 
 						uploadFn(fileArr, function() {
-							plus.nativeUI.closeWaiting()
+							plus.nativeUI.closeWaiting();
 						});
 						//	                        console.log(path);              
 					}, function(e) {
 						mui.toast("读取拍照文件错误：" + e.message);
 					});
-
 				});
 			}
 
 			//从相册选择图片
 			function galleryImg() {
 				plus.gallery.pick(function(e) {
-					var fileArr = []
+					var fileArr = [];
 					for(var i in e.files) {
-						var fileSrc = e.files[i]
+						var fileSrc = e.files[i];
 						//				console.log(fileSrc);
-						fileArr.push(fileSrc)
+						fileArr.push(fileSrc);
 					}
 					plus.nativeUI.confirm('确认发送？', function(e) {
 						if(e.index == 0) {
 							//							plus.nativeUI.showWaiting('发送中...')
 							//	  上传图片	
 							uploadFn(fileArr, function() {
-								plus.nativeUI.closeWaiting()
+								plus.nativeUI.closeWaiting();
 								//						fileArr.map(function(item, index) {
 								//						
 								//						})
@@ -882,7 +871,7 @@
 					multiple: true,
 					maximum: 1,
 					system: false,
-					onmaxed: function() {
+					onmaxed: function onmaxed() {
 						plus.nativeUI.alert('最多只能选择1张图片');
 					}
 				});
@@ -893,20 +882,18 @@
 				img.src = src;
 				img.onload = function() {
 					var canvas = document.createElement("canvas"); //创建canvas DOM元素，并设置其宽高和图片一样
-					var radio = img.width/img.height 
+					var radio = img.width / img.height;
 					canvas.width = 1000;
-					canvas.height = canvas.width/radio;
-					
+					canvas.height = canvas.width / radio;
+
 					var ctx = canvas.getContext("2d");
 					ctx.drawImage(img, 0, 0, canvas.width, canvas.height); //使用画布画图
 					var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase(); //动态截取图片的格式
 					//					alert(img.src)
 					var dataURL = canvas.toDataURL("image/" + ext); //返回的是一串Base64编码的URL并指定格式
 					//					return dataURL;
-					if(callback) callback(dataURL)
-
-				}
-
+					if(callback) callback(dataURL);
+				};
 			}
 			//模拟图片上传操作
 			function uploadFn(arr, callback) {
@@ -920,17 +907,17 @@
 				getBase64Image(imageUri, function(url) {
 
 					var ext = imageUri.substring(imageUri.lastIndexOf(".") + 1).toLowerCase();
-					url = url.substr(22)
-//					console.log(url)
-//					console.log(ext)
+					url = url.substr(22);
+					//					console.log(url)
+					//					console.log(ext)
 					plus.nativeUI.showWaiting();
 					var Info = {
 						image_base64: url,
 						file_name: '.' + ext,
 						foldName: plus.storage.getItem('userName'),
 						size: 1,
-						isPrj:false
-					}
+						isPrj: false
+					};
 					mui.ajax(app.baseUrl + '/api/Upload/UploadByBase64', {
 						data: Info,
 						dataType: 'json', //服务器返回json格式数据
@@ -939,58 +926,57 @@
 						headers: {
 							'Content-Type': 'application/json'
 						},
-						success: function(result) {
-							console.log(result.Data)
+						success: function success(result) {
+							console.log(result.Data);
 							var msg = new RongIMLib.ImageMessage({
 								content: 'base64 格式缩略图',
 								imageUri: result.Data,
 								extra: {
 									pro: '',
 									SHavatar: myAvatar,
-									KHavatar:  targetAvatar,
+									KHavatar: targetAvatar,
 									SHnickName: myNickName,
-									KHnickName:  targetNickName
+									KHnickName: targetNickName
 								}
 							});
 							SendMsg(conversationtype, targetId, msg, function(message) {
 								createHistory(message);
 								addHisType(message);
-								callback()
-								ui.sayBox.classList.remove('showMenu')
-							})
+								callback();
+								ui.sayBox.classList.remove('showMenu');
+							});
 
 							plus.nativeUI.closeWaiting();
 						},
-						error: function(xhr, type, errorThrown) {
+						error: function error(xhr, type, errorThrown) {
 							plus.nativeUI.closeWaiting();
 							//				alert(type)
 						}
-					})
+					});
 				});
-
 			}
 			//	发送位置信息
 			function SendPositionMsg(location) {
-//				console.log(JSON.stringify(location))
-				plus.nativeUI.showWaiting('发送中...')
+				//				console.log(JSON.stringify(location))
+				plus.nativeUI.showWaiting('发送中...');
 				var content = "位置缩略图";
 				location.content = content;
 				location.extra = {
-						pro: '',
-						SHavatar: myAvatar,
-						KHavatar:  targetAvatar,
-						SHnickName: myNickName,
-						KHnickName:  targetNickName
-					}
+					pro: '',
+					SHavatar: myAvatar,
+					KHavatar: targetAvatar,
+					SHnickName: myNickName,
+					KHnickName: targetNickName
+				};
 				var msg = new RongIMLib.LocationMessage(location);
 				var conversationtype = RongIMLib.ConversationType.PRIVATE;
 
 				SendMsg(conversationtype, targetId, msg, function(message) {
-					createHistory(message)
-					addHisType(message)
-					plus.nativeUI.closeWaiting()
-					sayBox.classList.remove('showMenu')
-				})
+					createHistory(message);
+					addHisType(message);
+					plus.nativeUI.closeWaiting();
+					sayBox.classList.remove('showMenu');
+				});
 			}
 
 			//	开始录制语音信息
@@ -1004,21 +990,20 @@
 				}, function(recordFile) {
 					// 发送录音
 					if(!reset) {
-						sendVoice(recordFile)
+						sendVoice(recordFile);
 					} else {
 						audioTxt.innerText = '语音撤回';
 						reset = false;
 					}
-
 				}, function(e) {
 					alert("Audio record failed: " + e.message);
 				});
 			}
 			//结束语音
 			function stopAudio() {
-				r.stop()
-				record.style.display = 'none'
-				onHolding = false
+				r.stop();
+				record.style.display = 'none';
+				onHolding = false;
 				ui.postVoice.innerText = '按住 说话';
 			}
 
@@ -1030,17 +1015,17 @@
 						extra: {
 							pro: '',
 							SHavatar: myAvatar,
-							KHavatar:  targetAvatar,
+							KHavatar: targetAvatar,
 							SHnickName: myNickName,
-							KHnickName:  targetNickName
+							KHnickName: targetNickName
 						}
 					});
 					var conversationtype = RongIMLib.ConversationType.PRIVATE; // 单聊,其他会话选择相应的消息类型即可。
 					SendMsg(conversationtype, targetId, msg, function(message) {
-						createHistory(message)
-						addHisType(message)
-					})
-				})
+						createHistory(message);
+						addHisType(message);
+					});
+				});
 			}
 			//	语音文件转化成base64	
 			function Audio2dataURl(path, callback) {
@@ -1054,29 +1039,27 @@
 								var reader = new plus.io.FileReader();
 								reader.readAsDataURL(file);
 								reader.onloadend = function(e) {
-									var data = e.target.result
-									callback(data)
+									var data = e.target.result;
+									callback(data);
 								};
-
 							}, function(e) {
-								console.log(e)
-							})
-						})
-					})
+								console.log(e);
+							});
+						});
+					});
 				} else if(mui.os.ios) {
 					plus.io.resolveLocalFileSystemURL(path, function(entry) {
 						entry.file(function(file) {
 							var reader = new plus.io.FileReader();
 							reader.onloadend = function(e) {
-								var data = e.target.result
-								callback(data)
+								var data = e.target.result;
+								callback(data);
 							};
 							reader.readAsDataURL(file);
 						}, function(e) {
 							mui.toast("读写出现异常: " + e.message);
-						})
-					})
-
+						});
+					});
 				}
 			}
 
@@ -1086,16 +1069,16 @@
 					var path = file.toURL();
 					p = plus.audio.createPlayer(path);
 					p.play(function() {
-						callback()
+						callback();
 					}, function(e) {
 						alert("语音信息不完整");
 					});
-				})
+				});
 			}
 			//base64传语音文件
 			function dataURL2Audio(base64Str, callback) {
 				var base64Str = base64Str.replace('data:audio/amr;base64,', '');
-				var audioName = (new Date()).valueOf() + '.amr';
+				var audioName = new Date().valueOf() + '.amr';
 
 				plus.io.requestFileSystem(plus.io.PRIVATE_DOC, function(fs) {
 
@@ -1105,7 +1088,7 @@
 						// 获得平台绝对路径
 						var fullPath = entry.fullPath;
 						if(mui.os.android) {
-							debugger
+							debugger;
 							// 读取音频
 							var Base64 = plus.android.importClass("android.util.Base64");
 							var FileOutputStream = plus.android.importClass("java.io.FileOutputStream");
@@ -1133,42 +1116,39 @@
 							// 回调
 							callback && callback(entry);
 						}
-					})
-				})
-
+					});
+				});
 			}
 
 			//	发送信息方法
 			function SendMsg(conversationtype, targetId, msg, callback) {
-				
+
 				callback = callback || null;
 				RongIMClient.getInstance().sendMessage(conversationtype, targetId.toString(), msg, {
-					onSuccess: function(message) {
+					onSuccess: function onSuccess(message) {
 						if(callback) {
-							resultFresh(true, true)
-							callback(message)
+							resultFresh(true, true);
+							callback(message);
 						}
-						var parent = plus.webview.getWebviewById('information')
-						if(parent){
-							parent.evalJS('send(' + JSON.stringify(message) + ')')
+						var parent = plus.webview.getWebviewById('information');
+						if(parent) {
+							parent.evalJS('send(' + JSON.stringify(message) + ')');
 						}
-						
-						
 					},
-					onError: function(errorCode, message) {
+					onError: function onError(errorCode, message) {
 						var info = '';
 						switch(errorCode) {
 							case RongIMLib.ErrorCode.TIMEOUT:
 								info = '超时';
-								plus.nativeUI.toast('链接失败，请检查网络')
+								plus.nativeUI.toast('链接失败，请检查网络');
 								break;
 							case RongIMLib.ErrorCode.UNKNOWN_ERROR:
 								info = '未知错误';
-								plus.nativeUI.toast('链接失败，请检查网络')
+								plus.nativeUI.toast('链接失败，请检查网络');
 								break;
 							case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
 								info = '在黑名单中，无法向对方发送消息';
-								plus.nativeUI.toast('链接失败，请检查网络')
+								plus.nativeUI.toast('链接失败，请检查网络');
 								break;
 							case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
 								info = '不在讨论组中';
@@ -1184,171 +1164,171 @@
 								break;
 						}
 						console.log('发送失败:' + info);
-						ImInit()	
+						ImInit();
 					}
 				});
 			}
 
 			//	每次收发消息触发scroll更新
 			function resultFresh(ismine, ifFresh) {
-				scroll.refresh()
-				if(ifFresh) { //是否需要自动下拉
+				scroll.refresh();
+				if(ifFresh) {
+					//是否需要自动下拉
 					mui.later(function() {
 						scroll.scrollToElement(document.getElementById('resultEnd'), 300, 0, 0, 'ease-in');
-					}, 200)
+					}, 200);
 				}
 
 				ismine = ismine || false;
 				if(ismine) {
-					ui.sayBox.classList.remove('showMenu')
+					ui.sayBox.classList.remove('showMenu');
 				}
 			}
 			//	历史记录本地储存
 			function createHistory(message) {
-				message.belong = myId
-//				console.log(JSON.stringify(message))
+				message.belong = myId;
+				//				console.log(JSON.stringify(message))
 				DB.addData(message);
 			}
 			//	删除本地记录
 			function resetHis(key) {
-				DB.delectData(key)
-
+				DB.delectData(key);
 			}
 			//			计算分页
 			function paging(callback) {
 				var rCount = pageIndex * pageSize;
 				realHisRecords = allHisRecords.slice(-rCount);
-				render(callback)
+				render(callback);
 			}
 			//  渲染条目
 			function render(callback) {
 				var rCount = pageIndex * pageSize;
 				ui.chatContent.innerHTML = '';
 				var l = {};
-				l.targetAvatar = targetAvatar
-				l.myAvatar = myAvatar ? myAvatar : '../../images/default_avatar.jpg'
+				l.targetAvatar = targetAvatar;
+				l.myAvatar = myAvatar ? myAvatar : '../../images/default_avatar.jpg';
 				l.ListInfo = realHisRecords;
 				l.emoji = RongIMLib.RongIMEmoji;
 				var html = template('listInfo', l);
 				document.getElementById('chatContent').innerHTML = html;
 				//				alert(realHisRecords.length)
 				if(allHisRecords.length <= realHisRecords.length) {
-					if(callback) callback(true)
+					if(callback) callback(true);
 				} else {
-					if(callback) callback(false)
+					if(callback) callback(false);
 				}
 				scroll.refresh();
-//				    var list = document.getElementById("img-content-app");//表示需要实施lazyload的div区域，指定其id。
-//				    var lazyLoadApi = mui('#chatContent').imageLazyload({
-//				        autoDestroy: false,
-//				        placeholder: '../../images/picLoad.gif'
-//				    });
+				//				    var list = document.getElementById("img-content-app");//表示需要实施lazyload的div区域，指定其id。
+				//				    var lazyLoadApi = mui('#chatContent').imageLazyload({
+				//				        autoDestroy: false,
+				//				        placeholder: '../../images/picLoad.gif'
+				//				    });
 			}
 
 			//	接受信息,所处反应
 			function receiveMsg(message) {
-				
-				if(isHome){
+
+				if(isHome) {
 					plus.device.vibrate(300);
-				}else{
-//					console.log(JSON.stringify(message))
+				} else {
+					//					console.log(JSON.stringify(message))
 					var t = message.messageType;
-					switch (t){
+					switch(t) {
 						case 'TextMessage':
-						var msg = {
-							title:message.content.extra.KHnickName,
-							content:message.content.content
-						}
-						app.createLocalPushMsg(message)
+							var msg = {
+								title: message.content.extra.KHnickName,
+								content: message.content.content
+							};
+							app.createLocalPushMsg(message);
 							break;
 						default:
-						var msg = {
-							title:message.content.extra.KHnickName,
-							content:'您收到一条新的对话'
-						}
-						app.createLocalPushMsg(msg)
+							var msg = {
+								title: message.content.extra.KHnickName,
+								content: '您收到一条新的对话'
+							};
+							app.createLocalPushMsg(msg);
 							break;
-					}			
+					}
 				}
-				
+
 				var parent = plus.webview.getWebviewById('information');
 				//				创建本地记录
 				//				判断是语音信息是否是已读
 				if(message.messageType == 'VoiceMessage') {
-					message.content.extra.isNew = true
+					message.content.extra.isNew = true;
 				}
 
-//				服务器备份
-				backups(message)
-				
-				createHistory(message)
+				//				服务器备份
+				backups(message);
 
-				parent.evalJS('receive(' + JSON.stringify(message) + ')')
-				if((message.senderUserId != targetId) || !onChatPage) {
-					return false
+				createHistory(message);
+
+				parent.evalJS('receive(' + JSON.stringify(message) + ')');
+				if(message.senderUserId != targetId || !onChatPage) {
+					return false;
 				}
-				allHisRecords.push(message)
-				realHisRecords.push(message)
-				
-				
-				render(function(){
-						mui.later(function() {
+				allHisRecords.push(message);
+				realHisRecords.push(message);
+
+				render(function() {
+					mui.later(function() {
 						scroll.scrollToElement(document.getElementById('resultEnd'), 300, 0, 0, 'ease-in');
-					}, 200)
-				})
+					}, 200);
+				});
 			}
-//			服务器备份数据
-			function backups(message){
+			//			服务器备份数据
+			function backups(message) {
 				mui.ajax(app.baseUrl + '/api/ChatRY/Save', {
 					type: 'post', //HTTP请求类型
 					timeout: 5000, //超时时间设置为10秒；
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					},
-					success: function(result) {
-						console.log('备份成功')
+					success: function success(result) {
+						console.log('备份成功');
 					},
-					error: function(xhr, type, errorThrown) {
-//									app.catchErr(type)
+					error: function error(xhr, type, errorThrown) {
+						//									app.catchErr(type)
 					}
 				});
 			}
 			//	打开的新的对话页面刷新对话对象 
 			function initHis(id, name, avatar) {
-	
+
 				targetId = id;
 				pageIndex = 1;
 				allHisRecords = [];
 				scroll.finishPullDown();
 				document.getElementById('title').innerText = name;
-				targetNickName = name
-				targetAvatar = avatar
+				targetNickName = name;
+				targetAvatar = avatar;
 
 				DB.getDataByIndex(id + '', function(list) {
 					allHisRecords = list;
 					paging(function() {
-						resultFresh(false, true)
-					})
+						resultFresh(false, true);
+					});
 
-					onChatPage = true
-				})
+					onChatPage = true;
+				});
 			}
 			//			获取到地图选址的回调
-			function getLocation(location) {			
-				document.getElementById('sayBox').classList.remove('showMenu')
-				SendPositionMsg(location)
+			function getLocation(location) {
+				document.getElementById('sayBox').classList.remove('showMenu');
+				SendPositionMsg(location);
 			}
 			//			添加信息
 			function addHisType(message) {
-				allHisRecords.push(message)
-				realHisRecords.push(message)
-				render()
+				allHisRecords.push(message);
+				realHisRecords.push(message);
+				render();
 			}
-			function refresh(){
-				myAvatar = plus.storage.getItem('pic_head')
-				
-				myNickName = plus.storage.getItem('userNickName')
-				myId = plus.storage.getItem('myId')
+
+			function refresh() {
+				myAvatar = plus.storage.getItem('pic_head');
+
+				myNickName = plus.storage.getItem('userNickName');
+				myId = plus.storage.getItem('myId');
 			}
 			Date.prototype.Format = function(fmt) {
 				var o = {
@@ -1360,12 +1340,12 @@
 					"q+": Math.floor((this.getMonth() + 3) / 3), // 季度
 					"S": this.getMilliseconds() // 毫秒
 				};
-				if(/(y+)/.test(fmt))
-					fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-				for(var k in o)
-					if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+				if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+				for(var k in o) {
+					if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+				}
 				return fmt;
-			}
+			};
 		</script>
 	</body>
 

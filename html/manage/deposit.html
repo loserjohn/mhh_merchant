@@ -8,8 +8,8 @@
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/common.css" />
 		<link rel="stylesheet" href="../../css/iconfont.css" />
-			<link rel="stylesheet" href="../../css/loading.css" />
-		
+		<link rel="stylesheet" href="../../css/loading.css" />
+
 		<style>
 			/*提现至*/
 			
@@ -39,7 +39,8 @@
 			.card .address .payIcon {
 				font-size: 30px;
 			}
-			.account{
+			
+			.account {
 				height: 52px;
 				line-height: 52px;
 			}
@@ -81,7 +82,8 @@
 			.btns {
 				margin-top: 40px;
 			}
-			#submit{
+			
+			#submit {
 				width: 100%;
 				height: 44px;
 				line-height: 44px;
@@ -94,17 +96,17 @@
 	<body>
 		<!--等待页面-->
 		<div class="loader" style="top:0" id="loader">
-				<ul>
-					<li id='a'></li>
-					<li id='b'></li>
-					<li id='c'></li>
-					<li id='d'></li>
-					<li id='e'></li>
-					<li id='f'></li>
-					<li id='g'></li>
-					<li id='h'></li>
-					<li id='i'></li>
-				</ul>
+			<ul>
+				<li id='a'></li>
+				<li id='b'></li>
+				<li id='c'></li>
+				<li id='d'></li>
+				<li id='e'></li>
+				<li id='f'></li>
+				<li id='g'></li>
+				<li id='h'></li>
+				<li id='i'></li>
+			</ul>
 		</div>
 		<div id="app">
 
@@ -112,7 +114,7 @@
 			<div id="content" class="card ">
 				<div class="flex  address container">
 					<i class="iconfont icon-jinnang cor_y payIcon"></i>
-					<div class="f1 account  t_r" >
+					<div class="f1 account  t_r">
 						{{allMoney}}
 					</div>
 				</div>
@@ -124,7 +126,7 @@
 					</div>
 					<i class="iconfont icon-arrowright cor_y"></i>
 					<div class="eletBox" style="z-index: 110;width: 100%;" v-if="card.length==0" @tap="_addBank"></div>
-					<select v-model="card"  class="f1 t_r  reset eletBox" style="opacity: 0;">
+					<select v-model="card" class="f1 t_r  reset eletBox" style="opacity: 0;">
 						<option disabled value="">请选择</option>
 						<option v-for="item in allBankCard" :value="item" :key="item.Value">{{item.BANK_NAME+'-'+item.BANK_CARDNUM}}</option>
 					</select>
@@ -160,36 +162,36 @@
 		<script src="../../js/vue.js"></script>
 		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
+			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
 						allBankCard: [],
 						card: '',
 						select: '',
-						money:'',
-						allMoney:''
+						money: '',
+						allMoney: ''
 					},
-					created: function() {
-	
-					},
-					mounted: function() {
-						var _this = this
-						plus.nativeUI.closeWaiting()
-						mui.currentWebview.show('pop-in', 300, function () {}, {});
-						this._getBanks()
-						var self=plus.webview.currentWebview()
+					created: function created() {},
+					mounted: function mounted() {
+						var _this = this;
+						plus.nativeUI.closeWaiting();
+						mui.currentWebview.show('pop-in', 300, function() {}, {});
+						this._getBanks();
+						var self = plus.webview.currentWebview();
 						this.allMoney = self.account;
-//						alert(this.allMoney)
+						//						alert(this.allMoney)
 					},
 					methods: {
 						/*获取名下银行卡*/
-						_getBanks() {
-							var _this = this
+						_getBanks: function _getBanks() {
+							var _this = this;
 							app.ajax(app.baseUrl + '/api/BusiBank/GetList', {
 								//									data: data,
 								// dataType:'json',//服务器返回json格式数据
@@ -199,97 +201,94 @@
 									'Content-Type': 'application/x-www-form-urlencoded',
 									'Authorization': app.mark + plus.storage.getItem('token')
 								},
-								success: function(result) {
-									document.getElementById('loader').style.display='none'
+								success: function success(result) {
+									document.getElementById('loader').style.display = 'none';
 									if(result.Success) {
-//										console.log(JSON.stringify(result.Data.ListInfo))
-										_this.allBankCard = result.Data.ListInfo
-										if(result.Data.ListInfo.length == 0){
-											_this.card = ''
-										}else{
-											_this.card = result.Data.ListInfo[0]
+										//										console.log(JSON.stringify(result.Data.ListInfo))
+										_this.allBankCard = result.Data.ListInfo;
+										if(result.Data.ListInfo.length == 0) {
+											_this.card = '';
+										} else {
+											_this.card = result.Data.ListInfo[0];
 										}
-										
 									} else {
 										/*验证失败*/
-										plus.nativeUI.toast(result.Msg)
-
+										plus.nativeUI.toast(result.Msg);
 									}
 								},
-								error: function(xhr, type, errorThrown) {
+								error: function error(xhr, type, errorThrown) {
 									//异常处理；
 									console.log(type);
 								}
 							});
 						},
+
 						/*提交取现*/
-						_submit(){
-							var _this =this  
-							if(!this.money ){
-									plus.nativeUI.alert( "请输入金额", function(){}, "马嘿嘿提醒您", "ok" );
-									return;
-							}	
-							plus.nativeUI.confirm('您将提现金额 ￥'+this.money+'元至选定银行卡', (event) => {
-								if(event.index==0){
+						_submit: function _submit() {
+							var _this = this;
+							if(!this.money) {
+								plus.nativeUI.alert("请输入金额", function() {}, "马嘿嘿提醒您", "ok");
+								return;
+							}
+							plus.nativeUI.confirm('您将提现金额 ￥' + this.money + '元至选定银行卡', function(event) {
+								if(event.index == 0) {
 									mui('#submit').button('loading');
-//									
-//									console.log(JSON.stringify({
-//											BANK_CODE:_this.card.BANK_CODE,
-//											AMOUNT:parseInt(_this.money)
-//										}))
+									//									
+									//									console.log(JSON.stringify({
+									//											BANK_CODE:_this.card.BANK_CODE,
+									//											AMOUNT:parseInt(_this.money)
+									//										}))
 									app.ajax(app.baseUrl + '/api/BusiWithdraw/Withdraw', {
 										// dataType:'json',//服务器返回json格式数据
 										data: {
-											BANK_CODE:_this.card.BANK_CODE,
-											AMOUNT:parseInt(_this.money)
+											BANK_CODE: _this.card.BANK_CODE,
+											AMOUNT: parseInt(_this.money)
 										},
 										type: 'post', //HTTP请求类型
-										success: function(result) {
-											/*登陆成功*/											
-											mui.later(()=>{
-												if(result.Success){
+										success: function success(result) {
+											/*登陆成功*/
+											mui.later(function() {
+												if(result.Success) {
 													mui('#submit').button('reset');
 													plus.nativeUI.toast('提现成功');
-													plus.webview.getWebviewById('manage').evalJS('initPage()')
-													mui.later(()=>{
-														mui.back()
-													},500)
-													
-												}else{
+													plus.webview.getWebviewById('manage').evalJS('initPage()');
+													mui.later(function() {
+														mui.back();
+													}, 500);
+												} else {
 													mui('#submit').button('reset');
-													plus.nativeUI.toast(result.Msg)
+													plus.nativeUI.toast(result.Msg);
 												}
-												
-											},1500)
+											}, 1500);
 										},
-										error: function(xhr, type, errorThrown) {
-											mui('#submit').button('reset');	
+										error: function error(xhr, type, errorThrown) {
+											mui('#submit').button('reset');
 										}
-									});			
-									
-								}														
+									});
+								}
 							}, {
 								title: '马嘿嘿提醒您'
-							})
-							
-							
-																	
+							});
 						},
+
 						/*重置*/
-						_reset(){
-							this.money = ''
+						_reset: function _reset() {
+							this.money = '';
 						},
+
 						/*矫正数字*/
-						_validNum(){
-							this.money = parseInt(this.money)
+						_validNum: function _validNum() {
+							this.money = parseInt(this.money);
 						},
+
 						/*全部去除*/
-						_allIn(){
-							this.money = this.allMoney
+						_allIn: function _allIn() {
+							this.money = this.allMoney;
 						},
+
 						/*添加新卡*/
-						_addBank(){
-							plus.nativeUI.alert( "您还没有绑定银行卡", function(){
+						_addBank: function _addBank() {
+							plus.nativeUI.alert("您还没有绑定银行卡", function() {
 								mui.openWindow({
 									url: './banks/banks.html',
 									id: 'banks',
@@ -300,7 +299,7 @@
 										plusrequire: 'ahead',
 										// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
 										titleNView: { // 窗口的标题栏控件
-											autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+											autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
 											titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
 											titleSize: "14px", // 字体大小,默认17px
 											backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
@@ -319,19 +318,17 @@
 										autoShow: true, //页面loaded事件发生后自动显示，默认为true
 										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 									},
-									extras: {
-										product:this.detail
-									},
+									extras: {},
 									waiting: {
 										autoShow: false, //自动显示等待框，默认为true
-										title: '正在加载...', //等待对话框上显示的提示内容
+										title: '正在加载...' //等待对话框上显示的提示内容
 									}
-								})								
-							}, "马嘿嘿提醒您", "前去绑定" );
+								});
+							}, "马嘿嘿提醒您", "前去绑定");
 						}
 					}
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

@@ -347,12 +347,14 @@
 		<script src="../../../js/imgClip.js"></script>
 
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
-			var APP
+			});
+			var APP;
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				APP = new Vue({
 					el: '#app',
 					data: {
@@ -382,20 +384,18 @@
 
 						proDetailList: [] //项目图片
 					},
-					created: function() {
-
-					},
-					mounted: function() {
-						var _this = this
-						var self = plus.webview.currentWebview()
+					created: function created() {},
+					mounted: function mounted() {
+						var _this = this;
+						var self = plus.webview.currentWebview();
 
 						if(self.product) {
-							this.dstProduct = self.product
-							this.title = "编辑项目"
-							this.btn = "提交修改"
-							this._initMsg()
+							this.dstProduct = self.product;
+							this.title = "编辑项目";
+							this.btn = "提交修改";
+							this._initMsg();
 						} else {
-							document.getElementById('loader').style.display = 'none'
+							document.getElementById('loader').style.display = 'none';
 						}
 						/*初始化项目类别*/
 						app.ajax(app.baseUrl + '/api/ProjectType/GetListPorjectType', {
@@ -403,13 +403,13 @@
 							type: 'get', //HTTP请求类型
 							timeout: 10000, //超时时间设置为10秒；
 							headers: {
-								'Content-Type': 'application/x-www-form-urlencoded',
+								'Content-Type': 'application/x-www-form-urlencoded'
 							},
-							success: function(result) {
+							success: function success(result) {
 								/*赋值*/
 								_this.productTypeList = result;
 							},
-							error: function(xhr, type, errorThrown) {
+							error: function error(xhr, type, errorThrown) {
 								//异常处理；
 								console.log(type);
 							}
@@ -417,7 +417,7 @@
 					},
 					methods: {
 						//						删除项目图片
-						_delectPic(key, index) {
+						_delectPic: function _delectPic(key, index) {
 							switch(key) {
 								case 1:
 									this.proList.splice(index, 1);
@@ -428,31 +428,31 @@
 								default:
 									break;
 							}
-
 						},
+
 						//						项目图片
-						_proDetailPict() {
-							var _this = this
-							app.getIMG('项目图片', (src) => {
+						_proDetailPict: function _proDetailPict() {
+							var _this = this;
+							app.getIMG('项目图片', function(src) {
 								//								console.log(src)
-								plus.nativeUI.showWaiting()
+								plus.nativeUI.showWaiting();
 								var img = new Image();
 								img.src = src;
 								img.onload = function() {
-									plus.nativeUI.closeWaiting()
-									_this.proDetailList.push(src)
-								}
-
-							})
+									plus.nativeUI.closeWaiting();
+									_this.proDetailList.push(src);
+								};
+							});
 						},
+
 						//						获取项目图片
-						_getPic() {
+						_getPic: function _getPic() {
 							if(this.proList.length >= 3) {
-								plus.nativeUI.toast('问题图片不超过三张')
+								plus.nativeUI.toast('问题图片不超过三张');
 								return;
 							}
-							var _this = this
-							Clip.getIMGPro('项目图片', (src) => {
+							var _this = this;
+							Clip.getIMGPro('项目图片', function(src) {
 								mui.openWindow({
 									url: '../imgClick.html',
 									id: 'imgClick',
@@ -474,13 +474,14 @@
 									},
 									waiting: {
 										autoShow: true, //自动显示等待框，默认为true
-										title: '正在加载...', //等待对话框上显示的提示内容
+										title: '正在加载...' //等待对话框上显示的提示内容
 									}
-								})
-							})
+								});
+							});
 						},
+
 						/*修改信息测初始化赋值*/
-						_initMsg() {
+						_initMsg: function _initMsg() {
 							/*赋值信息*/
 							this.productName = this.dstProduct.PROJECT_NAME; //项目名字
 							this.productType = this.dstProduct.PROJECT_TYPE; //类型
@@ -497,14 +498,14 @@
 							this.time = this.dstProduct.BOOKING_COUNT;
 							/*计算时段*/
 							this.proList = this.dstProduct.PROJECT_IMGS;
-							document.getElementById('loader').style.display = 'none'
+							document.getElementById('loader').style.display = 'none';
 							this.produtDetail = this.dstProduct.PROJECT_DETAILS; //项目详情
 							this.proDetailList = this.dstProduct.DETAILS_IMGS;
 							//							this.produtExplain=this.dstProduct.PROJECT_STATE //项目说明
-
 						},
+
 						/*更新信息*/
-						_updatedMsg(key) {
+						_updatedMsg: function _updatedMsg(key) {
 							var _this = this;
 							switch(key) {
 								case 1:
@@ -516,13 +517,13 @@
 										type: 'get', //HTTP请求类型
 										timeout: 10000, //超时时间设置为10秒；
 										headers: {
-											'Content-Type': 'application/x-www-form-urlencoded',
+											'Content-Type': 'application/x-www-form-urlencoded'
 										},
-										success: function(result) {
+										success: function success(result) {
 											/*赋值*/
 											_this.productClassList = result;
 										},
-										error: function(xhr, type, errorThrown) {
+										error: function error(xhr, type, errorThrown) {
 											//异常处理；
 											console.log(type);
 										}
@@ -538,14 +539,14 @@
 										type: 'get', //HTTP请求类型
 										timeout: 10000, //超时时间设置为10秒；
 										headers: {
-											'Content-Type': 'application/x-www-form-urlencoded',
+											'Content-Type': 'application/x-www-form-urlencoded'
 										},
-										success: function(result) {
+										success: function success(result) {
 											/*赋值*/
 											_this.productLabelList = result;
 											//											console.log(JSON.stringify(_this.productLabelList))
 										},
-										error: function(xhr, type, errorThrown) {
+										error: function error(xhr, type, errorThrown) {
 											//异常处理；
 											console.log(type);
 										}
@@ -559,20 +560,20 @@
 									break;
 								case 5:
 									/*计算时段*/
-									_this.mintime = Math.ceil(_this.consuming / 30) + 1 //记录最小时段
-									_this.time = Math.ceil(_this.consuming / 30)
+									_this.mintime = Math.ceil(_this.consuming / 30) + 1; //记录最小时段
+									_this.time = Math.ceil(_this.consuming / 30);
 									break;
 								case 10:
 									/*添加时段*/
 									if(!_this.consuming) {
 										plus.nativeUI.alert("请先填写耗时时间", function() {}, "马嘿嘿提醒您", "ok");
-										return
+										return;
 									}
 									if(_this.time > _this.mintime) {
-										_this.time -= 1
+										_this.time -= 1;
 									} else {
-										plus.nativeUI.toast('不能小于最小耗时时间')
-										_this.time = _this.mintime
+										plus.nativeUI.toast('不能小于最小耗时时间');
+										_this.time = _this.mintime;
 									}
 
 									break;
@@ -580,33 +581,34 @@
 									/*添加时段*/
 									if(!_this.consuming) {
 										plus.nativeUI.alert("请先填写耗时时间", function() {}, "马嘿嘿提醒您", "ok");
-										return
+										return;
 									}
-									_this.time += 1
+									_this.time += 1;
 									break;
 								default:
 									break;
 							}
 						},
-						/*提交发布*/
-						_submit() {
 
-							var _this = this
+						/*提交发布*/
+						_submit: function _submit() {
+
+							var _this = this;
 							if(!this.productName || !this.productType || !this.productClass || !this.productLabel || !this.originalPrice || !this.currentPrice || !this.consuming || !this.holdDay || !this.produtDetail) {
 								plus.nativeUI.alert("请完善当项目资料信息", function() {}, "马嘿嘿提醒您", "ok");
-								return
+								return;
 							}
 							if(this.proList.length < 1) {
 								plus.nativeUI.alert("请完善上传项目图片", function() {}, "马嘿嘿提醒您", "ok");
-								return
+								return;
 							}
 
 							var PROJECT_STATUS;
 
-							var self = plus.webview.currentWebview()
+							var self = plus.webview.currentWebview();
 							/*若是编辑*/
 							if(self.product) {
-								_this._addProduction()
+								_this._addProduction();
 								return;
 							}
 
@@ -628,21 +630,21 @@
 											break;
 										case 1:
 											//直接提交审核 
-											_this._addProduction(2)
+											_this._addProduction(2);
 											break;
 										case 2:
 											//保存到未提交项目 
-											_this._addProduction(0)
+											_this._addProduction(0);
 											break;
 										default:
 											break;
 									}
 								}, false);
 							}
-
 						},
+
 						/*提交接口*/
-						_addProduction(t) {
+						_addProduction: function _addProduction(t) {
 
 							var _this = this;
 							plus.nativeUI.showWaiting();
@@ -662,13 +664,12 @@
 								KEEP_COUNT: _this.holdDay,
 								PROJECT_IMGS: _this.proList.join(','),
 								PROJECT_DETAILS_IMGS: _this.proDetailList.join(',') //详情图片
-							}
-							var url = '/api/BusiProject/UpdateProject'
+							};
+							var url = '/api/BusiProject/UpdateProject';
 
 							if(t == 0 || t == 2) {
-								data.PROJECT_STATUS = t
-								url = '/api/BusiProject/CreateProject'
-
+								data.PROJECT_STATUS = t;
+								url = '/api/BusiProject/CreateProject';
 							} else {
 								data.PROJECT_CODE = this.dstProduct.PROJECT_CODE;
 							}
@@ -677,42 +678,39 @@
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
 								type: 'post', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 
-									plus.nativeUI.closeWaiting()
+									plus.nativeUI.closeWaiting();
 									if(result.Success) {
 										var msg = "修改成功";
 										if(t == 0 || t == 2) {
-											msg = '发布成功'
+											msg = '发布成功';
 										}
-										plus.webview.getWebviewById('production').evalJS('refresh()')
+										plus.webview.getWebviewById('production').evalJS('refresh()');
 										plus.nativeUI.alert(msg, function() {
-											mui.back()
+											mui.back();
 										}, "马嘿嘿提醒您", "ok");
 										/*还原数据*/
 									} else {
-										plus.nativeUI.toast(result.Msg)
-										console.log(result.Msg)
-
+										plus.nativeUI.toast(result.Msg);
+										console.log(result.Msg);
 									}
-
 								}
 							});
 						},
-						_chooseAvatar(res) {
-							this.proList.push(res)
-							plus.nativeUI.closeWaiting()
-
+						_chooseAvatar: function _chooseAvatar(res) {
+							this.proList.push(res);
+							plus.nativeUI.closeWaiting();
 						}
 					}
 
-				})
-			})
+				});
+			});
 
 			function choosePic(res) {
 
 				//				res = JSON.parse(res)
-				APP._chooseAvatar(res)
+				APP._chooseAvatar(res);
 			}
 		</script>
 	</body>

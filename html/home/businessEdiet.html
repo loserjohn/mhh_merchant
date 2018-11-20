@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../css/animate.css" />
 		<link rel="stylesheet" href="../../css/loading.css" />
-		
+
 		<style>
 			.businessTop {
 				background: rgba(21, 21, 21, 1);
@@ -155,9 +155,9 @@
 				line-height: 44px;
 				box-sizing: border-box;
 				position: relative;
-				
 			}
-			.mui-table-view-cell{
+			
+			.mui-table-view-cell {
 				background: #f2f2f2;
 				color: #404040;
 			}
@@ -251,16 +251,16 @@
 							<i class="iconfont icon-xiayibu  cor_y"></i>
 						</li>
 					</ul>
-					<div class="  listBoxs " ref="wrapper" >
+					<div class="  listBoxs " ref="wrapper">
 						<!--<div class="reset">-->
 
 						<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted">
 
-							<li class="mui-table-view-cell mui-checkbox " v-for="(item,index) in businessList">							
+							<li class="mui-table-view-cell mui-checkbox " v-for="(item,index) in businessList">
 								<label :for="'item'+index">{{item.Text}}</label>
-								<input :id="'item'+index" name="checkbox" :value="item.Text" type="checkbox"  v-model="newBusinessArea" >									
+								<input :id="'item'+index" name="checkbox" :value="item.Text" type="checkbox" v-model="newBusinessArea">
 							</li>
-						
+
 							<li v-show="businessList.length==0 " class="t_c lh26" style="line-height: 40px;">-暂无数据-</li>
 						</ul>
 						<!--</div>-->
@@ -278,11 +278,13 @@
 		<script src="../../js/bscroll.min.js"></script>
 		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
 			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
@@ -307,23 +309,23 @@
 
 						newBusinessArea: [], //新添加的商圈
 
-						selecteBusiness: [],/*已经选择的商圈*/
+						selecteBusiness: [],
+						/*已经选择的商圈*/
 						enabled: true,
 
-						modalToggle: false,/*模态框显示隐藏*/
+						modalToggle: false /*模态框显示隐藏*/
 
 					},
-					created: function() {
-//						app.initHeader();
+					created: function created() {
+						//						app.initHeader();
 						var self = plus.webview.currentWebview();
-
 					},
-					mounted: function() {
+					mounted: function mounted() {
 						var _this = this;
 						var scroll = this.$refs.scroll;
 						var wrapper = this.$refs.wrapper;
 						this.scrollTop = 44 + 'px';
-						this.modalTop = 0+ 'px';
+						this.modalTop = 0 + 'px';
 						this.$nextTick(function() {
 							//							初始化scrool
 							if(!_this.scroll) {
@@ -332,7 +334,7 @@
 									click: true,
 									probeType: 3,
 									bounceTime: 200
-								})
+								});
 							} else {
 								_this.scroll.refresh();
 							};
@@ -343,14 +345,14 @@
 									click: true,
 									probeType: 3,
 									bounceTime: 200
-								})
+								});
 							} else {
 								_this.wrapper.refresh();
 							};
-							document.getElementById('loader').style.display='none'
-						})
+							document.getElementById('loader').style.display = 'none';
+						});
 
-						var _this = this
+						var _this = this;
 						/*首次进入加载省份信息*/
 						app.ajax(app.baseUrl + '/api/Area/GetListProvince', {
 							// dataType:'json',//服务器返回json格式数据
@@ -359,16 +361,16 @@
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'
 							},
-							success: function(result) {
+							success: function success(result) {
 								//								console.log(result)
 
 								/*登陆成功*/
 								// 储存本地 记录登陆时间	
 								//								alert(11)
 
-								_this.provinceList = result
+								_this.provinceList = result;
 							},
-							error: function(xhr, type, errorThrown) {
+							error: function error(xhr, type, errorThrown) {
 								//异常处理；
 								//								alert(22)
 								console.log(type);
@@ -383,32 +385,31 @@
 								'Content-Type': 'application/x-www-form-urlencoded',
 								'Authorization': app.mark + plus.storage.getItem('token')
 							},
-							success: function(result) {
+							success: function success(result) {
 								/*登陆成功*/
 								// 储存本地 记录登陆时间	
 
-								_this.selecteBusiness = result.Data.SHOP.SHOP_AREA
+								_this.selecteBusiness = result.Data.SHOP.SHOP_AREA;
 
-								plus.nativeUI.closeWaiting()
+								plus.nativeUI.closeWaiting();
 								mui.currentWebview.show('pop-in', 300, function() {}, {});
 							},
-							error: function(xhr, type, errorThrown) {
+							error: function error(xhr, type, errorThrown) {
 								//异常处理；
 								//								alert(22)
 								console.log(type);
 							}
 						});
-
 					},
 					methods: {
 						/*切换模态框*/
-						_modalToggle() {
-							this.modalToggle = !this.modalToggle
+						_modalToggle: function _modalToggle() {
+							this.modalToggle = !this.modalToggle;
 						},
 
 						/*更新商圈*/
-						_updatedTown(t, value) {
-							var _this = this
+						_updatedTown: function _updatedTown(t, value) {
+							var _this = this;
 							switch(t) {
 								case 1:
 									/*更新市信息*/
@@ -422,11 +423,11 @@
 										headers: {
 											'Content-Type': 'application/x-www-form-urlencoded'
 										},
-										success: function(result) {
+										success: function success(result) {
 											/*登陆成功*/
-											_this.townList = result
+											_this.townList = result;
 										},
-										error: function(xhr, type, errorThrown) {
+										error: function error(xhr, type, errorThrown) {
 											//异常处理；
 											console.log(type);
 										}
@@ -444,11 +445,11 @@
 										headers: {
 											'Content-Type': 'application/x-www-form-urlencoded'
 										},
-										success: function(result) {
+										success: function success(result) {
 											/*登陆成功*/
-											_this.areaList = result
+											_this.areaList = result;
 										},
-										error: function(xhr, type, errorThrown) {
+										error: function error(xhr, type, errorThrown) {
 											//异常处理；
 											console.log(type);
 										}
@@ -467,12 +468,12 @@
 										headers: {
 											'Content-Type': 'application/x-www-form-urlencoded'
 										},
-										success: function(result) {
+										success: function success(result) {
 											/*登陆成功*/
 											//											alert(JSON.stringify(result.Data.ListInfo))
-											_this.businessList = result.Data.ListInfo
+											_this.businessList = result.Data.ListInfo;
 										},
-										error: function(xhr, type, errorThrown) {
+										error: function error(xhr, type, errorThrown) {
 											//异常处理；
 											console.log(type);
 										}
@@ -480,48 +481,46 @@
 									break;
 								case 4:
 									if(!value) return;
-									this.business = value.split('-')[0]
+									this.business = value.split('-')[0];
 
 									break;
 								default:
 									break;
 							}
-
 						},
+
 						//						删除操作
-						_delectItem(i) {
+						_delectItem: function _delectItem(i) {
 							var _this = this;
-							plus.nativeUI.confirm('确定删除该商圈？', (event) => {
+							plus.nativeUI.confirm('确定删除该商圈？', function(event) {
 								//								alert(1)
 
-								var li = document.getElementById('itemli_' + i)
+								var li = document.getElementById('itemli_' + i);
 								//							console.log(li)
-							
 
-								
 								//								console.log(JSON.stringify(_this.selecteBusiness))
 								if(event.index == 0) {
 									var arr = _this.selecteBusiness;
 									var arr2 = arr.splice(i, 1);
 									_this.selecteBusiness = arr;
-									
-									_this._save()
+
+									_this._save();
 								}
-								mui.swipeoutClose(li)
+								mui.swipeoutClose(li);
 							}, {
 								title: '马嘿嘿提醒您'
-							})
-
+							});
 						},
+
 						/*保存修改*/
-						_save(callback) {
+						_save: function _save(callback) {
 							//							alert(1)
-							var _this =this
-							
+							var _this = this;
+
 							var data = this.selecteBusiness.join(',');
-							
+
 							if(this.selecteBusiness.length == 0) {
-								data = '_'
+								data = '_';
 							}
 							//							console.log(data)
 							app.ajax(app.baseUrl + '/api/BusiShop/UpdateShop', {
@@ -535,61 +534,62 @@
 									'Content-Type': 'application/x-www-form-urlencoded',
 									'Authorization': app.mark + plus.storage.getItem('token')
 								},
-								success: function(result) {
+								success: function success(result) {
 									/*登陆成功*/
 									plus.nativeUI.toast('修改成功');
-									var  p  = plus.webview.getWebviewById('home')
-									p.evalJS('refresh()') 
-									if(callback)callback()
+									var p = plus.webview.getWebviewById('home');
+									p.evalJS('refresh()');
+									if(callback) callback();
 								},
-								error: function(xhr, type, errorThrown) {
+								error: function error(xhr, type, errorThrown) {
 									//异常处理；
 									console.log(type);
 								}
 							});
 						},
+
 						/*添加商圈*/
-						_addBusinessArea() {
-														
-							var _this = this
-							if(!this.province || !this.town || !this.area ) {
+						_addBusinessArea: function _addBusinessArea() {
+
+							var _this = this;
+							if(!this.province || !this.town || !this.area) {
 								plus.nativeUI.alert("请先选择地址", function() {}, "马嘿嘿提醒您", "OK");
-								return
+								return;
 							}
-							plus.nativeUI.confirm('确定添加该商圈？', (event) => {
+							plus.nativeUI.confirm('确定添加该商圈？', function(event) {
 
-								event.index == 0 && function() {								
-																							
-									_this.selecteBusiness = _this.selecteBusiness.concat(_this.newBusinessArea)	
-									
-									_this.selecteBusiness = _this._validArr()
+								event.index == 0 && function() {
 
-									_this._save(()=>{
-										_this._modalToggle()
-									})
-								}()
+									_this.selecteBusiness = _this.selecteBusiness.concat(_this.newBusinessArea);
 
+									_this.selecteBusiness = _this._validArr();
+
+									_this._save(function() {
+										_this._modalToggle();
+									});
+								}();
 							}, {
 								title: '马嘿嘿提醒您'
-							})
+							});
 						},
+
 						/*验证数组重复*/
-						_validArr() {
-							 var arr = this.selecteBusiness,
-							  result = [],
-							  len = arr.length;
-							 arr.forEach(function(v, i ,arr){  //这里利用map，filter方法也可以实现
-							  var bool = arr.indexOf(v,i+1);  //从传入参数的下一个索引值开始寻找是否存在重复
-							  if(bool === -1){
-							   result.push(v);
-							  }
-							 })
-							 return result;						 							 
+						_validArr: function _validArr() {
+							var arr = this.selecteBusiness,
+								result = [],
+								len = arr.length;
+							arr.forEach(function(v, i, arr) {
+								//这里利用map，filter方法也可以实现
+								var bool = arr.indexOf(v, i + 1); //从传入参数的下一个索引值开始寻找是否存在重复
+								if(bool === -1) {
+									result.push(v);
+								}
+							});
+							return result;
 						}
 					}
 
-				})
-
+				});
 			});
 		</script>
 	</body>

@@ -35,39 +35,46 @@
 			.tabsItems_top i {
 				line-height: 36px;
 			}
-			.commontContent{
+			
+			.commontContent {
 				margin-top: 15px;
 				border-top: 1px dotted #d3d3d3;
 			}
-			.commonPics{
+			
+			.commonPics {
 				justify-content: space-around;
 			}
-			.commonPics .commonPicsItem{
+			
+			.commonPics .commonPicsItem {
 				width: 100px;
 				height: 100px;
 				overflow: hidden;
 			}
 			
-			.commontTxt{
+			.commontTxt {
 				margin: 15px auto;
 			}
-			.recommont{
+			
+			.recommont {
 				background: #eee;
 				margin-top: 15px;
 				box-sizing: border-box;
-				padding:10px;
+				padding: 10px;
 			}
-			.recommont li{
+			
+			.recommont li {
 				margin: 10px auto;
 			}
-			.recommont li>div{
-				
+			
+			.recommont li>div {
 				margin: 10px auto;
 			}
-			.edietCommonBox{
+			
+			.edietCommonBox {
 				margin-top: 15px;
 			}
-			.edietCommon{
+			
+			.edietCommon {
 				min-height: 120px;
 			}
 		</style>
@@ -83,7 +90,7 @@
 			<div class=" panel " id="content">
 				<!--客户信息-->
 				<div class="tabsItems_top flex">
-					<img  :src="detail.MEMBER_HEAD?detail.MEMBER_HEAD:'../../../images/default_avatar.jpg'"  alt="" class="avatar" />
+					<img :src="detail.MEMBER_HEAD?detail.MEMBER_HEAD:'../../../images/default_avatar.jpg'" alt="" class="avatar" />
 					<div class="f1">
 						<div class="">{{detail.MEMBER_NIKENAME}}</div>
 						<p class="cor_y">{{detail.REVIEW_TIME}}</p>
@@ -107,8 +114,8 @@
 					<div class="commontTxt">
 						{{detail.REVIEW_CONTENT}}
 					</div>
-					
-					<div class="flex commonPics" v-show ="detail.HAS_PICTURE=='1'?true:false">
+
+					<div class="flex commonPics" v-show="detail.HAS_PICTURE=='1'?true:false">
 						<div class="commonPicsItem">
 							<img :src="detail.REPLY_IMG1" v-if="detail.REPLY_IMG1" class="contain" alt="" />
 						</div>
@@ -117,9 +124,9 @@
 						</div>
 						<div class="commonPicsItem">
 							<img :src="detail.REPLY_IMG3" v-if="detail.REPLY_IMG3" class="contain" alt="" />
-						</div>					
+						</div>
 					</div>
-					
+
 				</div>
 				<!--回复-->
 				<ul class="recommont" v-if="detail.REPLY_CONTENT || detail.REVIEW_AGAIN_CONTENT">
@@ -132,25 +139,25 @@
 					</li>
 
 					<li v-if="detail.REVIEW_AGAIN_CONTENT">
-						<div class="flex cm_name" >
+						<div class="flex cm_name">
 							<p class="f1">{{detail.MEMBER_NIKENAME}}:</p>
 							<p class="t_r">{{detail.REVIEW_AGAIN_TIME}}</p>
 						</div>
 						{{detail.REVIEW_AGAIN_CONTENT}}
 					</li>
 				</ul>
-				
+
 				<!--编辑框-->
 				<div class="edietCommonBox">
 					<textarea name="" rows="" cols="" class="edietCommon" v-model="commontext" placeholder="回复："></textarea>
 				</div>
 				<!--提交回复-->
 				<div class="container">
-					<div class="cm_btn" @tap = "_submitCommon">
+					<div class="cm_btn" @tap="_submitCommon">
 						提交回复
 					</div>
 				</div>
-				
+
 			</div>
 
 		</div>
@@ -158,66 +165,66 @@
 		<script src="../../../js/app.js"></script>
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
-		
+
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			mui.init({
-			swipeBack: true
+			 
 
-			})
+			mui.init({
+				swipeBack: true
+
+			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
 						detail: '',
-						commontext:''
+						commontext: ''
 					},
-					created: function() {
+					created: function created() {
 						//							alert(1)
 						app.initHeader();
 					},
-					mounted: function() {
+					mounted: function mounted() {
 						var self = plus.webview.currentWebview();
-						this.detail = self.commonData
-//						console.log(JSON.stringify(self.commonData))
+						this.detail = self.commonData;
+						//						console.log(JSON.stringify(self.commonData))
 					},
 					methods: {
 						/*提交评论回复*/
-						_submitCommon(){
-							if(!this.commontext){
-								plus.nativeUI.alert("请输入评论内容", function(){},'马嘿嘿提醒您');
-								return
+						_submitCommon: function _submitCommon() {
+							if(!this.commontext) {
+								plus.nativeUI.alert("请输入评论内容", function() {}, '马嘿嘿提醒您');
+								return;
 							}
-							var _this = this
-							plus.nativeUI.showWaiting('提交回复中..')
+							var _this = this;
+							plus.nativeUI.showWaiting('提交回复中..');
 							app.ajax(app.baseUrl + '/api/BusiOrderReview/AddReply', {
-									data: {
-										REVIEW_CODE:_this.detail.REVIEW_CODE,
-										REPLY_CONTENT:_this.commontext
-									},
-									// dataType:'json',//服务器返回json格式数据
-									type: 'post', //HTTP请求类型
-									success: function(result) {	
-										plus.nativeUI.closeWaiting()
-										if(result.Success) {
-											plus.nativeUI.toast('回复成功')
-											
-											if(plus.webview.getWebviewById('product_common'))
-											plus.webview.getWebviewById('product_common').evalJS('refresh()') 
-											
-											mui.back()
-										} else {
-											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)										
-										}
+								data: {
+									REVIEW_CODE: _this.detail.REVIEW_CODE,
+									REPLY_CONTENT: _this.commontext
+								},
+								// dataType:'json',//服务器返回json格式数据
+								type: 'post', //HTTP请求类型
+								success: function success(result) {
+									plus.nativeUI.closeWaiting();
+									if(result.Success) {
+										plus.nativeUI.toast('回复成功');
+
+										if(plus.webview.getWebviewById('product_common')) plus.webview.getWebviewById('product_common').evalJS('refresh()');
+
+										mui.back();
+									} else {
+										/*验证失败*/
+										plus.nativeUI.toast(result.Msg);
 									}
-								});
-						},
-						
+								}
+							});
+						}
 					}
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

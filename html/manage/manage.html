@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -39,7 +38,7 @@
 			
 			.quickMenus {
 				box-sizing: border-box;
-				padding: 0 ;
+				padding: 0;
 			}
 			
 			.quickMenus .menuPic {
@@ -96,15 +95,15 @@
 				<div class="account flex" id="content">
 					<div class="f1">
 						<h3 class="cor_w container allmaney">￥{{account}}</h3>
-						<p class="cor_g container">小草值：{{score}}  <span class="fr" @tap="_navigate()">查看积分明细<span class="mui-icon mui-icon-arrowright fs16"></span></span> </p>
+						<p class="cor_g container">小草值：{{score}} <span class="fr" @tap="_navigate()">分销积分<span class="mui-icon mui-icon-arrowright fs16"></span></span>
+						</p>
 					</div>
 					<!--<img src="../../images/logo3.png" alt="" class="bg" />-->
 
-					
 				</div>
 				<!--便捷按钮-->
 				<div class="quickBtns flex panel main">
-					<div class="f1 flex quickMenus " >
+					<div class="f1 flex quickMenus ">
 						<div href="./deposit.html" hid="deposit" class="flex naviTitle">
 							<img src="../../images/m4.png" alt="" class="menuPic" />
 							<p class="menuTxt f1">账户提现</p>
@@ -124,43 +123,43 @@
 						其他功能
 					</div>
 					<ul class="flex otherMenus">
-						<li class="menus " >
+						<li class="menus ">
 							<div href="./production/production.html" hid="production" class="navigate">
 								<i class="iconfont icon-similarproduct menusIcon cor_g"></i>
 								<p class="t_c fs12">作品管理</p>
 							</div>
 						</li>
-						<li class="menus " >
+						<li class="menus ">
 							<div href="./time/time.html" hid="time" class="naviTitle">
 								<i class="iconfont icon-shijian menusIcon cor_g"></i>
 								<p class="t_c fs12">时间管理</p>
 							</div>
 						</li>
-						<li class="menus " >
+						<li class="menus ">
 							<div href="./orders/orders.html" hid="orders" class="navigate">
 								<i class="iconfont icon-fuzhi menusIcon cor_g"></i>
 								<p class="t_c fs12">订单管理</p>
 							</div>
 						</li>
-						<li class="menus " >
+						<li class="menus ">
 							<div href="./comment/comment.html" hid="comment" class="naviTitle">
 								<i class="iconfont icon-bianji menusIcon cor_g"></i>
 								<p class="t_c fs12">评价管理</p>
 							</div>
 						</li>
-						<li class="menus " >
+						<li class="menus ">
 							<div href="./refillcard/refillcard.html" hid="refillcard" class="naviTitle">
 								<i class="iconfont icon-huiyuanqia menusIcon cor_g"></i>
 								<p class="t_c fs12">充值卡管理</p>
 							</div>
 						</li>
-						<li class="menus " >
+						<li class="menus ">
 							<div href="./coupons/coupons.html" hid="coupons" class="naviTitle">
 								<i class="iconfont icon-qiaquan menusIcon cor_g"></i>
 								<p class="t_c fs12">优惠券管理</p>
 							</div>
 						</li>
-						<li class="menus " >
+						<li class="menus ">
 							<div href="./personSet/personSet.html" hid="personSet" class="naviTitle">
 								<i class="iconfont icon-shezhi menusIcon cor_g"></i>
 								<p class="t_c fs12">个人设置</p>
@@ -173,26 +172,26 @@
 							</a>
 						</li>-->
 
-						<li class="menus " >
+						<li class="menus ">
 							<div href="./share/share.html" hid="share" class="naviTitle">
 								<i class="iconfont icon-geren menusIcon cor_g"></i>
 								<p class="t_c fs12">店铺分享</p>
 							</div>
 						</li>
-						<li class="menus " >
-							 <a href="../../rules.html" hid="rules" class="naviTitle"> 
+						<li class="menus ">
+							<a href="../../rules.html" hid="rules" class="naviTitle">
 								<i class="iconfont icon-xinxi menusIcon cor_g"></i>
 								<p class="t_c fs12">商户须知</p>
-							 </a> 
+							</a>
 						</li>
-						<li class="menus " id="kefu" >
-							<div href="./kefu.html" hid="kefu"  class="naviTitle">
+						<li class="menus " id="kefu">
+							<div href="./kefu.html" hid="kefu" class="naviTitle">
 								<i class="iconfont icon-service1 menusIcon cor_g"></i>
 								<p class="t_c fs12">平台客服</p>
 							</div>
 						</li>
-						
-						<li class="menus " >
+
+						<li class="menus ">
 							<div href="./banks/banks.html" hid="banks" class="naviTitle">
 								<i class="iconfont icon-bangdingyinhangqia   menusIcon cor_g"></i>
 								<p class="t_c fs12">银行卡管理</p>
@@ -213,24 +212,26 @@
 			</div>
 		</div>
 		<script src="../../js/mui.min.js"></script>
-	
+
 		<script src="../../js/app.js"></script>
 		<script src="../../js/vue.js"></script>
 		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			var APP ;
+			 
+
+			var APP;
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				app.initHeader();
-				 APP = new Vue({
+				APP = new Vue({
 					el: '#content',
 					data: {
 						account: '',
 						score: '',
-						num:''
+						num: ''
 					},
-					mounted() {
-						var _this = this
+					mounted: function mounted() {
+						var _this = this;
 						//							this._getData()
 						mui.init({
 							swipeBack: false,
@@ -243,116 +244,119 @@
 									range: '100px', //可选 默认100px,控件可下拉拖拽的范围
 									offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
 									auto: false, //可选,默认false.首次加载自动上拉刷新一次
-									callback: () => {
+									callback: function callback() {
 										//										alert(2)
-										_this._getData(() => {
-											mui.later(() => {
+										_this._getData(function() {
+											mui.later(function() {
 												mui('#app').pullRefresh().endPulldown();
-											}, 1000)
-										})
+											}, 1000);
+										});
 									} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 								}
 							}
 						});
-						
-						this._getData()
+
+						this._getData();
 						mui('.main').on('tap', '.navigate', function() {
-							let desturl = this.getAttribute('href')
-							let destid = this.getAttribute('hid')
+							var desturl = this.getAttribute('href');
+							var destid = this.getAttribute('hid');
 							if(!desturl || desturl.length == 0 || desturl == '#' || !destid) {
-								return false
-							}							
-							let exa = {
-									account: _this.account,
-									num:_this.num
-								}
-							let option = {
-								showTitle:false,
-								createNew:true,
-								autoWaiting:false
+								return false;
 							}
-							app.navigater(desturl,destid,exa,option)
+							var exa = {
+								account: _this.account,
+								num: _this.num
+							};
+							var option = {
+								showTitle: false,
+								createNew: true,
+								autoWaiting: false
+							};
+							app.navigater(desturl, destid, exa, option);
 						});
-						
+
 						mui('.main').on('tap', '.naviTitle', function() {
-							let desturl = this.getAttribute('href')
-							let destid = this.getAttribute('hid')
-							let exa = {
-									account: _this.account,
-									num:_this.num
-								}
-							let option = {
-								showTitle:true,
-								autoWaiting:false
-							}
-							app.navigater(desturl,destid,exa,option)
-						})
+							var desturl = this.getAttribute('href');
+							var destid = this.getAttribute('hid');
+							var exa = {
+								account: _this.account,
+								num: _this.num
+							};
+							var option = {
+								showTitle: true,
+								autoWaiting: false
+							};
+							app.navigater(desturl, destid, exa, option);
+						});
 					},
+
 					methods: {
 						/*跳转页面*/
-						_toKEFU(){
-							
-							let desturl = 'https://www.sobot.com/chat/h5/index.html?sysNum=053184bbe2174048b2dbc1df8f498c23'
-							let destid = 'kefu11'
-							let exa = {}
-							let option = {
-								showTitle:true,
-								autoWaiting:false,
-								splitLine_color:'#e6be65',
-								progress_color:'#fff',
-								title_bacground:"#ccaa42",
-								
-							}
-							app.navigater(desturl,destid,exa,option)
+						_toKEFU: function _toKEFU() {
+
+							var desturl = 'https://www.sobot.com/chat/h5/index.html?sysNum=053184bbe2174048b2dbc1df8f498c23';
+							var destid = 'kefu11';
+							var exa = {};
+							var option = {
+								showTitle: true,
+								autoWaiting: false,
+								splitLine_color: '#e6be65',
+								progress_color: '#fff',
+								title_bacground: "#ccaa42"
+
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*加载数据*/
-						_getData(callback) {
-//							plus.nativeUI.toast('欢迎登陆')
-							var _this = this
+						_getData: function _getData(callback) {
+							//							plus.nativeUI.toast('欢迎登陆')
+							var _this = this;
 							app.ajax(app.baseUrl + '/api/BusiAccount/GetAccountInfo', {
 								//							data: Info,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									/*登陆成功*/
 									if(result.Success) {
 										_this.account = result.Data.SHOP.SHOP_AMOUNT;
 										_this.score = result.Data.SHOP.INTEGRAL;
-										_this.num = result.Data.ACCOUNT_MOBILE
+										_this.num = result.Data.ACCOUNT_MOBILE;
 										if(callback) callback();
 									} else {
 										/*验证失败*/
-										if(callback) callback(false, result.Msg)
+										if(callback) callback(false, result.Msg);
 									}
 								}
 							});
 						},
+
 						/*刷新数据*/
-						_refreshfn() {
-//															alert(1)
-							plus.nativeUI.showWaiting()
-							this._getData(() => {
-								mui.later(() => {
-									plus.nativeUI.closeWaiting()
-								}, 1500)
-							})
+						_refreshfn: function _refreshfn() {
+							//															alert(1)
+							plus.nativeUI.showWaiting();
+							this._getData(function() {
+								mui.later(function() {
+									plus.nativeUI.closeWaiting();
+								}, 1500);
+							});
 						},
-						_navigate(){
-//							alert(1)
-							let desturl = './scores.html'
-							let destid = 'scores'
-							let exa = {}
-							let option = {
-								showTitle:true
-							}
-							app.navigater(desturl,destid,exa,option)	
+						_navigate: function _navigate() {
+							//							alert(1)
+							var desturl = './scores.html';
+							var destid = 'scores';
+							var exa = {};
+							var option = {
+								showTitle: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						}
-						
 					}
-				})
+				});
 			});
-			function initPage(){
-				APP._getData(()=>{})
+
+			function initPage() {
+				APP._getData(function() {});
 			}
 		</script>
 	</body>

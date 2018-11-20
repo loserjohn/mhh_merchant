@@ -33,7 +33,7 @@
 			
 			.invitationAvator {
 				width: 40px;
-				height:40px;
+				height: 40px;
 				border-radius: 4px;
 				margin-right: 15px;
 			}
@@ -50,11 +50,12 @@
 				color: #c4c4c4;
 				vertical-align: middle;
 			}
-			.labels i{
+			
+			.labels i {
 				font-size: 14px;
 				color: #c4c4c4;
-				
 			}
+			
 			.invitation_footer .labels.active,
 			.invitation_footer .labels.active i {
 				color: #ccaa42;
@@ -129,7 +130,7 @@
 					<div class="bg"></div>
 					<ul class="invitationsBox ">
 						<li class="panel2 invitation" v-for="item  in list">
-							<div v-if="item.type==0" >
+							<div v-if="item.type==0">
 								<div class="flex invitation_title">
 									<img src="../../images/mhh_avator.png" class="invitationAvator" alt="" />
 									<div class="f1">
@@ -171,7 +172,7 @@
 								</div>
 							</div>
 							<!--图片贴-->
-							<div v-else-if="item.type==1" >
+							<div v-else-if="item.type==1">
 								<div class="flex invitation_title">
 									<img src="../../images/mhh_avator.png" class="invitationAvator" alt="" />
 									<div class="f1">
@@ -209,7 +210,7 @@
 										<div class="fr labels" :class="{active:item.isGood}">
 											<i class="iconfont icon-zan cor_g"></i> 点赞{{item.goods}}
 										</div>
-	
+
 									</div>
 								</div>
 							</div>
@@ -261,10 +262,12 @@
 		<script src="../../js/vue.js"></script>
 		<script src="../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			var APP;
 			mui.plusReady(function() {
-				var self = plus.webview.currentWebview()
-				app.WXinit(CryptoJS)
+				var self = plus.webview.currentWebview();
+				app.WXinit(CryptoJS);
 				//自定义监听图标点击事件
 				APP = new Vue({
 					el: '#app',
@@ -274,12 +277,11 @@
 						list: [],
 						index: 1
 					},
-					created: function() {
+					created: function created() {
 						app.initHeader();
-
 					},
-					mounted: function() {
-						var _this = this
+					mounted: function mounted() {
+						var _this = this;
 						mui.init({
 							swipeBack: false,
 							pullRefresh: {
@@ -289,15 +291,13 @@
 									auto: true, //可选,默认false.自动上拉加载一次
 									contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
 									contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
-									callback: function() {
-//								alert(1)										
+									callback: function callback() {
+										//								alert(1)										
 										_this._getData(_this.index, function(b) {
-											if(b) {
-												
-											}
+											if(b) {}
 											mui('#app').pullRefresh().endPullupToRefresh(b);
 											mui('#app').pullRefresh().endPulldown(b);
-										})
+										});
 									} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 								},
 								down: {
@@ -307,25 +307,24 @@
 									range: '100px', //可选 默认100px,控件可下拉拖拽的范围
 									offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
 									auto: false, //可选,默认false.首次加载自动上拉刷新一次
-									callback: function() {
+									callback: function callback() {
 
 										_this.list = [];
 										_this.index = 1;
 										_this._getData(_this.index, function(b) {
 											mui('#app').pullRefresh().endPulldown(b);
 											mui('#app').pullRefresh().endPullupToRefresh();
-										})
-
+										});
 									} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 								}
 							}
 						});
 					},
 					methods: {
-//						举报
-						_report(){
-							plus.nativeUI.confirm('由于该资讯涉及非法内容,您将向马嘿嘿平台举报该条资讯',(e)=>{
-								if(e.index==0){
+						//						举报
+						_report: function _report() {
+							plus.nativeUI.confirm('由于该资讯涉及非法内容,您将向马嘿嘿平台举报该条资讯', function(e) {
+								if(e.index == 0) {
 									plus.nativeUI.showWaiting();
 									mui.ajax(app.baseUrl + '/api/Recommend/GetRecommendTypes', {
 										type: 'get', //HTTP请求类型
@@ -333,38 +332,36 @@
 										headers: {
 											'Content-Type': 'application/x-www-form-urlencoded'
 										},
-										success: function(result) {
-											mui.later(()=>{
-												plus.nativeUI.closeWaiting()
+										success: function success(result) {
+											mui.later(function() {
+												plus.nativeUI.closeWaiting();
 												if(result.Success) {
-													plus.nativeUI.toast('您的检举信息已经提交')
+													plus.nativeUI.toast('您的检举信息已经提交');
 												} else {
 													/*验证失败*/
 												}
-											},1000)
-											
+											}, 1000);
 										},
-										error: function(xhr, type, errorThrown) {
-
-										}
-									})
+										error: function error(xhr, type, errorThrown) {}
+									});
 								}
-							},'马嘿嘿提醒您')
+							}, '马嘿嘿提醒您');
 						},
+
 						/*获取数据*/
-						_getData(index, callback) {
+						_getData: function _getData(index, callback) {
 							//							alert(0)
-							var _this = this
+							var _this = this;
 							var data = {
 								pageIndex: index,
-								pageSize:5
-							}
+								pageSize: 5
+							};
 
 							app.ajax(app.baseUrl + '/api/Info/GetBusiMhhCmsList', {
 								data: data,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'post', //HTTP请求类型								
-								success: function(result) {
+								success: function success(result) {
 									//plus.nativeUI.closeWaiting()
 									if(result.Success) {
 										var l = _this.list.length;
@@ -372,7 +369,7 @@
 
 										if(_this.list.length == l) {
 											if(callback) callback(true);
-											return
+											return;
 										}
 										_this.index += 1;
 										if(callback) callback(false);
@@ -383,21 +380,21 @@
 								}
 							});
 						},
+
 						/*跳转至帖子的详情页*/
-						_toDetail(item) {
-							let desturl = './community_detail.html'
-							let destid = 'community_detail'
-							let exa = {
+						_toDetail: function _toDetail(item) {
+							var desturl = './community_detail.html';
+							var destid = 'community_detail';
+							var exa = {
 								detail: item
-							}
-							let option = {
-								showTitle:true
-							}
-							app.navigater(desturl,destid,exa,option)
-						
+							};
+							var option = {
+								showTitle: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						}
 					}
-				})
+				});
 			});
 		</script>
 	</body>

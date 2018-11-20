@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/loading.css" />
-		
+
 		<style>
 			.btns {
 				margin-top: 15px;
@@ -73,7 +73,7 @@
 				border: none;
 				outline: none;
 				padding: 0;
-				min-height:60px;
+				min-height: 60px;
 			}
 			
 			.msgBox .cellInputTxt select {
@@ -154,7 +154,7 @@
 							<div class="flex reset ">
 								<div class="f1 mui-input-row mui-radio mui-left reset ">
 									<label>正常时限优惠</label>
-									<input name="radio" type="radio" v-model="couponsType" :value="1" >
+									<input name="radio" type="radio" v-model="couponsType" :value="1">
 								</div>
 								<div class="f1 mui-input-row mui-radio mui-left reset ">
 									<label>领取后时限优惠</label>
@@ -164,7 +164,7 @@
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName ">适用类型</div>
-							<select v-model="couponsClass" class=" t_r red reset seletBox" >
+							<select v-model="couponsClass" class=" t_r red reset seletBox">
 								<option disabled value="">请选择</option>
 								<option v-for="item in typeList" :value="item.Text" :key="item.Value">{{item.Text}}</option>
 							</select>
@@ -259,14 +259,16 @@
 		<script src="../../../js/app.js"></script>
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
-				<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
+			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
@@ -281,30 +283,30 @@
 						couponsEnabled: false, //是否启用
 
 						couponsDetail: '', //券细节
-//						couponsEXplain: '', //券说明
+						//						couponsEXplain: '', //券说明
 						couponsRepet: false, //重复领取
-						couponsClass:'',
-						typeList:[] //类型数组
+						couponsClass: '',
+						typeList: [] //类型数组
 					},
-					created: function() {
+					created: function created() {
 						//							alert(1)
 
 					},
-					mounted: function() {
-						document.getElementById('loader').style.display='none'
-						var _this = this
+					mounted: function mounted() {
+						document.getElementById('loader').style.display = 'none';
+						var _this = this;
 						app.ajax(app.baseUrl + '/api/ProjectType/GetListPorjectType', {
 							// dataType:'json',//服务器返回json格式数据
 							type: 'get', //HTTP请求类型
 							timeout: 10000, //超时时间设置为10秒；
 							headers: {
-								'Content-Type': 'application/x-www-form-urlencoded',
+								'Content-Type': 'application/x-www-form-urlencoded'
 							},
-							success: function(result) {
+							success: function success(result) {
 								/*赋值*/
 								_this.typeList = result;
 							},
-							error: function(xhr, type, errorThrown) {
+							error: function error(xhr, type, errorThrown) {
 								//异常处理；
 								console.log(type);
 							}
@@ -312,45 +314,46 @@
 					},
 					methods: {
 						//						选择起始时间
-						_setStartTime() {
+						_setStartTime: function _setStartTime() {
 							var d = new Date();
 							var _this = this;
 
 							var option = {
 								title: '请选择起始时间',
 								minDate: d
-							}
+							};
 							if(this.endTime) {
 								var date = this.endTime.replace(/-/g, '/');
 								var x = new Date(date);
-								option.maxDate = x
+								option.maxDate = x;
 							}
 							plus.nativeUI.pickDate(function(e) {
 								var d = e.date;
-								_this.startTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+								_this.startTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 							}, function(e) {
 								//								console.log("未选择日期：" + e.message);
 
 							}, option);
 						},
+
 						//			选择结束时间
-						_setEndTime() {
+						_setEndTime: function _setEndTime() {
 							var d = new Date();
 							var _this = this;
 
 							var option = {
 								title: '请选择起始时间',
 								minDate: d
-							}
+							};
 							if(this.startTime) {
 								var date = this.startTime.replace(/-/g, '/');
 								var m = new Date(date);
-								option.minDate = m
+								option.minDate = m;
 							}
 
 							plus.nativeUI.pickDate(function(e) {
 								var d = e.date;
-								_this.endTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+								_this.endTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 							}, function(e) {
 								//								console.log("未选择日期：" + e.message);
 
@@ -358,86 +361,82 @@
 						},
 
 						/*更新信息*/
-						_updatedMsg(key) {
+						_updatedMsg: function _updatedMsg(key) {
 							switch(key) {
 								case 3:
-									this.couponsRepet = !this.couponsRepet
+									this.couponsRepet = !this.couponsRepet;
 									break;
 								default:
 									break;
 							}
-
 						},
+
 						/*提交添加*/
-						_submit() {
+						_submit: function _submit() {
 							if(!this.couponsName || !this.startTime || !this.endTime || !this.couponsAmount || !this.couponsSill || !this.couponsDetail) {
 								plus.nativeUI.alert("请完善优惠券资料信息", function() {}, "马嘿嘿提醒您", "ok");
 								return;
 							}
-							var _this =this;
-							var data ={
-								DISCOUNT_NAME:this.couponsName,
-								DISCOUNT_AMOUNT:this.couponsAmount,
-								DISCOUNT_LIMIT:this.couponsSill,
-								DISCOUNT_LIFE_START:this.startTime,
-								DISCOUNT_LIFE_END:this.endTime,
-								DISCOUNT_DETAILS:this.couponsDetail,
-								DISCOUNT_TYPE:this.couponsType,
-								IS_REPEAT:this.couponsRepet?'1':'0',
-								DISCOUNT_PROJECT_TYPE:this.couponsClass
-							}
-//							console.log(JSON.stringify(data))
-							/*若为类型二则有效期为必填*/
-							if(this.couponsType==2){
-								if(!this.couponsValidity ){
+							var _this = this;
+							var data = {
+								DISCOUNT_NAME: this.couponsName,
+								DISCOUNT_AMOUNT: this.couponsAmount,
+								DISCOUNT_LIMIT: this.couponsSill,
+								DISCOUNT_LIFE_START: this.startTime,
+								DISCOUNT_LIFE_END: this.endTime,
+								DISCOUNT_DETAILS: this.couponsDetail,
+								DISCOUNT_TYPE: this.couponsType,
+								IS_REPEAT: this.couponsRepet ? '1' : '0',
+								DISCOUNT_PROJECT_TYPE: this.couponsClass
+								//							console.log(JSON.stringify(data))
+								/*若为类型二则有效期为必填*/
+							};
+							if(this.couponsType == 2) {
+								if(!this.couponsValidity) {
 									plus.nativeUI.alert("请完填写有效天数", function() {}, "马嘿嘿提醒您", "ok");
-									return;								
+									return;
 								}
-								data.DISCOUNT_LIFE = this.couponsValidity
+								data.DISCOUNT_LIFE = this.couponsValidity;
 							}
-							
+
 							/*判断是否启用*/
-							if(this.couponsEnabled==1){
-								data.DISCOUNT_STATUS = 2
-							}else{
-								data.DISCOUNT_STATUS = 0
+							if(this.couponsEnabled == 1) {
+								data.DISCOUNT_STATUS = 2;
+							} else {
+								data.DISCOUNT_STATUS = 0;
 							}
-//							console.log(JSON.stringify(data))							
-							
-							plus.nativeUI.showWaiting('提交中...')
+							//							console.log(JSON.stringify(data))							
+
+							plus.nativeUI.showWaiting('提交中...');
 							app.ajax(app.baseUrl + '/api/BusiDiscount/CreateDiscount', {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
 								type: 'post', //HTTP请求类型
-								success: function(result) {
-						
-									
-									if(result.Success) {
-										
-										var msg = "添加成功";
-										mui.later(()=>{
-											plus.nativeUI.closeWaiting()
-											plus.webview.getWebviewById('coupons').evalJS('refresh()')
-											plus.nativeUI.alert(msg, function() {																					
-												mui.back()
-											}, "马嘿嘿提醒您", "ok");
-										},1500)
-										
-										/*还原数据*/										
-									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-										console.log(result.Msg)
-									}
+								success: function success(result) {
 
+									if(result.Success) {
+
+										var msg = "添加成功";
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
+											plus.webview.getWebviewById('coupons').evalJS('refresh()');
+											plus.nativeUI.alert(msg, function() {
+												mui.back();
+											}, "马嘿嘿提醒您", "ok");
+										}, 1500);
+
+										/*还原数据*/
+									} else {
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
+										console.log(result.Msg);
+									}
 								}
 							});
-							
 						}
-
 					}
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

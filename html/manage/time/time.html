@@ -129,6 +129,8 @@
 		<script src="../../../js/vue.js"></script>
 		<!--<script src="../../../js/bscroll.min.js"></script>-->
 		<script type="text/javascript">
+			 
+
 			(function() {
 				mui.init({
 					swipeBack: true
@@ -143,7 +145,7 @@
 							nextMount: [],
 							nowTime: ''
 						},
-						created: function() {
+						created: function created() {
 							//							赋值当前日期信息							
 							var n = new Date();
 							var year = n.getFullYear();
@@ -168,11 +170,11 @@
 								//								当月的天数
 								c_fullday: new Date(year, mount, 0).getDate(),
 								//								下个月的总天数
-								n_fullday: new Date(year, mount + 1, 0).getDate(),
-							}
-							this.nowTime = nt
+								n_fullday: new Date(year, mount + 1, 0).getDate()
+							};
+							this.nowTime = nt;
 						},
-						mounted: function() {
+						mounted: function mounted() {
 							var c_arr = [];
 							var n_arr = [];
 							var s_week = this.nowTime.s_week;
@@ -186,19 +188,19 @@
 							//							当月
 							for(i = 0; i < 35; i++) {
 								if(i < s_week) {
-									c_arr.push('')
-								} else if(i < (c_fullday + s_week)) {
+									c_arr.push('');
+								} else if(i < c_fullday + s_week) {
 									c_arr.push({
 										text: d,
 										date: new Date(this.nowTime.y, this.nowTime.m - 1, d).getTime()
 									});
-									d++
+									d++;
 								} else {
 									c_arr.push({
 										text: d - c_fullday,
 										date: new Date(this.nowTime.y, this.nowTime.m, d - c_fullday).getTime()
 									});
-									d++
+									d++;
 								}
 							}
 							this.curMount = c_arr;
@@ -211,35 +213,35 @@
 										n_arr.push({
 											text: d - c_fullday,
 											date: new Date(this.nowTime.y, this.nowTime.m, d - c_fullday).getTime()
-										})
-										d++
+										});
+										d++;
 									} else {
 										//										n_arr.push(d)
 										n_arr.push({
 											text: d,
 											date: new Date(this.nowTime.y, this.nowTime.m - 1, d).getTime()
-										})
-										d++
+										});
+										d++;
 									}
-								} else if((d - c_fullday) < n_fullday) {
+								} else if(d - c_fullday < n_fullday) {
 									//									n_arr.push(d-c_fullday);
 									n_arr.push({
 										text: d - c_fullday,
-										date: (new Date(this.nowTime.y, this.nowTime.m, d - c_fullday)).getTime()
-									})
-									d++
+										date: new Date(this.nowTime.y, this.nowTime.m, d - c_fullday).getTime()
+									});
+									d++;
 								} else {
 									n_arr.push('');
 								}
 							}
 							this.nextMount = n_arr;
 							this.loader = false;
-							document.getElementById('loader').style.display = 'none'
+							document.getElementById('loader').style.display = 'none';
 						},
 						methods: {
 							//							
 							//							判断样式
-							_enbleData(d) {
+							_enbleData: function _enbleData(d) {
 
 								if(!d) return false;
 								var min_t = new Date(this.nowTime.y, this.nowTime.m - 1, this.nowTime.d).getTime();
@@ -248,35 +250,32 @@
 								max_t.setDate(max_t.getDate() + 29);
 
 								if(min_t <= d && d <= max_t) {
-									return true
+									return true;
 								} else {
-									return false
+									return false;
 								}
-
 							},
+
 							//							跳转日期详情
-							_jumpDateDetail(t, date) {
+							_jumpDateDetail: function _jumpDateDetail(t, date) {
 								if(!date) return false;
 								if(!t) return false;
-								let desturl = './time_set.html'
-								let destid = 'time_set'
-								let exa = {
+								var desturl = './time_set.html';
+								var destid = 'time_set';
+								var exa = {
 									date: date
-								}
+								};
 
-								let td = new Date(date);
-								var today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate()
+								var td = new Date(date);
+								var today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate();
 
-								let option = {
+								var option = {
 									showTitle: true
-								}
-								app.navigater(desturl, destid, exa, option)
-
-							
+								};
+								app.navigater(desturl, destid, exa, option);
 							}
 						}
-					})
-
+					});
 				});
 			})();
 		</script>

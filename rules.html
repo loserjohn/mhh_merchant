@@ -131,10 +131,12 @@
 		<script src="./js/mui.min.js"></script>
 		<script src="./js/vue.js"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
-				swipeBack: true,
+				swipeBack: true
 			});
-			var APP
+			var APP;
 			mui.plusReady(function() {
 
 				APP = new Vue({
@@ -142,17 +144,12 @@
 					data: {
 						showType: 0
 					},
-					created: function() {
-						var self = plus.webview.currentWebview()
-
+					created: function created() {
+						var self = plus.webview.currentWebview();
 					},
 
-					mounted: function() {
-
-					},
-					methods: {
-
-					}
+					mounted: function mounted() {},
+					methods: {}
 				});
 			});
 		</script>

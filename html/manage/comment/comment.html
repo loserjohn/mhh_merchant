@@ -328,12 +328,14 @@
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
-			var APP
+			});
+			var APP;
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				APP = new Vue({
 					el: '#app',
 					data: {
@@ -342,38 +344,32 @@
 						scroll: '',
 						message: '',
 						note: '加载更多',
-						commonList: [{},
-							{
-								index: 1,
-								list: [],
-								norest: false
-							},
-							{
-								index: 1,
-								list: [],
-								norest: false
-							},
-							{
-								index: 1,
-								list: [],
-								norest: false
-							},
-							{
-								index: 1,
-								list: [],
-								norest: false
-							}
-						],
+						commonList: [{}, {
+							index: 1,
+							list: [],
+							norest: false
+						}, {
+							index: 1,
+							list: [],
+							norest: false
+						}, {
+							index: 1,
+							list: [],
+							norest: false
+						}, {
+							index: 1,
+							list: [],
+							norest: false
+						}],
 						timeScore: 5,
 						skillScore: 5,
 						serverScore: 5
 					},
-					created: function() {
-					},
-					mounted: function() {
-						var _this = this
+					created: function created() {},
+					mounted: function mounted() {
+						var _this = this;
 
-						var scroll = this.$refs.scroll
+						var scroll = this.$refs.scroll;
 						this.$nextTick(function() {
 							//							初始化scrool
 							/*竖向下拉刷新*/
@@ -390,86 +386,83 @@
 										threshold: 50,
 										stop: 0
 									}
-								})
+								});
 							} else {
 								_this.scroll.refresh();
 							};
 							/*下拉刷新*/
 							_this.scroll.on('pullingDown', function(e) {
-								_this._refresh()
-							})
+								_this._refresh();
+							});
 							_this.scroll.on('pullingUp', function(e) {
-								_this._getData((b) => {
-									if(b) {
-
-									} else {
-										_this.scroll.finishPullUp()
-
+								_this._getData(function(b) {
+									if(b) {} else {
+										_this.scroll.finishPullUp();
 									}
-								})
-							})
-						})
+								});
+							});
+						});
 						this._initScore();
 
-						this._getData((b) => {
-							if(b) {
-
-							} else {
-								_this.scroll.finishPullUp()
-
+						this._getData(function(b) {
+							if(b) {} else {
+								_this.scroll.finishPullUp();
 							}
-						})
-						this.tabTop = 88 + 'px'
+						});
+						this.tabTop = 88 + 'px';
 					},
 					methods: {
 						//							获取店铺评分
-						_initScore() {
-							var _this = this
+						_initScore: function _initScore() {
+							var _this = this;
 							app.ajax(app.baseUrl + '/api/BusiAccount/GetAccountInfo', {
 								//									data: data,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
 
-								success: function(result) {
+								success: function success(result) {
 
 									if(result.Success) {
-										_this.timeScore = result.Data.SHOP.PUNCTUAL_POINT
-										_this.skillScore = result.Data.SHOP.SKILL_POINT
-										_this.serverScore = result.Data.SHOP.SEVICE_POINT
+										_this.timeScore = result.Data.SHOP.PUNCTUAL_POINT;
+										_this.skillScore = result.Data.SHOP.SKILL_POINT;
+										_this.serverScore = result.Data.SHOP.SEVICE_POINT;
 									} else {
 										/*验证失败*/
-										plus.nativeUI.toast(result.Msg)
-
+										plus.nativeUI.toast(result.Msg);
 									}
 								}
 							});
 						},
+
 						//							tab切换
-						_changeTab(key) {
-							this.currtab = parseInt(key)
+						_changeTab: function _changeTab(key) {
+							var _this2 = this;
+
+							this.currtab = parseInt(key);
 							//								this.scroll.scrollTo(0,0,300);
 
 							if(this.commonList[this.currtab].index == 1) {
-								this._getData((b) => {
+								this._getData(function(b) {
 									if(b) {
 										//											this.note = "没有数据了"
 									} else {
-										this.scroll.finishPullUp()
+										_this2.scroll.finishPullUp();
 										//											this.note = "加载更多"
 									}
-								})
+								});
 							} else {
 								if(!this.commonList[this.currtab].norest) {
 									//										该分类还有数据
-									this.scroll.finishPullUp()
+									this.scroll.finishPullUp();
 								}
 								this.scroll.refresh();
-								return
+								return;
 							}
 						},
+
 						/*加载数据*/
-						_getData(callback) {
-							var _this = this
+						_getData: function _getData(callback) {
+							var _this = this;
 							var tabType = this.currtab;
 							var index = this.commonList[tabType].index;
 
@@ -477,14 +470,14 @@
 								pageIndex: index,
 								pageSize: 5,
 								REVIEW_TYPE: tabType
-							}
+							};
 							app.ajax(app.baseUrl + '/api/BusiOrderReview/GetReviewList', {
 								data: data,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
-									mui.later(() => {
-										document.getElementById('loader').style.display = 'none'
+								success: function success(result) {
+									mui.later(function() {
+										document.getElementById('loader').style.display = 'none';
 										if(result.Success) {
 											var l = _this.commonList[tabType].list.length;
 											_this.commonList[tabType].list = _this.commonList[tabType].list.concat(result.Data.ListInfo);
@@ -494,87 +487,79 @@
 												if(callback) callback(true);
 												return;
 											}
-											_this.commonList[tabType].index += 1
+											_this.commonList[tabType].index += 1;
 
 											_this.scroll.refresh();
 											if(callback) callback(false);
-
 										} else {
 											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
-
+											plus.nativeUI.toast(result.Msg);
 										}
-									}, 500)
+									}, 500);
 								}
 							});
 						},
+
 						/*跳转详情*/
-						_jumpDetail(item) {
-							let desturl = './common_detail.html'
-							let destid = 'common_detail'
-							let exa = {commonData: item}
-							let option = {
-								showTitle:true,
-								createNew: true,
-							}
-							app.navigater(desturl,destid,exa,option)
-					
+						_jumpDetail: function _jumpDetail(item) {
+							var desturl = './common_detail.html';
+							var destid = 'common_detail';
+							var exa = {
+								commonData: item
+							};
+							var option = {
+								showTitle: true,
+								createNew: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						//							刷新
-						_refresh() {
-							this.commonList = [{},
-								{
-									index: 1,
-									list: [],
-									norest: false
-								},
-								{
-									index: 1,
-									list: [],
-									norest: false
-								},
-								{
-									index: 1,
-									list: [],
-									norest: false
-								},
-								{
-									index: 1,
-									list: [],
-									norest: false
+						_refresh: function _refresh() {
+							var _this3 = this;
+
+							this.commonList = [{}, {
+								index: 1,
+								list: [],
+								norest: false
+							}, {
+								index: 1,
+								list: [],
+								norest: false
+							}, {
+								index: 1,
+								list: [],
+								norest: false
+							}, {
+								index: 1,
+								list: [],
+								norest: false
+							}];
+							plus.nativeUI.showWaiting();
+							this._getData(function(b) {
+								if(b) {} else {
+									_this3.scroll.finishPullUp();
 								}
-							]
-							plus.nativeUI.showWaiting()
-							this._getData((b) => {
-								if(b) {
-
-								} else {
-									this.scroll.finishPullUp()
-
-								}
-								this.scroll.finishPullDown()
-								plus.nativeUI.closeWaiting()
-							})
-
+								_this3.scroll.finishPullDown();
+								plus.nativeUI.closeWaiting();
+							});
 						},
+
 						/*跳转页面*/
-						_navigateTo(desturl, destid, extras) {
-							let exa = extras
-							let option = {
-								showTitle:false,
+						_navigateTo: function _navigateTo(desturl, destid, extras) {
+							var exa = extras;
+							var option = {
+								showTitle: false,
 								autoShow: false
-							}
-							app.navigater(desturl,destid,exa,option)
-						
+							};
+							app.navigater(desturl, destid, exa, option);
 						}
-
 					}
-				})
-
+				});
 			});
 
 			function refresh() {
-				APP._refresh()
+				APP._refresh();
 			}
 		</script>
 	</body>

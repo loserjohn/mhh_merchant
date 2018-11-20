@@ -153,11 +153,13 @@
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
 			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
@@ -172,14 +174,14 @@
 						enbled: true
 
 					},
-					created: function() {
+					created: function created() {
 
 						var self = plus.webview.currentWebview();
 						var td = new Date(self.date);
-						this.today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate()
+						this.today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate();
 						// alert(this.today )
 					},
-					mounted: function() {
+					mounted: function mounted() {
 						/*初始化数据*/
 						//							alert(this.today)
 						var _this = this;
@@ -188,45 +190,47 @@
 					methods: {
 
 						/*选择效果*/
-						_selectTime(time) {
+						_selectTime: function _selectTime(time) {
 
 							if(time.orderStatus == 3) return; // 被预约的不可选中
 
 							var r = this.selectList.indexOf(time.value);
 							if(r < 0) {
-								return false
+								return false;
 							} else {
-								return true
+								return true;
 							}
 						},
+
 						/*显示样式*/
-						_timeStyle(time) {
-							var r = this.orderList.indexOf(time)
+						_timeStyle: function _timeStyle(time) {
+							var r = this.orderList.indexOf(time);
 
 							if(r < 0) {
-								var re = this.workList.indexOf(time)
+								var re = this.workList.indexOf(time);
 								if(re < 0) {
 									/*休息状态*/
 									return {
 										selectTime: this._selectTime(time)
-									}
+									};
 								} else {
 									/*工作状态*/
 									return {
 										work: true,
 										selectTime: this._selectTime(time)
-									}
+									};
 								}
 							} else {
 								/*已经预约不可改变*/
 								return {
 									hasOrder: true,
 									selectTime: this._selectTime(time)
-								}
+								};
 							}
 						},
+
 						/*提交保存*/
-						_save() {
+						_save: function _save() {
 							var _this = this;
 							if(mui.os.plus) {
 								var a = [{
@@ -245,11 +249,11 @@
 											break;
 										case 1:
 											//设为休息 
-											_this.setDate(2)
+											_this.setDate(2);
 											break;
 										case 2:
 											//设为未预约 
-											_this.setDate(0)
+											_this.setDate(0);
 											break;
 										default:
 											break;
@@ -257,20 +261,21 @@
 								}, false);
 							}
 						},
+
 						/*状态设置*/
-						setDate(t) {
+						setDate: function setDate(t) {
 							var msg = t == 2 ? '休息' : '可预约 ';
 							var _this = this;
 
 							if(this.allDayRest) {
 								//									plus. nativeUI.toast()
 								plus.nativeUI.alert('请先关闭全天休息状态');
-								this.selectList = []
-								return
+								this.selectList = [];
+								return;
 							}
-							console.log(_this.today + _this.selectList.join(','))
-							plus.nativeUI.confirm('确定将选择时段置为' + msg + '？', () => {
-								plus.nativeUI.showWaiting()
+							console.log(_this.today + _this.selectList.join(','));
+							plus.nativeUI.confirm('确定将选择时段置为' + msg + '？', function() {
+								plus.nativeUI.showWaiting();
 								app.ajax(app.baseUrl + '/api/BusiAccount/SetBookingTime', {
 									// dataType:'json',//服务器返回json格式数据
 									data: {
@@ -279,25 +284,26 @@
 										status: t
 									},
 									type: 'post', //HTTP请求类型
-									success: function(result) {
+									success: function success(result) {
 										/*登陆成功*/
-										plus.nativeUI.closeWaiting()
+										plus.nativeUI.closeWaiting();
 										if(result.Success) {
 											plus.nativeUI.toast('成功');
-											_this._getData()
+											_this._getData();
 										} else {
-											plus.nativeUI.toast(result.Msg)
+											plus.nativeUI.toast(result.Msg);
 										}
 									}
 								});
 							}, {
 								title: '马嘿嘿提醒您'
-							})
+							});
 						},
+
 						/*获取当天数据*/
-						_getData() {
-							this.loader = true
-							var _this = this
+						_getData: function _getData() {
+							this.loader = true;
+							var _this = this;
 							this.selectList = [];
 							app.ajax(app.baseUrl + '/api/BusiAccount/GetBookingTimeByDate', {
 								// dataType:'json',//服务器返回json格式数据
@@ -305,73 +311,72 @@
 									date: _this.today
 								},
 								type: 'get', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									_this.loader = false;
-									document.getElementById('loader').style.display = 'none'
+									document.getElementById('loader').style.display = 'none';
 									/*登陆成功*/
-									_this.timeList = result.Data.timeList
+									_this.timeList = result.Data.timeList;
 
-									_this.allDayRest = result.Data.allRestEnbled //当前状态
+									_this.allDayRest = result.Data.allRestEnbled; //当前状态
 
-									_this._allRestEnable()
-
+									_this._allRestEnable();
 								}
 							});
 						},
+
 						//							是否可以全天休息
-						_allRestEnable() {
-							this.timeList.forEach((item, index) => {
+						_allRestEnable: function _allRestEnable() {
+							var _this2 = this;
+
+							this.timeList.forEach(function(item, index) {
 								if(parseInt(item.orderStatus) == 3) {
-									this.enbled = false;
+									_this2.enbled = false;
 									return false;
 								}
-							})
-
+							});
 						},
-						/*设置全天休息*/
-						_allDayRest() {
 
-							var msg = this.allDayRest ? '取消' : '开启'
-							var t = this.allDayRest ? 1 : 0 //1 可预约  2休息
+						/*设置全天休息*/
+						_allDayRest: function _allDayRest() {
+
+							var msg = this.allDayRest ? '取消' : '开启';
+							var t = this.allDayRest ? 1 : 0; //1 可预约  2休息
 							var _this = this;
 
 							//								判断是否可以设置全天休息  只有在 当天不是全天休息状态 并且 当天没有真实预约 才可以 设为全天休息
 							if(!this.enbled && !this.allDayRest) {
-								plus.nativeUI.toast('当天已有客户预约，不可置为全天休息！')
-								return
+								plus.nativeUI.toast('当天已有客户预约，不可置为全天休息！');
+								return;
 							}
 
-							plus.nativeUI.confirm('确定' + msg + '全天休息？', (event) => {
+							plus.nativeUI.confirm('确定' + msg + '全天休息？', function(event) {
 								if(event.index == 0) {
-									plus.nativeUI.showWaiting()
+									plus.nativeUI.showWaiting();
 									app.ajax(app.baseUrl + '/api/BusiAccount/SetBookingDate', {
 										data: {
 											dates: _this.today,
 											status: t
 										},
 										type: 'post', //HTTP请求类型
-										success: function(result) {
+										success: function success(result) {
 											/*成功*/
-											plus.nativeUI.closeWaiting()
+											plus.nativeUI.closeWaiting();
 											if(result.Success) {
 												plus.nativeUI.toast('成功');
 												_this.allDayRest = !_this.allDayRest;
-												_this._getData()
+												_this._getData();
 											} else {
-												alert(result.Msg)
+												alert(result.Msg);
 											}
 										}
 									});
 								}
-
 							}, {
 								title: '马嘿嘿提醒您'
-							})
+							});
 						}
-
 					}
-				})
-
+				});
 			});
 		</script>
 	</body>

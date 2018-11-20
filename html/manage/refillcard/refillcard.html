@@ -153,12 +153,14 @@
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
-			var APP
+			});
+			var APP;
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				APP = new Vue({
 					el: '#app',
 					data: {
@@ -167,32 +169,32 @@
 						cardsList: ''
 					},
 					filters: {
-						getStatus(k) {
+						getStatus: function getStatus(k) {
 							switch(k) {
 								case '0':
-									return '未启用'
+									return '未启用';
 									break;
 								case '1':
-									return '启用中'
+									return '启用中';
 									break;
 								case '2':
-									return '审核中'
+									return '审核中';
 									break;
 								default:
 									break;
 							}
 						}
 					},
-					created: function() {
+					created: function created() {
 						//							alert(1)
 
 					},
-					mounted: function() {
+					mounted: function mounted() {
 
-						var _this = this
+						var _this = this;
 
 						var scroll = this.$refs.scroll;
-						this.scrollTop = 0 + 'px'
+						this.scrollTop = 0 + 'px';
 
 						this.$nextTick(function() {
 							//							初始化scrool
@@ -206,89 +208,87 @@
 										threshold: 50,
 										stop: 20
 									}
-								})
+								});
 							} else {
 								_this.scroll.refresh();
 							};
 							/*下拉刷新*/
 							_this.scroll.on('pullingDown', function(e) {
 
-								plus.nativeUI.showWaiting()
-								_this._getData(() => {
+								plus.nativeUI.showWaiting();
+								_this._getData(function() {
 									plus.nativeUI.closeWaiting();
-									_this.scroll.finishPullDown()
-								})
-
-							})
-						})
+									_this.scroll.finishPullDown();
+								});
+							});
+						});
 
 						/*首次加载数据*/
-						this._getData()
-
+						this._getData();
 					},
 					methods: {
 						/*查看详细*/
-						_toDetail(item) {
-								let desturl = './editCard.html'
-							let destid = 'editCard'
-							let exa = {cardDetail: item}
-							let option = {
+						_toDetail: function _toDetail(item) {
+							var desturl = './editCard.html';
+							var destid = 'editCard';
+							var exa = {
+								cardDetail: item
+							};
+							var option = {
 								createNew: true,
-								showTitle:true
-							}
-							app.navigater(desturl,destid,exa,option)
-							
+								showTitle: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*添加新卡*/
-						_toAddNewCard(item) {
+						_toAddNewCard: function _toAddNewCard(item) {
 							var data = {};
 							if(item) {
 								data = {
 									cardDetail: item
-								}
+								};
 							}
-								let desturl = './addCard.html'
-							let destid = 'addCard'
-							let exa = data
-							let option = {
+							var desturl = './addCard.html';
+							var destid = 'addCard';
+							var exa = data;
+							var option = {
 								createNew: true,
-								showTitle:true
-							}
-							app.navigater(desturl,destid,exa,option)
-			
+								showTitle: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*读取卡列表*/
-						_getData(callback) {
-							var _this = this
+						_getData: function _getData(callback) {
+							var _this = this;
 							app.ajax(app.baseUrl + '/api/BusiRecharge/GetRechargeList', {
 
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
-									mui.later(() => {
-										document.getElementById('loader').style.display = 'none'
+								success: function success(result) {
+									mui.later(function() {
+										document.getElementById('loader').style.display = 'none';
 										if(result.Success) {
-											_this.cardsList = result.Data.ListInfo
+											_this.cardsList = result.Data.ListInfo;
 
 											_this.scroll.refresh();
 											//											 	alert(_this.detail.PROJECT_STATUS)
 											if(callback) callback();
-
 										} else {
 											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
-
+											plus.nativeUI.toast(result.Msg);
 										}
-									}, 500)
+									}, 500);
 								}
 							});
 						}
 					}
-				})
-			})
+				});
+			});
 
 			function refresh() {
-				APP._getData()
+				APP._getData();
 			}
 		</script>
 	</body>

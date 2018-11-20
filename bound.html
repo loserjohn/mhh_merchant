@@ -77,9 +77,11 @@
 		<script src="js/aes.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: false
-			})
+			});
 			app.WXinit(CryptoJS);
 			mui.plusReady(function() {
 				var APP = new Vue({
@@ -98,15 +100,14 @@
 						enables: false,
 						time: 90
 					},
-					created() {
+					created: function created() {},
 
-					},
 					computed: {
-						ctime() {
-							return '(' + this.time + 's)'
+						ctime: function ctime() {
+							return '(' + this.time + 's)';
 						}
 					},
-					mounted() {
+					mounted: function mounted() {
 						this.opId = plus.storage.getItem('opId');
 						this.pic_head = plus.storage.getItem('pic_head');
 						this.petname = plus.storage.getItem('petname');
@@ -119,30 +120,32 @@
 								//软键盘弹起与隐藏  都会引起窗口的高度发生变化
 								var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
 
-								if(resizeHeight * 1 < originalHeight * 1) { //resizeHeight<originalHeight证明窗口被挤压了
+								if(resizeHeight * 1 < originalHeight * 1) {
+									//resizeHeight<originalHeight证明窗口被挤压了
 
 									plus.webview.currentWebview().setStyle({
 										height: originalHeight
 									});
-
 								}
-							}
+							};
 						}
 					},
+
 					methods: {
 						/*注册*/
-						_toregiste() {
-							let desturl = './registe.html'
-							let destid = 'registe'
-							let exa = {}
-							let option = {
+						_toregiste: function _toregiste() {
+							var desturl = './registe.html';
+							var destid = 'registe';
+							var exa = {};
+							var option = {
 								showTitle: true,
 								autoShow: false
-							}
-							app.navigater(desturl, destid, exa, option)
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*绑定成功*/
-						_toBound() {
+						_toBound: function _toBound() {
 							/*号码验证*/
 							if(!this.mobile) {
 								plus.nativeUI.alert("请输入手机号", function() {}, '马嘿嘿提醒您');
@@ -167,7 +170,7 @@
 								type: 2,
 								validate: this.validate,
 								openid: this._Encrypt(this.opId)
-							}
+							};
 							mui.ajax(app.baseUrl + '/api/Authorize/BindWx', {
 								data: data,
 								// dataType:'json',//服务器返回json格式数据
@@ -176,21 +179,24 @@
 								headers: {
 									'Content-Type': 'application/x-www-form-urlencoded'
 								},
-								success: function(result) {
+								success: function success(result) {
 									plus.nativeUI.closeWaiting();
 									if(result.Success) {
 										//											plus.nativeUI.toast('绑定成功！')
-										app._toMain(2)
+										app._toMain(2);
 									} else {}
 								},
-								error: function(xhr, type, errorThrown) {
+								error: function error(xhr, type, errorThrown) {
 									plus.nativeUI.closeWaiting();
-									app.catchErr(type)
+									app.catchErr(type);
 								}
 							});
 						},
+
 						/* 获取验证码 */
-						_getYZM() {
+						_getYZM: function _getYZM() {
+							var _this = this;
+
 							if(this.enables) return;
 							// alert(app.checkPhone(this.mobile))
 							if(!this.mobile || !app.checkPhone(this.mobile)) {
@@ -201,20 +207,21 @@
 							}
 
 							var waiting = plus.nativeUI.showWaiting();
-							app.getValidate(this.mobile, 1, (status, Msg) => {
-								waiting.close()
+							app.getValidate(this.mobile, 1, function(status, Msg) {
+								waiting.close();
 								if(status) {
 									/*开始倒计时*/
-									this._timeMove()
+									_this._timeMove();
 									plus.nativeUI.toast("发送成功");
 								} else {
 									plus.nativeUI.toast(Msg);
 								}
-							})
+							});
 						},
+
 						//							加密
-						_Encrypt(str) {
-							str = str + '|.|' + new Date().getTime()
+						_Encrypt: function _Encrypt(str) {
+							str = str + '|.|' + new Date().getTime();
 							var key = CryptoJS.enc.Utf8.parse(app._KEY);
 							var iv = CryptoJS.enc.Utf8.parse(app._IV);
 							var encrypted = '';
@@ -226,26 +233,30 @@
 							});
 							return encrypted.ciphertext.toString();
 						},
+
 						//							切换密码框
-						_toggleType() {
-							this.toggleType = !this.toggleType
+						_toggleType: function _toggleType() {
+							this.toggleType = !this.toggleType;
 						},
+
 						/*倒计时*/
-						_timeMove() {
+						_timeMove: function _timeMove() {
+							var _this2 = this;
+
 							this.enables = true;
-							var time = setInterval(() => {
-								this.time -= 1;
-								if(this.time == 0) {
-									this.enables = false;
+							var time = setInterval(function() {
+								_this2.time -= 1;
+								if(_this2.time == 0) {
+									_this2.enables = false;
 									clearInterval(time);
-									this.time = 90
+									_this2.time = 90;
 								}
-							}, 1000)
+							}, 1000);
 						}
 					}
 
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

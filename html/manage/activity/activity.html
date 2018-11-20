@@ -36,31 +36,36 @@
 				background: orangered;
 				color: #fff;
 			}
-			.activityPic{
+			
+			.activityPic {
 				position: relative;
 			}
-			.activityPic img{
+			
+			.activityPic img {
 				margin-bottom: -6px;
 			}
-			.timeBox{
+			
+			.timeBox {
 				align-items: center;
 				margin-top: 10px;
 				position: absolute;
 				bottom: 0;
 				left: 0;
-				background: rgba(0,0,0,.5);
+				background: rgba(0, 0, 0, .5);
 				width: 100%;
 				padding: 4px;
 			}
-			.timeBox span{
+			
+			.timeBox span {
 				line-height: 30px;
 			}
-			.timeBox .rest{
+			
+			.timeBox .rest {
 				padding: 0 6px;
 				line-height: 26px;
 				background: #e0c974;
 				color: #fff;
-				margin:  0 4px;
+				margin: 0 4px;
 			}
 		</style>
 	</head>
@@ -85,9 +90,9 @@
 			<div class=" ">
 				<ul class="reset cm_ul ">
 					<li class="panel2 reset" v-for="(item,index) in activeList">
-						<aside class="activityPic" @tap ="_jump(item.ACTIVITY_URL)">
+						<aside class="activityPic" @tap="_jump(item.ACTIVITY_URL)">
 							<img :src="item.ACTIVITY_IMG?item.ACTIVITY_IMG:'../../../images/defaultbanner.jpg'" alt="" class="contain" />
-							<div class="timeBox flex" v-html = "restTimeList[index]" ></div>
+							<div class="timeBox flex" v-html="restTimeList[index]"></div>
 						</aside>
 						<article class="activityTXT flex">
 							<div class="f1">
@@ -96,16 +101,15 @@
 									<span class="cor_r  label">{{item.ACTIVITY_PROJECT_TYPE}} </span>
 								</div>
 								<p>已报名人数：{{item.ACTIVITY_APPLY_COUNT}}人</p>
-								
+
 							</div>
 							<div>
-								<div class="btns"  @tap ="_jump(item.ACTIVITY_URL)">查看详情<span class="mui-icon mui-icon-arrowright fs16"></span></div>
+								<div class="btns" @tap="_jump(item.ACTIVITY_URL)">查看详情<span class="mui-icon mui-icon-arrowright fs16"></span></div>
 								<div class="btns btnYes cor_w " @tap="_toJoin(item.ACTIVITY_CODE,item.ACTIVITY_NAME,item.ACTIVITY_PROJECT_TYPE)">立即参加<span class="mui-icon mui-icon-arrowright fs16"></span></div>
 							</div>
 
 						</article>
 					</li>
-					
 
 					<li v-if="activeList.length==0" class="t_c cm_noItem">
 						<img src="../../../images/no3.png" alt="" />
@@ -122,88 +126,89 @@
 		<script src="../../../js/bscroll.min.js"></script>
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
-			var APP
+			});
+			var APP;
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				APP = new Vue({
 					el: '#app',
 					data: {
 						activeList: [],
-						endTimeList:[],
-						restTimeList:[]
+						endTimeList: [],
+						restTimeList: []
 					},
-					created: function() {},
-					mounted: function() {
+					created: function created() {},
+					mounted: function mounted() {
 
-						var _this = this
+						var _this = this;
 
-						this.scrollTop = 0 + 'px'
+						this.scrollTop = 0 + 'px';
 						/*首次加载数据*/
-						this._getData(()=>{
-							_this.activeList.forEach((item,index)=>{
-								let d = item.ACTIVITY_APPLY_END.split(' ')[0];
-								d = d.replace(/-/g,'/')
-//								console.log(d)
+						this._getData(function() {
+							_this.activeList.forEach(function(item, index) {
+								var d = item.ACTIVITY_APPLY_END.split(' ')[0];
+								d = d.replace(/-/g, '/');
+								//								console.log(d)
 								_this.endTimeList.push(d);
-							})
-							_this._sche()
-						})
+							});
+							_this._sche();
+						});
 					},
 					filters: {
-						getStatus(k) {
+						getStatus: function getStatus(k) {
 							//							优惠券状态0-未启用，1-启用中,2-审核中
 							switch(k) {
 								case '0':
-									return '未启用'
+									return '未启用';
 									break;
 								case '1':
-									return '启用中'
+									return '启用中';
 									break;
 								case '2':
-									return '审核中...'
+									return '审核中...';
 									break;
 								default:
 									break;
 							}
 						},
-						formatTime:{
-							
-						}
+
+						formatTime: {}
 					},
 					methods: {
-//						计算倒计时
-						_sche(){
-							var _this =this
-							setInterval(()=>{
-								_this.restTimeList=[]
-								_this.endTimeList.forEach((item,index)=>{
-//									var d = item.ACTIVITY_APPLY_END
-									let str = app.resttime(item)
-									_this.restTimeList.push(str)
-								})
-							},1000)					
+						//						计算倒计时
+						_sche: function _sche() {
+							var _this = this;
+							setInterval(function() {
+								_this.restTimeList = [];
+								_this.endTimeList.forEach(function(item, index) {
+									//									var d = item.ACTIVITY_APPLY_END
+									var str = app.resttime(item);
+									_this.restTimeList.push(str);
+								});
+							}, 1000);
 						},
+
 						//						参加项目跳转
-						_toJoin(code, name, type) {
-							let desturl = './join.html'
-							let destid = 'join'
-							let exa = {
-									activityId: code,
-									activityType: type
-								}
-							let option = {
-								showTitle:true,
-								autoWaiting:false
-							}
-							app.navigater(desturl,destid,exa,option)
-							
-						
+						_toJoin: function _toJoin(code, name, type) {
+							var desturl = './join.html';
+							var destid = 'join';
+							var exa = {
+								activityId: code,
+								activityType: type
+							};
+							var option = {
+								showTitle: true,
+								autoWaiting: false
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						//						跳转活动页面
-						_jump(str) {
+						_jump: function _jump(str) {
 							// alert(str)
 							var key = str.split('||')[0];
 							var code = str.split('||')[1];
@@ -221,8 +226,8 @@
 											plusrequire: 'ahead',
 											// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
 											titleNView: { // 窗口的标题栏控件
-												type:'transparent',
-												autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+												type: 'transparent',
+												autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
 												titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
 												titleSize: "14px", // 字体大小,默认17px
 												backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
@@ -247,9 +252,9 @@
 										},
 										waiting: {
 											autoShow: false, //自动显示等待框，默认为true
-											title: '正在加载...', //等待对话框上显示的提示内容
+											title: '正在加载...' //等待对话框上显示的提示内容
 										}
-									})
+									});
 
 									break;
 								case 'W':
@@ -264,7 +269,7 @@
 											plusrequire: 'ahead',
 											// 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
 											titleNView: { // 窗口的标题栏控件
-												autoBackButton: true,// 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+												autoBackButton: true, // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
 												titleColor: "#fff", // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
 												titleSize: "14px", // 字体大小,默认17px
 												backgroundColor: "#151515", // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
@@ -289,15 +294,15 @@
 										},
 										waiting: {
 											autoShow: false, //自动显示等待框，默认为true
-											title: '正在加载...', //等待对话框上显示的提示内容
+											title: '正在加载...' //等待对话框上显示的提示内容
 										}
-									})
+									});
 									break;
 								case 'B':
 									//								社区新闻
 									var data = {
 										infoCode: code
-									}
+									};
 									mui.openWindow({
 										url: './html/community_detail.html',
 										id: 'community_detail',
@@ -318,46 +323,44 @@
 										},
 										waiting: {
 											autoShow: false, //自动显示等待框，默认为true
-											title: '正在加载...', //等待对话框上显示的提示内容
+											title: '正在加载...' //等待对话框上显示的提示内容
 										}
-									})
+									});
 
 									break;
 								default:
 									break;
 							}
 						},
+
 						/*获取数据*/
-						_getData(callback) {
-							var _this = this
+						_getData: function _getData(callback) {
+							var _this = this;
 							app.ajax(app.baseUrl + '/api/BusiActivity/GetActivityList', {
 								//									data: data,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								success: function(result) {
-									mui.later(() => {
-										document.getElementById('loader').style.display = 'none'
+								success: function success(result) {
+									mui.later(function() {
+										document.getElementById('loader').style.display = 'none';
 										if(result.Success) {
-											_this.activeList = result.Data.ListInfo
+											_this.activeList = result.Data.ListInfo;
 											if(callback) callback();
-											
-											
 										} else {
 											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
-
+											plus.nativeUI.toast(result.Msg);
 										}
-									}, 500)
+									}, 500);
 								}
 							});
 						}
 					}
-				})
-			})
+				});
+			});
 
 			function refresh() {
 				//				alert(1)
-				APP._getData()
+				APP._getData();
 			}
 		</script>
 	</body>

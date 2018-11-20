@@ -138,8 +138,8 @@
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">有效期</div>
-							<input type="number" class="cellInputTxt" v-model="enabledtime"  placeholder="天" />
-							
+							<input type="number" class="cellInputTxt" v-model="enabledtime" placeholder="天" />
+
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">充值面额</div>
@@ -185,107 +185,107 @@
 		<script src="../../../js/bscroll.min.js"></script>
 		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
+			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
 						/*卡信息*/
-						cardName:'',
+						cardName: '',
 						enabledtime: '',
-						cardEnabled:false,
-						payDenomination:'',
-						giveDenomination:'',
-						cardDetail:'',
-						cardExplain:''
+						cardEnabled: false,
+						payDenomination: '',
+						giveDenomination: '',
+						cardDetail: '',
+						cardExplain: ''
 					},
-					created: function() {},
-					mounted: function() {
-						var _this = this		;
-						document.getElementById('loader').style.display = 'none'
+					created: function created() {},
+					mounted: function mounted() {
+						var _this = this;
+						document.getElementById('loader').style.display = 'none';
 					},
 					methods: {
-						
+
 						//	选择起始时间
-						_chooseStime(key) {
+						_chooseStime: function _chooseStime(key) {
 							var d = new Date();
-							var _this = this
+							var _this = this;
 
 							plus.nativeUI.pickDate(function(e) {
 								var d = e.date;
-//								console.log("选择的日期：" + d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate());						
-								if(key==1){
-									_this.startTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+								//								console.log("选择的日期：" + d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate());						
+								if(key == 1) {
+									_this.startTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 								}
-								if(key==2){
-									_this.endTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+								if(key == 2) {
+									_this.endTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 								}
-								
-								
 							}, function(e) {
-//								console.log("未选择日期：" + e.message);
-								
+								//								console.log("未选择日期：" + e.message);
+
 							}, {
-								title:'请选择起始时间',
-								minDate:d
+								title: '请选择起始时间',
+								minDate: d
 							});
 						},
+
 						/*更新信息*/
-						_updatedMsg(){
-								this.cardEnabled = !this.cardEnabled
+						_updatedMsg: function _updatedMsg() {
+							this.cardEnabled = !this.cardEnabled;
 						},
+
 						/*提交添加*/
-						_submit(){
-							if(!this.cardName || !this.enabledtime || !this.payDenomination || !this.giveDenomination ){
+						_submit: function _submit() {
+							if(!this.cardName || !this.enabledtime || !this.payDenomination || !this.giveDenomination) {
 								plus.nativeUI.alert("请完善卡信息", function() {}, "马嘿嘿提醒您", "ok");
 								return;
 							}
-							var _this =this;
-							var data ={
-								RECHARGE_NAME:this.cardName,
-								RECHARGE_LIFE:this.enabledtime,
-								RECHARGE_STATUS:this.cardEnabled?2:0,
-								RECHARGE_AMOUNT:this.payDenomination,
-								RECHARGE_GRANT:this.giveDenomination,
-								RECHARGE_DETAILS:this.cardDetail,
-								RECHARGE_DESCRIBE:this.cardExplain,
-								RECHARGE_TYPE:1,
-							}
-							plus.nativeUI.showWaiting('提交中...')
+							var _this = this;
+							var data = {
+								RECHARGE_NAME: this.cardName,
+								RECHARGE_LIFE: this.enabledtime,
+								RECHARGE_STATUS: this.cardEnabled ? 2 : 0,
+								RECHARGE_AMOUNT: this.payDenomination,
+								RECHARGE_GRANT: this.giveDenomination,
+								RECHARGE_DETAILS: this.cardDetail,
+								RECHARGE_DESCRIBE: this.cardExplain,
+								RECHARGE_TYPE: 1
+							};
+							plus.nativeUI.showWaiting('提交中...');
 							app.ajax(app.baseUrl + '/api/BusiRecharge/CreateBusiRecharge', {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
 								type: 'post', //HTTP请求类型
-								success: function(result) {
-						
-									
-									if(result.Success) {
-										
-										var msg = "添加成功";
-										mui.later(()=>{
-											plus.nativeUI.closeWaiting()
-											plus.webview.getWebviewById('refillcard').evalJS('refresh()')
-											plus.nativeUI.alert(msg, function() {																					
-												mui.back()
-											}, "马嘿嘿提醒您", "ok");
-										},1500)
-										
-										/*还原数据*/										
-									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-										console.log(result.Msg)
-									}
+								success: function success(result) {
 
+									if(result.Success) {
+
+										var msg = "添加成功";
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
+											plus.webview.getWebviewById('refillcard').evalJS('refresh()');
+											plus.nativeUI.alert(msg, function() {
+												mui.back();
+											}, "马嘿嘿提醒您", "ok");
+										}, 1500);
+
+										/*还原数据*/
+									} else {
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
+										console.log(result.Msg);
+									}
 								}
 							});
 						}
 					}
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

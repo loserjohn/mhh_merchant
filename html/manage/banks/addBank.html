@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="../../../css/common.css" />
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/loading.css" />
-		
+
 		<style>
 			.btns {
 				margin-top: 15px;
@@ -73,7 +73,7 @@
 				border: none;
 				outline: none;
 				padding: 0;
-				min-height:60px;
+				min-height: 60px;
 			}
 			
 			.msgBox .cellInputTxt select {
@@ -121,11 +121,21 @@
 			.mui-radio.mui-left input[type=radio] {
 				left: 0;
 			}
+			
+			.cm_input_groups {
+				border: none;
+				/*background: red;*/
+				margin-top: 0;
+			}
+			
+			.yzm {
+				font-size: 12px;
+			}
 		</style>
 	</head>
 
 	<body>
-		
+
 		<!--等待页面-->
 		<div class="loader" style="top:0" id="loader">
 			<ul>
@@ -165,14 +175,26 @@
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">预留电话</div>
-							<input type="number" class="cellInputTxt" placeholder="" v-model="bankPhone" placeholder="请输入预留电话" />
+							<input type="number" class="cellInputTxt" placeholder="" v-model="bankPhone" disabled="true" placeholder="请输入预留电话" />
+
+						</li>
+						<li class="mui-table-view-cell  flex">
+							<div class="cm_input_groups flex">
+								<div class="cm_groups_title">
+									验证码
+								</div>
+								<input class="f1 cm_groups_input" v-model="validate" type="number" placeholder="验证码" value="" />
+							</div>
+							<div class="yzm cm_btn_half" @tap="_getYZM">
+								{{enables?ctime:'获取验证码'}}
+							</div>
 						</li>
 						<li class="mui-table-view-cell flex">
 							<div class="f1 cellName">是否设为默认</div>
 							<div class="mui-switch" :class="{'mui-active': isDefault}" @tap="_updatedMsg">
 								<div class="mui-switch-handle"></div>
 							</div>
-						</li>											
+						</li>
 						<li class="mui-table-view-cell">
 							<!--<div class="f1 cellName ">优惠券限制</div>-->
 							<textarea name="" rows="" cols="" v-model="openBank" class="cellInputArea" placeholder="开户行"></textarea>
@@ -196,96 +218,143 @@
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
 		<script src="../../../js/bank.js"></script>
-				<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
+			});
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				var APP = new Vue({
 					el: '#app',
 					data: {
-						bankName:'',//银行名字
-						bankNum:'',//卡号
-						openBank:'',//开户行
-						isDefault:false,//是否是默认卡
-						userName:'',//持卡人姓名
-						bankPhone:'',//预留电话
-						
-						allList:[]//银行列表
+						bankName: '', //银行名字
+						bankNum: '', //卡号
+						openBank: '', //开户行
+						isDefault: false, //是否是默认卡
+						userName: '', //持卡人姓名
+						bankPhone: '', //预留电话
+						validate: '', //验证码
+						allList: [], //银行列表
+						enables: false,
+						time: 90
 					},
-					created: function() {
-						//							alert(1)
-
+					created: function created() {
+						var self = plus.webview.currentWebview();
+						//						alert(self.mobile)
+						this.bankPhone = self.mobile;
 					},
-					mounted: function() {
-						var _this = this
+					mounted: function mounted() {
+						var _this = this;
 						this.allList = allBacnkList;
-						document.getElementById('loader').style.display='none'
+						document.getElementById('loader').style.display = 'none';
+					},
+					computed: {
+						ctime: function ctime() {
+							return '(' + this.time + 's)';
+						}
 					},
 					methods: {
-						/*更新信息*/
-						_updatedMsg(key) {
-							this.isDefault = !this.isDefault
+						/*倒计时*/
+						_timeMove: function _timeMove() {
+							var _this2 = this;
+
+							this.enables = true;
+							var time = setInterval(function() {
+								_this2.time -= 1;
+								if(_this2.time == 0) {
+									_this2.enables = false;
+									clearInterval(time);
+									_this2.time = 90;
+								}
+							}, 1000);
 						},
+
+						//						获取验证码
+						_getYZM: function _getYZM() {
+							var _this3 = this;
+
+							if(this.enables) return;
+
+							plus.nativeUI.showWaiting();
+							app.getValidate(this.bankPhone, 4, function(status, Msg) {
+								plus.nativeUI.closeWaiting();
+								if(status) {
+									/*开始倒计时*/
+									_this3._timeMove();
+									plus.nativeUI.toast("发送成功");
+								} else {
+									plus.nativeUI.toast(Msg);
+								}
+							});
+						},
+
+						/*更新信息*/
+						_updatedMsg: function _updatedMsg(key) {
+							this.isDefault = !this.isDefault;
+						},
+
 						/*提交添加*/
-						_submit() {
-							if(!this.bankName || !this.bankNum || !this.openBank || !this.userName || !this.bankPhone ) {
+						_submit: function _submit() {
+							if(!this.bankName || !this.openBank || !this.userName || !this.bankPhone) {
 								plus.nativeUI.alert("请完善银行卡资料信息", function() {}, "马嘿嘿提醒您", "ok");
 								return;
-							}else if(!app.checkPhone(this.bankPhone) ){
-								plus.nativeUI.alert("无效手机号", function() {}, "马嘿嘿提醒您", "ok");
+							} else if(!this.validate) {
+								plus.nativeUI.alert("请填写验证码", function() {}, "马嘿嘿提醒您", "ok");
 								return;
-							}else if(!app.rightCard(this.bankNum) ){
+							} else if(!this.enables) {
+								plus.nativeUI.alert("超过时限,请重新获取验证码", function() {
+									return false;
+								}, '马嘿嘿提醒您');
+								return;
+							} else if(!app.rightCard(this.bankNum)) {
 								plus.nativeUI.alert("无效银行卡", function() {}, "马嘿嘿提醒您", "ok");
 								return;
 							}
-							
-							
-							var _this =this;
-							var data ={
-								BANK_NAME:this.bankName,
-								BANK_CARDNUM:this.bankNum,
-								BANK_OPEN_NAME:this.openBank,
-								ISDEFAULT:this.isDefault?1:0,
-								BANK_MOBILE:this.bankPhone,
-								BANK_CARDHOLDER:this.userName
-							}
-							plus.nativeUI.showWaiting('提交中...')
+
+							var _this = this;
+							var data = {
+								BANK_NAME: this.bankName,
+								BANK_CARDNUM: this.bankNum,
+								BANK_OPEN_NAME: this.openBank,
+								ISDEFAULT: this.isDefault ? 1 : 0,
+								BANK_MOBILE: this.bankPhone,
+								BANK_CARDHOLDER: this.userName,
+								validate: this.validate
+							};
+							plus.nativeUI.showWaiting('提交中...');
 							app.ajax(app.baseUrl + '/api/BusiBank/Create', {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
 								type: 'post', //HTTP请求类型
 
-								success: function(result) {
-															
-									if(result.Success) {
-										
-										var msg = "添加成功";
-										mui.later(()=>{
-											plus.nativeUI.closeWaiting()
-											plus.webview.getWebviewById('banks').evalJS('refresh()')
-											plus.nativeUI.alert(msg, function() {																					
-												mui.back()
-											}, "马嘿嘿提醒您", "ok");
-										},1500)
-										
-										/*还原数据*/										
-									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-//										console.log(result.Msg)
-									}
+								success: function success(result) {
 
+									if(result.Success) {
+
+										var msg = "添加成功";
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
+											plus.webview.getWebviewById('banks').evalJS('refresh()');
+											plus.nativeUI.alert(msg, function() {
+												mui.back();
+											}, "马嘿嘿提醒您", "ok");
+										}, 1500);
+
+										/*还原数据*/
+									} else {
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
+										//										console.log(result.Msg)
+									}
 								}
 							});
-							
 						}
-
 					}
-				})
-			})
+				});
+			});
 		</script>
 	</body>
 

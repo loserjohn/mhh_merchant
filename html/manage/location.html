@@ -1,6 +1,5 @@
-
-
 <!DOCTYPE html>
+
 <html>
 
 	<head>
@@ -131,7 +130,7 @@
 				width: -moz-calc(100% - 5.7vw - 8px);
 			}
 			
-			#addressDels  #submit {
+			#addressDels #submit {
 				display: block;
 				float: right;
 				margin-right: 2%;
@@ -159,7 +158,7 @@
 			<button class=" mui-btn  mui-btn-link mui-btn-nav mui-pull-right cor_w" style="width:66px"></button>
 		</header>
 		<div id="container" class="map" tabindex="0"></div>
-		
+
 		<div class=" flex" id="addressDels">
 			<ul class="f1 ">
 				<li class="poi">
@@ -174,26 +173,27 @@
 							<span></span>
 							<p class="info"></p>
 						</div>
-					</div>				
+					</div>
 				</li>
-				
+
 			</ul>
 			<a href="#" id="submit">确定</a>
 		</div>
 		<script>
+			 
+
 			mui.init({
 				swipeBack: true
 			});
 			mui.plusReady(function() {
 				app.initHeader();
-				plus.nativeUI.closeWaiting()
+				plus.nativeUI.closeWaiting();
 				mui.currentWebview.show('pop-in', 300, function() {}, {});
-				
-				var lon='';
-				var lan='';
-				var address='';
-				
-				
+
+				var lon = '';
+				var lan = '';
+				var address = '';
+
 				AMapUI.loadUI(['misc/PositionPicker', 'misc/PoiPicker'], function(PositionPicker, PoiPicker) {
 					var map = new AMap.Map('container', {
 						zoom: 14,
@@ -244,8 +244,8 @@
 					//						});
 
 					function onComplete(data) {
-						$('#address').val(data.formattedAddress)
-						$('.address .info').text(data.formattedAddress)
+						$('#address').val(data.formattedAddress);
+						$('.address .info').text(data.formattedAddress);
 					}
 					//解析定位错误信息
 					function onError(data) {
@@ -259,68 +259,65 @@
 					// 拖拽选址
 
 					positionPicker.on('success', function(positionResult) {
-//						console.log(JSON.stringify(positionResult.position) )
-						lon =  positionResult.position.lng
-						lan =  positionResult.position.lat
-						address =  positionResult.address;
-						
-						$('.poi .nearpoi').text(positionResult.nearestPOI)
-						$('.address .info').text(positionResult.address)
-						
+						//						console.log(JSON.stringify(positionResult.position) )
+						lon = positionResult.position.lng;
+						lan = positionResult.position.lat;
+						address = positionResult.address;
+
+						$('.poi .nearpoi').text(positionResult.nearestPOI);
+						$('.address .info').text(positionResult.address);
 					});
 					positionPicker.on('fail', function(positionResult) {
-						$('.poi .nearpoi').text('')
-						$('.address .info').text('')
+						$('.poi .nearpoi').text('');
+						$('.address .info').text('');
 					});
-					var onModeChange = function(e) {
-						positionPicker.setMode(e.target.value)
-					}
+					var onModeChange = function onModeChange(e) {
+						positionPicker.setMode(e.target.value);
+					};
 					positionPicker.start();
 					map.panBy(0, 1);
-					
-					
-					mui('#addressDels').on('tap','#submit',function(){
-						
-						if(!lon || !lan || !address){
-							mui.back()
+
+					mui('#addressDels').on('tap', '#submit', function() {
+
+						if(!lon || !lan || !address) {
+							mui.back();
 							return;
 						}
-						
+
 						var self = plus.webview.currentWebview();
-						var prevID = self.prevWebview
-						var s = plus.webview.getWebviewById(prevID)
+						var prevID = self.prevWebview;
+						var s = plus.webview.getWebviewById(prevID);
 						var co = {
-									longitude: lon,
-									/*经度*/
-									latitude: lan,
-									/*纬度*/
-									address: address
-								}
-						
-						
+							longitude: lon,
+							/*经度*/
+							latitude: lan,
+							/*纬度*/
+							address: address
+						};
+
 						switch(prevID) {
 							case 'addAddress':
-								s.evalJS('setPos(' + JSON.stringify(co) + ')')
+								s.evalJS('setPos(' + JSON.stringify(co) + ')');
 								mui.currentWebview.close();
 								break;
-		
+
 							default:
-								
-								plus.storage.setItem('pos', JSON.stringify(co))
-								plus.webview.getLaunchWebview().evalJS('setPos("' + co.address + '")')
+
+								plus.storage.setItem('pos', JSON.stringify(co));
+								plus.webview.getLaunchWebview().evalJS('setPos("' + co.address + '")');
 								if(plus.webview.getWebviewById('productList')) {
-									plus.webview.getWebviewById('productList').evalJS('setPos("' + co.address + '")')
+									plus.webview.getWebviewById('productList').evalJS('setPos("' + co.address + '")');
 								}
 								break;
 						}
-						if(plus.webview.getWebviewById('where')){
-							plus.webview.getWebviewById('where').close()
+						if(plus.webview.getWebviewById('where')) {
+							plus.webview.getWebviewById('where').close();
 						}
-						
-						mui.back()
-							})
-						});
-			})
+
+						mui.back();
+					});
+				});
+			});
 			//			提交操作
 		</script>
 	</body>

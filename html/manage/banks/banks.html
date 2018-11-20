@@ -10,32 +10,35 @@
 		<link rel="stylesheet" href="../../../css/iconfont.css" />
 		<link rel="stylesheet" href="../../../css/animate.css" />
 		<link rel="stylesheet" href="../../../css/loading.css" />
-		
+
 		<style>
-			.bankList{
+			.bankList {
 				width: 100%;
 				box-sizing: border-box;
 			}
-			.bankList .bankNUm{
+			
+			.bankList .bankNUm {
 				box-sizing: border-box;
 				padding: 15px;
 			}
-			.bankList .bankName{
+			
+			.bankList .bankName {
 				box-sizing: border-box;
 				padding: 15px;
 				background: #212121;
 				width: 140px;
 				text-align: center;
 			}
-			.bankList  i{
+			
+			.bankList i {
 				margin-top: 18px;
 				margin-right: 10px;
 			}
-			.bankList .bankName.default{
+			
+			.bankList .bankName.default {
 				background: #ccaa42;
 				color: #fff;
 			}
-			
 			/*底部的按钮*/
 			
 			.bottomMenus {
@@ -59,7 +62,7 @@
 	</head>
 
 	<body>
-		
+
 		<!--等待页面-->
 		<div class="loader" style="top:0" id="loader">
 			<ul>
@@ -86,12 +89,12 @@
 					<ul class="reset cm_ul ">
 						<li class="mui-table-view-cell mui-transitioning reset" :id="item.BANK_CODE" v-for="item in banksList">
 							<div class="mui-slider-right mui-disabled">
-								<a class="mui-btn " v-show="item.ISDEFAULT==0" style="transform: translate(-180px, 0px);background: #ccaa42;" @tap="_handle(item.BANK_CODE)">设为默认</a>
-								<a class="mui-btn mui-btn-red" v-show="item.ISDEFAULT==0" style="transform: translate(-180px, 0px);" @tap="_delect(item.BANK_CODE)">删除</a>
+								<a class="mui-btn " style="transform: translate(-180px, 0px);background: #ccaa42;" @tap="_handle(item.BANK_CODE)">设为默认</a>
+								<a class="mui-btn mui-btn-red"  style="transform: translate(-180px, 0px);" @tap="_delect(item.BANK_CODE)">删除</a>
 							</div>
-							<div class="mui-slider-handle" style="transform: translate(0px, 0px);" >
-								<div class="bankList flex "  @tap="_preDetail(item)" >
-									<div class=" flex f1 "  >
+							<div class="mui-slider-handle" style="transform: translate(0px, 0px);">
+								<div class="bankList flex " @tap="_preDetail(item)">
+									<div class=" flex f1 ">
 										<div class="bankName cm_name cor_y" :class="{default:item.ISDEFAULT==1}">
 											{{item.BANK_NAME}}
 										</div>
@@ -101,7 +104,7 @@
 								</div>
 							</div>
 						</li>
-						<li v-if="banksList.length==0" class="t_c cm_noItem" >
+						<li v-if="banksList.length==0" class="t_c cm_noItem">
 							<img src="../../../images/no2.png" alt="" />
 							<div class="t_c">--您还没有银行卡--</div>
 						</li>
@@ -109,15 +112,15 @@
 				</div>
 			</div>
 			<!--模态框显示优惠券信息信息-->
-			<div class="cm_mask" v-show="show" >
+			<div class="cm_mask" v-show="show">
 				<div class="cm_modal animated slideInUp">
 					<h3 class="cm_title t_c">银行卡详情</h3>
 					<h3 class="cm_name">{{detailPre.BANK_NAME}}</h3>
 					<div>开号 : {{detailPre.BANK_CARDNUM}}</div>
 					<div>开户行 : {{detailPre.BANK_OPEN_NAME}}</div>
-					<div>持卡人姓名  : {{detailPre.BANK_CARDHOLDER}}</div>					
+					<div>持卡人姓名 : {{detailPre.BANK_CARDHOLDER}}</div>
 					<div>预留手机号 : {{detailPre.BANK_MOBILE}}</div>
-					
+
 					<div class="cm_btn" @tap="_preDetail">
 						关闭
 					</div>
@@ -136,32 +139,36 @@
 		<script src="../../../js/app.js"></script>
 		<script src="../../../js/vue.js"></script>
 		<script src="../../../js/bscroll.min.js"></script>
-				<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../js/aes.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			 
+
 			mui.init({
 				swipeBack: true
-			})
-			var APP 
+			});
+			var APP;
 			mui.plusReady(function() {
-				app.WXinit(CryptoJS)
+				app.WXinit(CryptoJS);
 				APP = new Vue({
 					el: '#app',
 					data: {
+						num: '', //用户的手机号码
 						scrollTop: '',
 						scroll: '',
 						show: false,
 						banksList: '',
 						detailPre: {}
 					},
-					created: function() {
-					},
-					mounted: function() {
-
-						var _this = this
-						var scroll = this.$refs.scroll
-						this.scrollTop = 0+ 'px'
+					created: function created() {},
+					mounted: function mounted() {
+						var self = plus.webview.currentWebview();
+						//						alert(self.num)
+						this.num = self.num;
+						var _this = this;
+						var scroll = this.$refs.scroll;
+						this.scrollTop = 0 + 'px';
 						/*首次加载数据*/
-						this._getData()
+						this._getData();
 
 						this.$nextTick(function() {
 							//							初始化scrool
@@ -175,34 +182,33 @@
 										threshold: 50,
 										stop: 20
 									}
-								})
+								});
 							} else {
 								_this.scroll.refresh();
 							};
 							/*下拉刷新*/
 							_this.scroll.on('pullingDown', function(e) {
 
-								plus.nativeUI.showWaiting()
-								_this._getData(() => {
+								plus.nativeUI.showWaiting();
+								_this._getData(function() {
 									plus.nativeUI.closeWaiting();
-									_this.scroll.finishPullDown()
-								})
-
-							})
-						})
+									_this.scroll.finishPullDown();
+								});
+							});
+						});
 					},
 					filters: {
-						getStatus(k) {
+						getStatus: function getStatus(k) {
 							//优惠券状态0-未启用，1-启用中,2-审核中
 							switch(k) {
 								case '0':
-									return '未启用'
+									return '未启用';
 									break;
 								case '1':
-									return '启用中'
+									return '启用中';
 									break;
 								case '2':
-									return '审核中...'
+									return '审核中...';
 									break;
 								default:
 									break;
@@ -211,127 +217,128 @@
 					},
 					methods: {
 						/*添加新卡*/
-						_toAddNewCard() {
-							let desturl = './addBank.html'
-							let destid = 'addBank'
-							let exa = {}
-							let option = {
-								showTitle:true,
-								autoWaiting:false,
-								createNew: true,
-							}
-							app.navigater(desturl,destid,exa,option)
-							
+						_toAddNewCard: function _toAddNewCard() {
+							var desturl = './addBank.html';
+							var destid = 'addBank';
+							var exa = {
+								mobile: this.num
+							};
+							var option = {
+								showTitle: true,
+								autoWaiting: false,
+								createNew: true
+							};
+							app.navigater(desturl, destid, exa, option);
 						},
+
 						/*删除操作*/
-						_delect(code) {
+						_delect: function _delect(code) {
 							//							console.log(11)
-							var li = document.getElementById(code)
+							var li = document.getElementById(code);
 							//							console.log(li)
-							mui.swipeoutClose(li)
-							var _this = this
+							mui.swipeoutClose(li);
+							var _this = this;
 							var data = {
-								BANK_CODE: code,
-							}
-							//
-							plus.nativeUI.showWaiting('删除中...')
+								BANK_CODE: code
+								//
+							};
+							plus.nativeUI.showWaiting('删除中...');
 							app.ajax(app.baseUrl + '/api/BusiBank/Delete', {
 								// dataType:'json',//服务器返回json格式数据
 								data: data,
 								type: 'post', //HTTP请求类型
-								success: function(result) {
+								success: function success(result) {
 									if(result.Success) {
 
 										var msg = "删除成功";
-										mui.later(() => {
-											plus.nativeUI.closeWaiting()
-											plus.nativeUI.toast(msg)
-											_this._getData()
-										}, 1500)
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
+											plus.nativeUI.toast(msg);
+											_this._getData();
+										}, 1500);
 
 										/*还原数据*/
 									} else {
-										plus.nativeUI.closeWaiting()
-										plus.nativeUI.toast(result.Msg)
-										console.log(result.Msg)
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
+										console.log(result.Msg);
 									}
-
 								}
 							});
 						},
+
 						/*设为默认*/
-						_handle(code) {
-							var li = document.getElementById(code)
-										//							console.log(li)
-							mui.swipeoutClose(li)
-							var _this = this 
-							plus.nativeUI.showWaiting('设置中...')
-								app.ajax(app.baseUrl + '/api/BusiBank/Default', {
-									// dataType:'json',//服务器返回json格式数据
-									data: {
-										BANK_CODE:code
-									},
-									type: 'post', //HTTP请求类型
-									success: function(result) {											
-										if(result.Success) {
-											
-											var msg = "设置成功";
-											mui.later(()=>{
-												plus.nativeUI.closeWaiting()
-												plus.nativeUI.toast(msg)
-												_this._getData()
-											},1500)
-											
-											/*还原数据*/										
-										} else {
-											plus.nativeUI.closeWaiting()
-											plus.nativeUI.toast(result.Msg)
-											console.log(result.Msg)
-										}
-	
+						_handle: function _handle(code) {
+							var li = document.getElementById(code);
+							//							console.log(li)
+							mui.swipeoutClose(li);
+							var _this = this;
+							plus.nativeUI.showWaiting('设置中...');
+							app.ajax(app.baseUrl + '/api/BusiBank/Default', {
+								// dataType:'json',//服务器返回json格式数据
+								data: {
+									BANK_CODE: code
+								},
+								type: 'post', //HTTP请求类型
+								success: function success(result) {
+									if(result.Success) {
+
+										var msg = "设置成功";
+										mui.later(function() {
+											plus.nativeUI.closeWaiting();
+											plus.nativeUI.toast(msg);
+											_this._getData();
+										}, 1500);
+
+										/*还原数据*/
+									} else {
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast(result.Msg);
+										console.log(result.Msg);
 									}
-								});	
-							
+								}
+							});
 						},
+
 						/*查看详情*/
-						_preDetail(item){
-							if(item){
-								this.detailPre = item	
+						_preDetail: function _preDetail(item) {
+							if(item) {
+								this.detailPre = item;
 							}
 							this.show = !this.show;
 						},
+
 						/*获取银行卡数据*/
-						_getData(callback) {
-							var _this = this
+						_getData: function _getData(callback) {
+							var _this = this;
 							app.ajax(app.baseUrl + '/api/BusiBank/GetList', {
 								//									data: data,
 								// dataType:'json',//服务器返回json格式数据
 								type: 'get', //HTTP请求类型
 
-								success: function(result) {
-									mui.later(() => {
-									document.getElementById('loader').style.display='none'
+								success: function success(result) {
+									mui.later(function() {
+										document.getElementById('loader').style.display = 'none';
 										if(result.Success) {
-											_this.banksList = result.Data.ListInfo
-											
-												_this.scroll.refresh();
-												if(callback) callback();
-											
+											_this.banksList = result.Data.ListInfo;
+
+											_this.scroll.refresh();
+											if(callback) callback();
 										} else {
 											/*验证失败*/
-											plus.nativeUI.toast(result.Msg)
-	
+											plus.nativeUI.toast(result.Msg);
 										}
-									}, 300)
+									}, 300);
 								}
 							});
 						}
 					}
-				})
-			})
-			function refresh(){
-//				alert(1)
-				APP._getData()
+				});
+			});
+
+			function refresh() {
+				//				alert(1)
+				APP._getData();
 			}
 		</script>
 	</body>
