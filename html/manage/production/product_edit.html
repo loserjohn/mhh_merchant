@@ -560,8 +560,19 @@
 									break;
 								case 5:
 									/*计算时段*/
-									_this.mintime = Math.ceil(_this.consuming / 30) + 1; //记录最小时段
-									_this.time = Math.ceil(_this.consuming / 30);
+									 //记录最小时段
+//							console.log(_this.consuming )
+									if(_this.consuming%30==0){
+//										alert(1)
+										_this.mintime = parseInt(_this.consuming / 30)
+										_this.time =parseInt(_this.consuming / 30);
+
+									}else{
+//										alert(2)
+										_this.mintime = Math.ceil(_this.consuming / 30);
+										_this.time = Math.ceil(_this.consuming / 30);
+									}
+									
 									break;
 								case 10:
 									/*添加时段*/

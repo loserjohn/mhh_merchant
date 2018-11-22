@@ -176,7 +176,8 @@
 						card: '',
 						select: '',
 						money: '',
-						allMoney: ''
+						allMoney: '',
+						num:''
 					},
 					created: function created() {},
 					mounted: function mounted() {
@@ -186,6 +187,7 @@
 						this._getBanks();
 						var self = plus.webview.currentWebview();
 						this.allMoney = self.account;
+						this.num = self.num
 						//						alert(this.allMoney)
 					},
 					methods: {
@@ -288,6 +290,7 @@
 
 						/*添加新卡*/
 						_addBank: function _addBank() {
+							var _this = this
 							plus.nativeUI.alert("您还没有绑定银行卡", function() {
 								mui.openWindow({
 									url: './banks/banks.html',
@@ -318,7 +321,9 @@
 										autoShow: true, //页面loaded事件发生后自动显示，默认为true
 										duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 									},
-									extras: {},
+									extras: {
+										num:_this.num 
+									},
 									waiting: {
 										autoShow: false, //自动显示等待框，默认为true
 										title: '正在加载...' //等待对话框上显示的提示内容

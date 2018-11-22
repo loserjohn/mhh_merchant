@@ -186,7 +186,7 @@
 												</div>
 												<!--回复记录-->
 												<div class="recommont cor_g">
-													<ul class="recommontList">
+													<ul class="recommontList" v-show="item.REPLY_CONTENT">
 														<li v-show="item.REPLY_CONTENT"><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
 														<li v-show="item.REVIEW_AGAIN_CONTENT"><span class="cm_name">{{item.MEMBER_NIKENAME}}： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
 													</ul>
@@ -225,7 +225,7 @@
 												</div>
 												<!--回复记录-->
 												<div class="recommont cor_g">
-													<ul class="recommontList">
+													<ul class="recommontList" v-show="item.REPLY_CONTENT">
 														<li v-show="item.REPLY_CONTENT"><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
 														<li v-show="item.REVIEW_AGAIN_CONTENT"><span class="cm_name">{{item.MEMBER_NIKENAME}}： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
 													</ul>
@@ -264,7 +264,7 @@
 												</div>
 												<!--回复记录-->
 												<div class="recommont cor_g">
-													<ul class="recommontList">
+													<ul class="recommontList" v-show="item.REPLY_CONTENT"> 
 														<li v-show="item.REPLY_CONTENT"><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
 														<li v-show="item.REVIEW_AGAIN_CONTENT"><span class="cm_name">{{item.MEMBER_NIKENAME}}： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
 													</ul>
@@ -303,7 +303,7 @@
 												</div>
 												<!--回复记录-->
 												<div class="recommont cor_g">
-													<ul class="recommontList">
+													<ul class="recommontList" v-show="item.REPLY_CONTENT">
 														<li v-show="item.REPLY_CONTENT"><span class="cm_name">我的回复： </span>{{item.REPLY_CONTENT}}</li>
 														<li v-show="item.REVIEW_AGAIN_CONTENT"><span class="cm_name">{{item.MEMBER_NIKENAME}}： </span>{{item.REVIEW_AGAIN_CONTENT}}</li>
 													</ul>

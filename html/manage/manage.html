@@ -95,7 +95,7 @@
 				<div class="account flex" id="content">
 					<div class="f1">
 						<h3 class="cor_w container allmaney">￥{{account}}</h3>
-						<p class="cor_g container">小草值：{{score}} <span class="fr" @tap="_navigate()">分销积分<span class="mui-icon mui-icon-arrowright fs16"></span></span>
+						<p class="cor_g container">小草值：{{score}} <span class="fr" @tap="_navigate()">分享积分<span class="mui-icon mui-icon-arrowright fs16"></span></span>
 						</p>
 					</div>
 					<!--<img src="../../images/logo3.png" alt="" class="bg" />-->
@@ -322,6 +322,7 @@
 										_this.account = result.Data.SHOP.SHOP_AMOUNT;
 										_this.score = result.Data.SHOP.INTEGRAL;
 										_this.num = result.Data.ACCOUNT_MOBILE;
+//										alert(_this.num)
 										if(callback) callback();
 									} else {
 										/*验证失败*/

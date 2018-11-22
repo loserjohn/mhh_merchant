@@ -118,7 +118,10 @@
 								}
 							};
 						}
+						plus.nativeUI.closeWaiting();
+						mui.currentWebview.show('pop-in', 300, function() {}, {});
 					},
+					
 					methods: {
 						/*跳转到手机号码注册*/
 						_toRegiste: function _toRegiste() {

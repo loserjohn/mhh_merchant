@@ -8,6 +8,7 @@
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/common.css" />
 		<link rel="stylesheet" href="../../css/iconfont.css" />
+		<link rel="stylesheet" href="../../css/loading.css" />
 		<style>
 			.messageItem {
 				/*border-bottom: 1px dashed #d3d3d3;*/
@@ -38,6 +39,20 @@
 	</head>
 
 	<body>
+		<!--等待页面-->
+			<div class="loader" style="top:0" id="loader">
+				<ul>
+					<li id='a'></li>
+					<li id='b'></li>
+					<li id='c'></li>
+					<li id='d'></li>
+					<li id='e'></li>
+					<li id='f'></li>
+					<li id='g'></li>
+					<li id='h'></li>
+					<li id='i'></li>
+				</ul>
+			</div>
 		<div id="app">
 			<!--<header class="mui-bar mui-bar-nav" style="background: #ccaa42;" id="header">
 				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#fff"></a>
@@ -167,7 +182,9 @@
 							});
 						});
 						/*首次加载数据*/
-						this._getData(function() {});
+						this._getData(function() {
+							document.getElementById('loader').style.display = 'none'
+						});
 					},
 					methods: {
 						// 跳转订单页面

@@ -459,11 +459,11 @@
 			plus.storage.setItem('lastLoginWay', '2');
 			var t = new Date().getTime().toString();
 			plus.storage.setItem('lastLoginTime', t.toString());
-			plus.nativeUI.close();
+			plus.nativeUI.closeWaiting();
 			owner._toMain(2);
 		} else {
 			// 没有授权
-			waiting.close();
+			plus.nativeUI.closeWaiting();
 			owner.wxOAuth();
 		}
 	}
