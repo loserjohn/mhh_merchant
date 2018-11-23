@@ -954,7 +954,7 @@
 		}
 	}
 
-	owner.jumpAuding = function() {
+	owner.jumpAuding = function(id) {
 		mui.openWindow({
 			url: './' + id + '.html',
 			id: id,
