@@ -78,9 +78,12 @@
 			}
 			
 			.tabsItems_top {
-				padding-top: 10px;
+				margin-top: 15px;
+				margin-bottom: 15px;
 			}
-			
+			.tabsItems_top .cm_name {
+				line-height: 1.2;
+			}
 			.commont_body {
 				margin-top: 10px;
 				padding-bottom: 10px;
@@ -244,12 +247,16 @@
 						<div class="cm_tabBars ">
 							<ul class="reset">
 								<li class="tabsItems " v-for="item in commonList">
-									<div class="tabsItems_top flex">
+									<div class="tabsItems_top flex ">
 										<img :src="item.MEMBER_HEAD" alt="" class="avatar" />
-										<div class="cm_title">{{item.MEMBER_NIKENAME}}</div>
+										<div class="f1">
+											<div class="cm_name">{{item.MEMBER_NIKENAME}}</div>
+										<p class="cor_y">{{item.REVIEW_TIME}}</p>
+										</div>
+										
 									</div>
 									<div class="commont_body ">
-										{{item.MEMBER_NIKENAME}}
+										{{item.REVIEW_CONTENT}}
 										<p class="recommont" v-show="item.REVIEW_AGAIN_CONTENT">
 											回复：{{item.REVIEW_AGAIN_CONTENT}}
 										</p>
