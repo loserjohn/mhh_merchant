@@ -223,7 +223,7 @@
 							<li class="mui-table-view-cell flex" style="position: relative;">
 								<div class="f1 cellName">开始时间:</div>
 								<div class="f1 t_r">
-									<div class="f cellName t_r">{{startTime?startTime:c_sTime}}</div>
+									<div class="f cellName t_r">{{startTime}}</div>
 
 								</div>
 								<select v-model="startTime" class=" t_r  reset eletBox " style="opacity: 0;">
@@ -233,7 +233,7 @@
 							<li class="mui-table-view-cell flex" style="position: relative;">
 								<div class="f1 cellName">结束时间:</div>
 								<div class="f1 t_r">
-									<div class="f cellName t_r">{{endTime?endTime:c_eTime}}</div>
+									<div class="f cellName t_r">{{endTime}}</div>
 
 								</div>
 								<select v-model="endTime" class=" t_r  reset eletBox" style="opacity: 0;">
@@ -266,8 +266,8 @@
 				APP = new Vue({
 					el: '#app',
 					data: {
-						c_sTime: '',
-						c_eTime: '',
+//						c_sTime: '',
+//						c_eTime: '',
 						startTime: '',
 						endTime: '',
 						show: false,
@@ -348,7 +348,6 @@
 								type: 'post', //HTTP请求类型
 								success: function success(result) {
 									if(result.Success) {
-										//	alert('更新成功')
 										plus.nativeUI.closeWaiting();
 										_this._getData();
 										if(callback) callback();
@@ -401,8 +400,8 @@
 										_this.avatar = result.Data.SHOP.SHOP_LOGO;
 										_this.nickname = result.Data.SHOP.SHOP_NAME;
 										_this.phone = result.Data.ACCOUNT_MOBILE;
-										_this.c_sTime = result.Data.SETTING_TIME_LIMIT.split('-')[0];
-										_this.c_eTime = result.Data.SETTING_TIME_LIMIT.split('-')[1];
+										_this.startTime = result.Data.SETTING_TIME_LIMIT.split('-')[0];
+										_this.endTime = result.Data.SETTING_TIME_LIMIT.split('-')[1];
 										if(callback) callback();
 									} else {
 										/*验证失败*/
