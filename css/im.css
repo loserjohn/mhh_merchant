@@ -1,4 +1,4 @@
-/*#block_list {
+#block_list {
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -10,16 +10,16 @@
 }
 
 #block_chat {
-	position: absolute;
+	position: fixed;
 	left: 0;
 	right: 0;
 	top: 0;
 	bottom: 0;
-	background: #fff;
+	background: #f7f7f7;
 	overflow: hidden;
 	display: none;
 	z-index: 100;
-}*/
+}
 
 
 /*最近联系人列表*/
@@ -79,26 +79,26 @@
 }
 
 .listItem .newsTip {
-	position: absolute;
+		position: absolute;
 	background: red;
 	color: #fff;
-	height: 20px;
-	width: 20px;
+	height: 18px;
+	width: 18px;
 	top: -10px;
 	right: -10px;
 	font-size: 12px;
 	border-radius: 50%;
 	line-height: 20px;
 	text-align: center;
-	display: none;
+	/*display: none;*/
 }
 
 .sysItem .newsTip {
 	position: absolute;
 	background: red;
 	color: #fff;
-	height: 20px;
-	width: 20px;
+	height: 18px;
+	width: 18px;
 	top: -10px;
 	right: -10px;
 	font-size: 12px;
@@ -595,7 +595,14 @@ li {
 .msgList .msgContent .picMsg {
 	width: 120px;
 }
-
+.msgList .msgContent .picMsgBox{
+	padding: 0!important;
+	background:#fff!important;
+	border: none !important;
+}
+.msgList .msgContent .picMsgBox>img{
+	margin: 0 !important;
+}
 .msgList .msgContent .posMsg {
 	width: 220px;
 }

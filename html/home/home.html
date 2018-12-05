@@ -185,6 +185,19 @@
 				background: pink;
 				z-index: 100;
 			}
+			.newMsg{
+				position: absolute;
+				background: red;
+				color: #fff;
+				height: 14px;
+				width: 14px;
+				top: 20px;
+				right: 10px;
+				font-size: 12px;
+				border-radius: 50%;
+				line-height: 20px;
+				text-align: center;
+			}
 		</style>
 	</head>
 
@@ -247,9 +260,10 @@
 						<img src="../../images/m2.png" alt="" class="menusIcon" />
 						<p class="menuTxt">作品管理</p>
 					</div>
-					<div class="f1" @click="_NWnavigateTo('orders')">
+					<div class="f1" @click="_jumpMenus('information')" style="position: relative;"> 
+						<p v-show="newMsg" class="newMsg"></p>
 						<img src="../../images/m3.png" alt="" class="menusIcon" />
-						<p class="menuTxt">订单管理</p>
+						<p class="menuTxt">消息</p>
 					</div>
 					<div class="f1" @click="_jumpMenus('activity')">
 						<img src="../../images/m8.png" alt="" class="menusIcon" />
@@ -349,6 +363,7 @@
 			 
 
 			var APP;
+			var ImPage = ''
 			mui.plusReady(function() {
 				initPage();
 				var self = plus.webview.currentWebview();
@@ -386,7 +401,8 @@
 							PayOrderAmount: 0
 						},
 
-						account: ''
+						account: '',
+						newMsg:false
 
 					},
 					created: function created() {
@@ -593,7 +609,9 @@
 						},
 						/*菜单跳转*/
 						_jumpMenus: function _jumpMenus(key) {
-							//							alert(1)
+							if(key === 'information'){
+								this.newMsg = false
+							}
 							var url = '../manage/' + key + '/' + key + '.html';
 
 							var exa = {
@@ -640,7 +658,7 @@
 						var active_color = '#fff';
 
 						// 创建子webview窗口 并初始化
-						var aniShow = {};
+						var aniShow = {}; 
 
 						//创建原生菜单栏		
 						util.initSubpage(aniShow);
@@ -704,6 +722,32 @@
 					plus.nativeUI.closeWaiting();
 					//											}, 1000)
 				});
+			}
+//			初始化information im
+			function initIm(){
+//				alert(1)
+				ImPage = plus.webview.getWebviewById('information');
+
+				if(!ImPage) {
+//						alert('n')				
+					ImPage = mui.preload({
+						"id": 'information',
+						"url": '../manage/information/information.html',
+						'styles': {
+							titleNView: {
+								backgroundColor: '#151515',
+								titleColor: '#fff',
+								autoBackButton: true
+							}
+						}
+					});
+				} else {
+//					alert('y')		
+					ImPage.evalJS('connectIM()');
+				}				
+			}
+			function newMsg(){
+				APP.newMsg = true
 			}
 		</script>
 	</body>

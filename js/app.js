@@ -587,7 +587,7 @@
 
 	/* 账号登陆 */
 	owner.zhlogin = function(loginInfo, callback) {
-		callback = callback || $.noop;
+		callback = callback || null;
 		var Info = {};
 		Info.username = loginInfo.username || '';
 		Info.password = loginInfo.password || '';
@@ -678,7 +678,7 @@
 	/* 微信登陆 */
 	owner.wxlogin = function(loginInfo, callback) {
 
-		callback = callback || $.noop;
+		callback = callback || null;
 		var Info = {};
 		Info.aesOpenid = loginInfo.aseopid || '';
 		Info.type = loginInfo.type || '';
@@ -874,7 +874,7 @@
 					}, {
 						"tag": "font",
 						"id": "contactIcon",
-						"text": "\ue6ad",
+						"text": "\ue656",
 						"position": {
 							"top": "4px",
 							"left": "50%",
@@ -889,7 +889,7 @@
 					}, {
 						"tag": "font",
 						"id": "contactText",
-						"text": "消息",
+						"text": "订单",
 						"position": {
 							"top": "24px",
 							"left": "50%",
@@ -947,9 +947,11 @@
 			}]
 		});
 		home.onloaded = function() {
+//			alert(0)
+			home.evalJS('initIm()')
 			mui.later(function() {
-
 				if(callback) callback(true)
+				
 			}, 500)
 		}
 	}

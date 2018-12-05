@@ -2,7 +2,7 @@ var util = {
 	options: {
 		ACTIVE_COLOR: "#cdac41",
 		NORMAL_COLOR: "#f6f6f6",
-		subpages: ["community", "information", "manage"]
+		subpages: ["community", "orders", "manage"]
 	},
 	/**
 	 *  简单封装了绘制原生view控件的方法
@@ -47,7 +47,15 @@ var util = {
 		for(var i = 0, len = subpages.length; i < len; i++) {
 
 			if(!plus.webview.getWebviewById(subpages[i])) {
-				var sub = plus.webview.create('../'+subpages[i]+'/'+subpages[i]+'.html', subpages[i], subpage_style);
+				var sub = '';
+				if(subpages[i]== 'orders'){
+					sub = plus.webview.create('../manage/'+subpages[i]+'/'+subpages[i]+'.html', subpages[i], subpage_style);
+				}else{
+					sub = plus.webview.create('../'+subpages[i]+'/'+subpages[i]+'.html', subpages[i], subpage_style);
+				}
+//				var sub = plus.webview.create('../'+subpages[i]+'/'+subpages[i]+'.html', subpages[i], subpage_style);
+				
+				
 				//初始化隐藏
 				sub.hide();
 				// append到当前父webview
