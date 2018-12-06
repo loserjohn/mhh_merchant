@@ -276,7 +276,7 @@
 			<div class=" bottomMenus flex">
 				<h3 class="cor_y t_c menusTxt f1" v-show="detail.PROJECT_STATUS==2">审核中...</h3>
 				<h3 class="cor_y t_c menusTxt f1" @tap="_delectProduct" v-show="detail.PROJECT_STATUS==0 || detail.PROJECT_STATUS==3 ||detail.PROJECT_STATUS==4">删除</h3>
-				<h3 class="cor_y t_c menusTxt f1" @tap="_putawayProduct" v-show="detail.PROJECT_STATUS==0||detail.PROJECT_STATUS==4">提交审核</h3>
+				<h3 class="cor_y t_c menusTxt f1" @tap="_putawayProduct" v-show="detail.PROJECT_STATUS==0||detail.PROJECT_STATUS==4||detail.PROJECT_STATUS==3">提交审核</h3>
 				<h3 class="cor_w t_c menusTxt f1 bg_y" @tap="_editProduct" v-show="detail.PROJECT_STATUS==0||detail.PROJECT_STATUS==3 || detail.PROJECT_STATUS==4">编辑</h3>
 				<h3 class="cor_w t_c menusTxt f1 " @tap="_downProduct" v-show="detail.PROJECT_STATUS==1">下架</h3>
 			</div>
@@ -406,6 +406,22 @@
 							/*加载作品详情*/
 						},
 						methods: {
+							_img:function(arr){
+								var l = arr.length;
+								var count = 0
+								var _this = this 
+								arr.map(function(item,index){
+//									console.log(index)
+									var img = new Image;
+									img.src = item;
+									img.onload = function(){
+										count++;
+										if(count>=l){
+											_this.scroll.refresh();
+										}
+									}
+								})
+							},
 							//							tab切换
 							_changeTab: function _changeTab(key) {
 								//								alert(key)
@@ -573,7 +589,8 @@
 												//											console.log(JSON.stringify(result.Data.dataFormart.ErrMsg))
 												_this.ppic = _this.detail.PROJECT_IMGS[0];
 												_this.npic = _this.detail.PROJECT_IMGS[_this.detail.PROJECT_IMGS.length - 1];
-
+	
+												_this._img(_this.detail.DETAILS_IMGS	)
 												_this.scroll.refresh();
 												//											 	alert(_this.detail.PROJECT_STATUS)
 												if(callback) callback();

@@ -316,8 +316,8 @@
 			case 'P':
 				//项目
 				mui.openWindow({
-					url: '../manage/production/productBuy.html',
-					id: 'productBuy',
+					url: '../manage/production/product_detail.html',
+					id: 'product_detail',
 					styles: {
 						top: '0px', //新页面顶部位置
 						bottom: '0px', //新页面底部位置
@@ -330,13 +330,14 @@
 						duration: 300 //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
 					},
 					extras: {
-						proKey: code
+						productId: code
 					},
 					waiting: {
 						autoShow: true, //自动显示等待框，默认为true
 						title: '正在加载...', //等待对话框上显示的提示内容
 					}
 				})
+				break;
 			case 'O':
 				//订单详情
 				mui.openWindow({
@@ -757,7 +758,7 @@
 	}
 	//	发送cid
 	owner.postDevice = function() {
-		//				alert(1)
+//						alert(1)
 		var info = plus.push.getClientInfo();
 		//		console.log(info.clientid)
 
@@ -793,6 +794,8 @@
 			type: 'post', //HTTP请求类型
 			success: function(result) {
 				if(result.Success) {
+//					console.log('!!!!!!!!!!!!!!!!')
+//					console.log(result.Msg)
 					plus.storage.setItem('IMtoken', result.Msg);
 					plus.storage.setItem('myId', result.Data)
 				} else {}
