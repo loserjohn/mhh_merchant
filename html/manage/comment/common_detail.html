@@ -133,13 +133,13 @@
 
 					<div class="flex commonPics" v-show="detail.HAS_PICTURE=='1'?true:false">
 						<div class="commonPicsItem">
-							<img :src="detail.REPLY_IMG1" v-if="detail.REPLY_IMG1" class="contain" alt="" />
+							<img :src="detail.REPLY_IMG1" v-if="detail.REPLY_IMG1" class="contain commontPic" alt="" />
 						</div>
 						<div class="commonPicsItem">
-							<img :src="detail.REPLY_IMG2" v-if="detail.REPLY_IMG2" class="contain" alt="" />
+							<img :src="detail.REPLY_IMG2" v-if="detail.REPLY_IMG2" class="contain commontPic" alt="" />
 						</div>
 						<div class="commonPicsItem">
-							<img :src="detail.REPLY_IMG3" v-if="detail.REPLY_IMG3" class="contain" alt="" />
+							<img :src="detail.REPLY_IMG3" v-if="detail.REPLY_IMG3" class="contain commontPic" alt="" />
 						</div>
 					</div>
 
@@ -200,12 +200,19 @@
 					},
 					created: function created() {
 						//							alert(1)
-						app.initHeader();
+//						app.initHeader();
 					},
 					mounted: function mounted() {
 						var self = plus.webview.currentWebview();
 						this.detail = self.commonData;
 						document.getElementById('loader').style.display = 'none';
+						
+						mui('#app').on('click','.commontPic',function(){
+							var url = this.getAttribute('src');
+//							url = url.replace('_mini', '_small');
+							//					console.log(url)
+							plus.nativeUI.previewImage(url, {});
+						})
 					},
 					methods: {
 						/*提交评论回复*/
