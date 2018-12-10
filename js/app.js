@@ -1226,9 +1226,9 @@
 					},
 					success: function(result) {
 						if(callback) callback(result.Data);
-						mui.later(function() {
-							plus.nativeUI.closeWaiting();
-						}, 2500)
+//						mui.later(function() {
+//							plus.nativeUI.closeWaiting();
+//						}, 2500)
 					},
 					error: function(xhr, type, errorThrown) {
 						plus.nativeUI.closeWaiting();
@@ -1241,7 +1241,7 @@
 	}
 	//	压缩图片
 	owner.zipPic = function(src, callback) {
-		console.log('ZIP--' + src)
+//		console.log('ZIP--' + src)
 		plus.zip.compressImage({
 			src: src,
 			dst: '_doc/zip_' + src.substr(src.lastIndexOf('/') + 1),
@@ -1249,10 +1249,10 @@
 			quality: 100,
 			format: 'jpg'
 		}, function(zip) {
-			plus.nativeUI.closeWaiting();
+//			plus.nativeUI.closeWaiting();
 			if(callback)(callback(zip.target))
 		}, function() {
-			plus.nativeUI.closeWaiting();
+//			plus.nativeUI.closeWaiting();
 			mui.toast('压缩失败！');
 		})
 	}

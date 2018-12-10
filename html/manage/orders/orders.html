@@ -269,8 +269,9 @@
 											</div>
 										</div>
 									</div>
-									<div class="itemFoot  cor_g t_c" v-if="item.ORDER_STATUS == 6">
-										<div class="fs16 black-btn" @tap="_refondDetail(item)">查看退款详情</div>
+									<div class="itemFoot  cor_g t_c" >
+										<div class="fs16 black-btn" @tap="_refondDetail(item)" >查看退款详情</div>
+										<!--<div class="fs16 black-btn"  v-if="item.ORDER_STATUS == 8" >继续服务</div>-->
 									</div>
 								</li>
 
