@@ -289,7 +289,8 @@
 			var TargetChat = {}; //当前聊天的对象
 
 			var connecting = false;
-
+			var onInfor = false
+			
 			mui.plusReady(function() {
 
 				IMtoken = plus.storage.getItem('IMtoken');
@@ -298,7 +299,7 @@
 				initIM();
 				//   初始化scroll	
 				initScroll();
-
+			
 				var wv = plus.webview.currentWebview();
 
 				var toChat = function toChat() {};
@@ -308,7 +309,7 @@
 					TargetChat.userid = this.dataset.userid;
 					TargetChat.avatar = this.dataset.avatar;
 					TargetChat.nickName = this.dataset.nickname;
-					//					alert(this.dataset.nickname)
+					onInfor = true
 					//					去掉红点
 					var m = document.getElementById('fdRed' + TargetChat.userid);
 					m.style.display = 'none';
@@ -376,6 +377,7 @@
 						onChatPage = false;
 						return;
 					}
+					onInfor = false
 					old_back();
 					return false;
 				};
@@ -455,7 +457,7 @@
 					nickName: name,
 				}
 
-				//					initChatList(function() {
+				onInfor = true
 				initChatContent();
 				ui.blockChat.style.display = 'block';
 				onChatPage = true;
@@ -1343,29 +1345,12 @@
 
 			//	接受信息,所处反应
 			function receiveMsg(message) {
-				if(isHome) {
+	
 					//					当app处在前台
-					plus.device.vibrate(300);
-				} else {
-					//					console.log(JSON.stringify(message))
-					var t = message.messageType;
-					switch(t) {
-						case 'TextMessage':
-							var msg = {
-								title: message.content.extra.KHnickName,
-								content: message.content.content
-							};
-							app.createLocalPushMsg(message);
-							break;
-						default:
-							var msg = {
-								title: message.content.extra.KHnickName,
-								content: '您收到一条新的对话'
-							};
-							app.createLocalPushMsg(msg);
-							break;
-					}
-				}
+					
+				plus.device.vibrate(300);
+				
+		
 				//				判断是语音信息是否是已读
 				if(message.messageType == 'VoiceMessage') {
 					message.content.extra.isNew = true;
@@ -1379,6 +1364,15 @@
 				if(!onChatPage || message.senderUserId != TargetChat.userid) {
 					//					列表页产生红点提示
 					hintNewMsg(message);
+					if(!onInfor){
+	//					不再聊天页面就产生本地推送,点击跳转信息页面
+						var msg = {
+							title: message.content.extra.KHnickName,
+							content: '您收到新的消息来自('+message.content.extra.KHnickName+')',
+							payload:'LocalMSG'
+						};
+						app.createLocalPushMsg(msg);
+					}
 					return false;
 				}
 				realHisRecords.push(message);

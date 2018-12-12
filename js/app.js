@@ -83,6 +83,7 @@
 			if(plus.os.name == "iOS") {
 				if(msg.payload.indexOf('LocalMSG') >= 0) {
 					//				收到的是本地消息
+//					console.log(11)
 					//					alert('本地消息'+msg.payload)
 					return
 				} else {
@@ -104,10 +105,13 @@
 			if(plus.os.name == "iOS") {
 				//			直接进入消息中心的消息
 				if(typeof(msg.payload) == "string") {
-
 					if(msg.payload.indexOf('LocalMSG') >= 0) {
 						//				收到的是本地消息
 						var pl = msg.payload.split('@')[1];
+						if(pl === 'LocalMSG'){
+							plus.webview.getWebviewById('information').show('pop-in', 300, function() {}, {});
+							return
+						};
 						mui.later(function() {
 							owner._jump(pl)
 						}, 1000)
