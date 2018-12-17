@@ -225,203 +225,241 @@
         "adid" : "127376240105"
     },
     "dependencies" : {
-        "pages" : {
-            "index.html" : {
-                "resources" : [],
-                "refer" : [
-                    "login.html",
-                    "html/home/home.html",
-                    "registe.html",
-                    "auditing.html",
-                    "msg.html",
-                    "bound.html"
-                ],
-                "priority" : 0
-            },
-            "html/home/home.html" : {
-                "resources" : [ "html/community/community.html", "images/商户首页3.png" ],
-                "refer" : [
-                    "html/manage/manage.html",
-                    "html/information/information.html",
-                    "html/manage/orders/orders.html",
-                    "html/manage/production/production.html",
-                    "html/manage/deposit.html",
-                    "html/home/businessEdiet.html",
-                    "html/manage/time/time.html",
-                    "html/manage/personSet/personSet.html",
-                    "html/manage/production/product_detail.html",
-                    "html/manage/activity/activity.html"
-                ],
-                "priority" : 0
-            },
-            "html/manage/manage.html" : {
-                "resources" : [],
-                "refer" : [
-                    "html/manage/production/production.html",
-                    "html/manage/time/time.html",
-                    "html/manage/comment/comment.html",
-                    "html/manage/orders/orders.html",
-                    "html/manage/personSet/personSet.html",
-                    "html/manage/custom/custom.html",
-                    "html/manage/bill.html",
-                    "html/manage/deposit.html",
-                    "html/manage/refillcard/refillcard.html",
-                    "html/manage/coupons/coupons.html",
-                    "html/manage/share/share.html",
-                    "html/manage/kefu.html",
-                    "html/manage/banks/banks.html",
-                    "html/manage/activity/activity.html",
-                    "rules.html",
-                    "html/manage/scores.html"
-                ],
-                "priority" : 0
-            },
-            "html/manage/production/production.html" : {
-                "resources" : [],
-                "refer" : [
-                    "html/manage/production/product_detail.html",
-                    "html/manage/search/search.html",
-                    "html/manage/production/product_edit.html"
-                ],
-                "priority" : 0
-            },
-            "html/manage/orders/orders.html" : {
-                "resources" : [],
-                "refer" : [
-                    "html/manage/orders/order_detail.html",
-                    "html/manage/orders/refund.html"
-                ],
-                "priority" : 0
-            },
-            "html/manage/custom/custom.html" : {
-                "resources" : [],
-                "refer" : [ "html/manage/custom/custom_detail.html" ],
-                "priority" : 0
-            },
-            "html/manage/time/time.html" : {
-                "resources" : [],
-                "refer" : [ "html/manage/time/time_set.html" ],
-                "priority" : 0
-            },
-            "html/community/community.html" : {
-                "resources" : [],
-                "refer" : [ "html/community/community_detail.html" ],
-                "priority" : 0
-            },
-            "html/manage/search/search.html" : {
-                "resources" : [],
-                "refer" : [ "html/manage/production/product_detail.html" ],
-                "priority" : 0
-            },
-            "html/manage/production/product_detail.html" : {
-                "resources" : [],
-                "refer" : [
-                    "html/manage/production/product_common.html",
-                    "html/manage/production/product_edit.html"
-                ],
-                "priority" : 0
-            },
-            "html/manage/comment/comment.html" : {
-                "resources" : [],
-                "refer" : [ "html/manage/comment/common_detail.html" ],
-                "priority" : 0
-            },
-            "html/manage/refillcard/refillcard.html" : {
-                "resources" : [],
-                "refer" : [
-                    "html/manage/refillcard/editCard.html",
-                    "html/manage/refillcard/addCard.html"
-                ],
-                "priority" : 0
-            },
-            "html/manage/coupons/coupons.html" : {
-                "resources" : [],
-                "refer" : [
-                    "html/manage/coupons/addCoupon.html",
-                    "html/manage/coupons/editCoupon.html"
-                ],
-                "priority" : 0
-            },
-            "html/manage/personSet/personSet.html" : {
-                "resources" : [],
-                "refer" : [
-                    "html/manage/banks/banks.html",
-                    "index.html",
-                    "html/manage/imgClick.html",
-                    "html/manage/personSet/updatedNum.html"
-                ],
-                "priority" : 0
-            },
-            "login.html" : {
-                "resources" : [],
-                "refer" : [
-                    "yzmLogin.html",
-                    "registe.html",
-                    "forgetPass.html",
-                    "msg.html",
-                    "html/home/home.html"
-                ],
-                "priority" : 0
-            },
-            "registe.html" : {
-                "resources" : [],
-                "refer" : [ "msg.html" ],
-                "priority" : 0
-            },
-            "msg.html" : {
-                "resources" : [],
-                "refer" : [ "auditing.html", "html/manage/imgClick.html" ],
-                "priority" : 0
-            },
-            "html/information/information.html" : {
-                "resources" : [],
-                "refer" : [
-                    "html/information/sysMessege.html",
-                    "html/information/chat.html",
-                    "html/information/sysMessage.html"
-                ],
-                "priority" : 0
-            },
-            "html/information/chat.html" : {
-                "resources" : [],
-                "refer" : [ "html/information/location.html", "html/information/mapPre.html" ],
-                "priority" : 0
-            },
-            "html/manage/production/product_edit.html" : {
-                "resources" : [],
-                "refer" : [ "html/manage/imgClick.html" ],
-                "priority" : 0
-            },
-            "bound.html" : {
-                "resources" : [],
-                "refer" : [ "html/home/home.html", "registe.html" ],
-                "priority" : 0
-            },
-            "html/manage/banks/banks.html" : {
-                "resources" : [],
-                "refer" : [ "html/manage/banks/addBank.html" ],
-                "priority" : 0
-            },
-            "html/manage/deposit.html" : {
-                "resources" : [],
-                "refer" : [ "html/manage/banks/banks.html" ],
-                "priority" : 0
-            }
-        },
-        "idle" : {
-            "resources" : [
-                "images/back.png",
-                "images/logo1.png",
-                "js/mui.min.js",
-                "css/common.css",
-                "fonts/mui.ttf",
-                "css/mui.min.css",
-                "images/logo2.png",
-                "js/mui.js",
-                "images/go.png",
-                "css/mui.css",
-                "images/btn_bg.jpg"
-            ]
-        }
-    }
+		"pages": {
+			"index.html": {
+				"resources": [],
+				"refer": [
+					"login.html",
+					"html/home/home.html",
+					"registe.html",
+					"auditing.html",
+					"msg.html",
+					"bound.html"
+				],
+				"priority": 0
+			},
+			"html/home/home.html": {
+				"resources": [
+					"html/community/community.html",
+					"images/商户首页3.png"
+				],
+				"refer": [
+					"html/manage/manage.html",
+					"html/information/information.html",
+					"html/manage/orders/orders.html",
+					"html/manage/production/production.html",
+					"html/manage/deposit.html",
+					"html/home/businessEdiet.html",
+					"html/manage/time/time.html",
+					"html/manage/personSet/personSet.html",
+					"html/manage/production/product_detail.html",
+					"html/manage/activity/activity.html",
+					"html/manage/information/information.html"
+				],
+				"priority": 0
+			},
+			"html/manage/manage.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/production/production.html",
+					"html/manage/time/time.html",
+					"html/manage/comment/comment.html",
+					"html/manage/orders/orders.html",
+					"html/manage/personSet/personSet.html",
+					"html/manage/custom/custom.html",
+					"html/manage/bill.html",
+					"html/manage/deposit.html",
+					"html/manage/refillcard/refillcard.html",
+					"html/manage/coupons/coupons.html",
+					"html/manage/share/share.html",
+					"html/manage/kefu.html",
+					"html/manage/banks/banks.html",
+					"html/manage/activity/activity.html",
+					"rules.html",
+					"html/manage/scores.html"
+				],
+				"priority": 0
+			},
+			"html/manage/production/production.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/production/product_detail.html",
+					"html/manage/search/search.html",
+					"html/manage/production/product_edit.html"
+				],
+				"priority": 0
+			},
+			"html/manage/orders/orders.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/orders/order_detail.html",
+					"html/manage/orders/refund.html"
+				],
+				"priority": 0
+			},
+			"html/manage/custom/custom.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/custom/custom_detail.html"
+				],
+				"priority": 0
+			},
+			"html/manage/time/time.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/time/time_set.html"
+				],
+				"priority": 0
+			},
+			"html/community/community.html": {
+				"resources": [],
+				"refer": [
+					"html/community/community_detail.html"
+				],
+				"priority": 0
+			},
+			"html/manage/search/search.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/production/product_detail.html"
+				],
+				"priority": 0
+			},
+			"html/manage/production/product_detail.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/production/product_common.html",
+					"html/manage/production/product_edit.html"
+				],
+				"priority": 0
+			},
+			"html/manage/comment/comment.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/comment/common_detail.html"
+				],
+				"priority": 0
+			},
+			"html/manage/refillcard/refillcard.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/refillcard/editCard.html",
+					"html/manage/refillcard/addCard.html"
+				],
+				"priority": 0
+			},
+			"html/manage/coupons/coupons.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/coupons/addCoupon.html",
+					"html/manage/coupons/editCoupon.html"
+				],
+				"priority": 0
+			},
+			"html/manage/personSet/personSet.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/banks/banks.html",
+					"index.html",
+					"html/manage/imgClick.html",
+					"html/manage/personSet/updatedNum.html"
+				],
+				"priority": 0
+			},
+			"login.html": {
+				"resources": [],
+				"refer": [
+					"yzmLogin.html",
+					"registe.html",
+					"forgetPass.html",
+					"msg.html",
+					"html/home/home.html"
+				],
+				"priority": 0
+			},
+			"registe.html": {
+				"resources": [],
+				"refer": [
+					"msg.html"
+				],
+				"priority": 0
+			},
+			"msg.html": {
+				"resources": [],
+				"refer": [
+					"auditing.html",
+					"html/manage/imgClick.html"
+				],
+				"priority": 0
+			},
+			"html/information/information.html": {
+				"resources": [],
+				"refer": [
+					"html/information/sysMessege.html",
+					"html/information/chat.html",
+					"html/information/sysMessage.html"
+				],
+				"priority": 0
+			},
+			"html/information/chat.html": {
+				"resources": [],
+				"refer": [
+					"html/information/location.html",
+					"html/information/mapPre.html"
+				],
+				"priority": 0
+			},
+			"html/manage/production/product_edit.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/imgClick.html"
+				],
+				"priority": 0
+			},
+			"bound.html": {
+				"resources": [],
+				"refer": [
+					"html/home/home.html",
+					"registe.html"
+				],
+				"priority": 0
+			},
+			"html/manage/banks/banks.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/banks/addBank.html"
+				],
+				"priority": 0
+			},
+			"html/manage/deposit.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/banks/banks.html"
+				],
+				"priority": 0
+			},
+			"html/manage/information/information.html": {
+				"resources": [],
+				"refer": [
+					"html/manage/information/sysMessage.html"
+				],
+				"priority": 0
+			}
+		},
+		"idle": {
+			"resources": [
+				"images/back.png",
+				"images/logo1.png",
+				"js/mui.min.js",
+				"css/common.css",
+				"fonts/mui.ttf",
+				"css/mui.min.css",
+				"images/logo2.png",
+				"js/mui.js",
+				"images/go.png",
+				"css/mui.css",
+				"images/btn_bg.jpg"
+			]
+		}
+	}
 }

@@ -168,7 +168,14 @@
 				}
 
 			} else {
-//				alert(msg.payload)
+				if(msg.payload.indexOf('LocalMSG') >= 0) {
+						//				收到的是本地消息
+					var pl = msg.payload.split('@')[1];
+					if(pl === 'LocalMSG'){
+						plus.webview.getWebviewById('information').show('pop-in', 300, function() {}, {});
+						return
+					};
+				} 
 				mui.later(function() {
 					owner._jump(msg.payload)
 				}, 1000)
@@ -390,7 +397,7 @@
 
 	//	创建本地消息
 	owner.createLocalPushMsg = function(msg) {
-
+//	console.log(1111)
 		var options = {
 			cover: false
 		};
