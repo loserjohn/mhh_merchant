@@ -55,7 +55,7 @@
 						登陆
 					</div>
 				</div>
-				<img src="images/logo2.png" alt="" class="logo_bg" />
+				<img src="images/logo2.png" alt="" class="logo_bg" v-show = "androidShow"/>
 
 			</div>
 		</div>
@@ -81,7 +81,8 @@
 						validate: '',
 						/* 验证码 */
 						enables: false,
-						time: 90
+						time: 90,
+						androidShow:true
 					},
 					computed: {
 						ctime: function ctime() {
@@ -97,6 +98,27 @@
 						this.petname = plus.storage.getItem('petname');
 						plus.nativeUI.closeWaiting();
 						mui.currentWebview.show('pop-in', 300, function() {}, {});
+						var _this = this
+						if(mui.os.android) {
+							var originalHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+							window.onresize = function() {
+
+								//软键盘弹起与隐藏  都会引起窗口的高度发生变化
+								var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+								if(resizeHeight * 1 < originalHeight * 1) {
+									//resizeHeight<originalHeight证明窗口被挤压了
+									
+//									plus.webview.currentWebview().setStyle({
+//										height: originalHeight
+//									});
+									_this.androidShow = false
+								}else{
+									_this.androidShow = true
+								}
+							};
+						}
 					},
 
 					methods: {

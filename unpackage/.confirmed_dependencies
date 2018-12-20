@@ -56,7 +56,10 @@
 	},
 	"login.html": {
 		"refer": [
-			"html/home/home.html"
+			"html/home/home.html",
+			"yzmLogin.html",
+			"registe.html",
+			"forgetPass.html"
 		]
 	},
 	"html/manage/personSet/personSet.html": {

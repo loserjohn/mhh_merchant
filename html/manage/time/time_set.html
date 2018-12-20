@@ -160,6 +160,8 @@
 			});
 			mui.plusReady(function() {
 				app.WXinit(CryptoJS);
+				
+				
 				var APP = new Vue({
 					el: '#app',
 					data: {
@@ -175,11 +177,15 @@
 
 					},
 					created: function created() {
-
 						var self = plus.webview.currentWebview();
 						var td = new Date(self.date);
 						this.today = td.getFullYear() + '-' + (td.getMonth() + 1) + '-' + td.getDate();
-						// alert(this.today )
+//						alert(this.today)
+						plus.webview.currentWebview().setStyle({
+							titleNView:{
+								titleText:this.today
+							}
+						})
 					},
 					mounted: function mounted() {
 						/*初始化数据*/

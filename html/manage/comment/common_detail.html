@@ -49,7 +49,7 @@
 			
 			.commonPics .commonPicsItem {
 				width: 100px;
-				height: 100px;
+				min-height: 100px;
 				overflow: hidden;
 			}
 			
@@ -208,7 +208,9 @@
 						document.getElementById('loader').style.display = 'none';
 						
 						mui('#app').on('click','.commontPic',function(){
+							
 							var url = this.getAttribute('src');
+//							console.log(url)
 //							url = url.replace('_mini', '_small');
 							//					console.log(url)
 							plus.nativeUI.previewImage(url, {});
