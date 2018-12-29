@@ -231,7 +231,8 @@
 											嘿皮值 <i class="iconfont icon-xiaolianwawa cor_y fontIcon"></i>：
 										</p>
 										<p class="f1 cor_g  fs12 msg_p flex" style="line-height: 2;">
-											<span v-for="item in levelNum" class="levelIcon"></span>
+											<!--{{levelNum}}-->
+											<span v-for="item in levelNum" class="levelIcon"></span>										
 										</p>
 									</div>
 									<div class="flex lh26">
@@ -523,7 +524,7 @@
 										//										alert(result.Data.ACCOUNT_PETNAME)
 										_this.profession = result.Data.SHOP.SHOP_BUSINESS_TYPE;
 										//									_this.level=result.Data.ACCOUNT_PETNAME;
-										_this.levelNum = result.Data.SHOP.SHOP_STAR;
+										_this.levelNum = parseInt(result.Data.SHOP.SHOP_STAR) ;
 										_this.scoreNum = result.Data.SHOP.INTEGRAL;
 										//										console.log(_this.scoreNum )
 										_this.businessArea = result.Data.SHOP.SHOP_AREA;
