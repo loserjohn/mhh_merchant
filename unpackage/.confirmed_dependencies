@@ -1,124 +1,126 @@
 {
-	"index.html": {
-		"refer": [
-			"html/home/home.html",
-			"login.html",
-			"bound.html"
-		]
-	},
-	"html/home/home.html": {
-		"resources": [
-			"html/community/community.html"
-		],
-		"refer": [
-			"html/community/community.html",
-			"html/manage/manage.html",
-			"html/information/information.html",
-			"html/manage/orders/orders.html",
-			"html/manage/time/time.html",
-			"html/manage/production/production.html",
-			"html/manage/activity/activity.html",
-			"html/home/businessEdiet.html",
-			"html/manage/production/product_detail.html",
-			"html/manage/information/information.html"
-		]
-	},
-	"html/information/information.html": {
-		"refer": [
-			"html/information/chat.html",
-			"html/information/sysMessage.html"
-		]
-	},
-	"html/manage/manage.html": {
-		"refer": [
-			"html/manage/orders/orders.html",
-			"html/manage/production/production.html",
-			"html/manage/time/time.html",
-			"html/manage/kefu.html",
-			"html/manage/activity/activity.html",
-			"html/manage/comment/comment.html",
-			"html/manage/personSet/personSet.html",
-			"html/manage/coupons/coupons.html",
-			"html/manage/deposit.html",
-			"html/manage/bill.html",
-			"html/manage/refillcard/refillcard.html",
-			"rules.html",
-			"html/manage/banks/banks.html",
-			"html/manage/scores.html",
-			"html/manage/share/share.html"
-		]
-	},
-	"html/manage/orders/orders.html": {
-		"refer": [
-			"html/manage/orders/order_detail.html",
-			"html/manage/orders/refund.html"
-		]
-	},
-	"login.html": {
-		"refer": [
-			"html/home/home.html",
-			"yzmLogin.html",
-			"registe.html",
-			"forgetPass.html"
-		]
-	},
-	"html/manage/personSet/personSet.html": {
-		"refer": [
-			"index.html",
-			"html/manage/personSet/updatedNum.html"
-		]
-	},
-	"html/manage/time/time.html": {
-		"refer": [
-			"html/manage/time/time_set.html"
-		]
-	},
-	"html/manage/production/production.html": {
-		"refer": [
-			"html/manage/search/search.html",
-			"html/manage/production/product_edit.html",
-			"html/manage/production/product_detail.html"
-		]
-	},
-	"html/manage/search/search.html": {
-		"refer": [
-			"html/manage/production/product_detail.html"
-		]
-	},
-	"html/community/community.html": {
-		"refer": [
-			"html/community/community_detail.html"
-		]
-	},
-	"html/manage/refillcard/refillcard.html": {
-		"refer": [
-			"html/manage/refillcard/addCard.html",
-			"html/manage/refillcard/editCard.html"
-		]
-	},
-	"html/manage/coupons/coupons.html": {
-		"refer": [
-			"html/manage/coupons/addCoupon.html"
-		]
-	},
-	"html/manage/banks/banks.html": {
-		"refer": [
-			"html/manage/banks/addBank.html"
-		]
-	},
-	"html/manage/deposit.html": {
-		"refer": [
-			"html/manage/banks/banks.html"
-		]
-	},
-	"html/manage/comment/comment.html": {
-		"refer": [
-			"html/manage/comment/common_detail.html"
-		]
-	},
-	"html/manage/information/information.html": {
-		"refer": [
-			"html/manage/information/sysMessage.html"
-		]
-	}
+  "index.html": {
+    "refer": [
+      "html/home/home.html",
+      "login.html",
+      "bound.html",
+      "msg.html"
+    ]
+  },
+  "html/home/home.html": {
+    "resources": [
+      "html/community/community.html"
+    ],
+    "refer": [
+      "html/community/community.html",
+      "html/manage/manage.html",
+      "html/information/information.html",
+      "html/manage/orders/orders.html",
+      "html/manage/time/time.html",
+      "html/manage/production/production.html",
+      "html/manage/activity/activity.html",
+      "html/home/businessEdiet.html",
+      "html/manage/production/product_detail.html",
+      "html/manage/information/information.html"
+    ]
+  },
+  "html/information/information.html": {
+    "refer": [
+      "html/information/chat.html",
+      "html/information/sysMessage.html"
+    ]
+  },
+  "html/manage/manage.html": {
+    "refer": [
+      "html/manage/orders/orders.html",
+      "html/manage/production/production.html",
+      "html/manage/time/time.html",
+      "html/manage/kefu.html",
+      "html/manage/activity/activity.html",
+      "html/manage/comment/comment.html",
+      "html/manage/personSet/personSet.html",
+      "html/manage/coupons/coupons.html",
+      "html/manage/deposit.html",
+      "html/manage/bill.html",
+      "html/manage/refillcard/refillcard.html",
+      "rules.html",
+      "html/manage/banks/banks.html",
+      "html/manage/scores.html",
+      "html/manage/share/share.html"
+    ]
+  },
+  "html/manage/orders/orders.html": {
+    "refer": [
+      "html/manage/orders/order_detail.html",
+      "html/manage/orders/refund.html"
+    ]
+  },
+  "login.html": {
+    "refer": [
+      "html/home/home.html",
+      "yzmLogin.html",
+      "registe.html",
+      "forgetPass.html",
+      "msg.html"
+    ]
+  },
+  "html/manage/personSet/personSet.html": {
+    "refer": [
+      "index.html",
+      "html/manage/personSet/updatedNum.html"
+    ]
+  },
+  "html/manage/time/time.html": {
+    "refer": [
+      "html/manage/time/time_set.html"
+    ]
+  },
+  "html/manage/production/production.html": {
+    "refer": [
+      "html/manage/search/search.html",
+      "html/manage/production/product_edit.html",
+      "html/manage/production/product_detail.html"
+    ]
+  },
+  "html/manage/search/search.html": {
+    "refer": [
+      "html/manage/production/product_detail.html"
+    ]
+  },
+  "html/community/community.html": {
+    "refer": [
+      "html/community/community_detail.html"
+    ]
+  },
+  "html/manage/refillcard/refillcard.html": {
+    "refer": [
+      "html/manage/refillcard/addCard.html",
+      "html/manage/refillcard/editCard.html"
+    ]
+  },
+  "html/manage/coupons/coupons.html": {
+    "refer": [
+      "html/manage/coupons/addCoupon.html"
+    ]
+  },
+  "html/manage/banks/banks.html": {
+    "refer": [
+      "html/manage/banks/addBank.html"
+    ]
+  },
+  "html/manage/deposit.html": {
+    "refer": [
+      "html/manage/banks/banks.html"
+    ]
+  },
+  "html/manage/comment/comment.html": {
+    "refer": [
+      "html/manage/comment/common_detail.html"
+    ]
+  },
+  "html/manage/information/information.html": {
+    "refer": [
+      "html/manage/information/sysMessage.html"
+    ]
+  }
 }

@@ -149,14 +149,16 @@
 					<div class="productMsg  flex ">
 						<div class="cm_prePic">
 							<img :src="detail.PROJECT_IMG1" alt="" class="cover" />
+							
 						</div>
 						<div class="f1">
-							<h3 class="cm_title">{{detail.PROJECT_NAME}}</h3>
-							<p class="cm_time">发布时间 {{detail.CREATE_TIME}}</p>
+							<p class="cor_y   lh24">{{detail.ORDER_STATUS | getStatus}}</p>
+							<h3 class="cm_title">{{detail.PROJECT_NAME}}</h3>						
+							<p class="cm_time">发布时间 ：{{detail.CREATE_TIME}}</p>
+							<p class=" f1  lh24">原价：{{detail.PROJECT_DISCOUNT }} 元</p>
+							<p class=" f1  lh24">差价：{{detail.ORDER_AGIO_AMOUNT }} 元</p>
 							<div class="flex">
-								<h3 class="prize f1 ">￥{{detail.ORDER_PAY_AMOUNT}} </h3>
-
-								<p class="cor_y f1 t_r lh24">{{detail.ORDER_STATUS | getStatus}}</p>
+								<p  style="line-height: 24px;" >交易金额：</p><h3 class="prize f1 t_r"> ￥{{detail.ORDER_PAY_AMOUNT}} </h3>	
 							</div>
 						</div>
 					</div>
